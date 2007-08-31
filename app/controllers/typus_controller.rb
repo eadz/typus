@@ -9,7 +9,8 @@ class TypusController < ApplicationController
   def index
     @fields = @model.list_fields
     if params[:status]
-      @items = @model.find(:all, :conditions => ["status = ?", params[:status]], :limit => "20")
+      @status = params[:status] == "true" ? true : false
+      @items = @model.find(:all, :conditions => ["status = ?", @status], :limit => "20")
     elsif params[:order_by]
       @order = params[:order_by]
       @sort_order = params[:sort_order]

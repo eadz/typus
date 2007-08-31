@@ -5,7 +5,7 @@ namespace :typus do
     system "script/generate model user first_name:string last_name:string email:string hashed_password:string status:boolean is_admin:boolean created_at:datetime"
     Rake::Task["db:migrate"].invoke
     system "rm app/models/user.rb"
-    User.create(:first_name => 'First Name', :last_name => 'Last Name', :is_admin => true, :status => true, :email => 'admin@foo.com', :password => "typus", :password_confirmation => "typus")
+    User.create(:first_name => 'First Name', :last_name => 'Last Name', :is_admin => true, :status => true, :email => 'admin@foo.com', :password => "typuscms", :password_confirmation => "typuscms")
     system "cp #{RAILS_ROOT}/vendor/plugins/typus/config/typus.yml #{RAILS_ROOT}/config"
   end
 
