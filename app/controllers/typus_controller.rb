@@ -10,28 +10,17 @@ class TypusController < ApplicationController
     @fields = @model.list_fields
     if params[:status]
       @status = params[:status] == "true" ? true : false
-      @item_pages, @items = paginate params[:model], :conditions => ["status = ?", @status], :order => "id DESC", :per_page => TYPUS[:per_page]
+      @item_pages, @items = paginate @model, :conditions => ["status = ?", @status], :order => "id DESC", :per_page => TYPUS[:per_page]
     elsif params[:search]
       @search = "%#{params[:search].downcase}%"
-      @item_pages, @items = paginate params[:model], :conditions => ["LOWER(title) LIKE ?", @search], :order => "id DESC", :per_page => TYPUS[:per_page]
-      # @items = @model.find(:all, :order => 'title ASC', :conditions => [ 'LOWER(title) LIKE ?', @search ], :limit => TYPUS[:per_page])
+      @item_pages, @items = paginate @model, :conditions => ["LOWER(title) LIKE ?", @search], :order => "id DESC", :per_page => TYPUS[:per_page]
+    elsif params[:order_by]
+      @order = params[:order_by]
+      @sort_order = params[:sort_order]
+      @item_pages, @items = paginate @model, :order => "#{@order} #{@sort_order}", :per_page => TYPUS[:per_page]
     else
-      @item_pages, @items = paginate params[:model], :order => "id DESC", :per_page => TYPUS[:per_page]
+      @item_pages, @items = paginate @model, :order => "id DESC", :per_page => TYPUS[:per_page]
     end
-#      
-#      @items = @model.find(:all, :conditions => ["status = ?", @status], :limit => TYPUS[:per_page])
-#    elsif params[:search]
-#      @search = "%#{params[:search].downcase}%"
-#      @items = @model.find(:all, :order => 'title ASC', :conditions => [ 'LOWER(title) LIKE ?', @search ], :limit => TYPUS[:per_page])
-#    elsif params[:order_by]
-#      @order = params[:order_by]
-#      @sort_order = params[:sort_order]
-#      @items = @model.find(:all, :order => "#{@order} #{@sort_order}", :limit => TYPUS[:per_page])
-#    else
-      # @item_pages, @items = paginate params[:model], :order => "id DESC", :per_page => TYPUS[:per_page]
-      # @items = []
-      # @items = @model.find(:all, :order => "id DESC", :limit => TYPUS[:per_page])
-#      @item_pages, @items = paginate params[:model], :order => "id DESC", :per_page => TYPUS[:per_page]
   end
 
   def new
