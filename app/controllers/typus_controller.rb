@@ -39,9 +39,10 @@ class TypusController < ApplicationController
   def edit
     @form_fields = @model.form_fields
     @item = @model.find(params[:id])
-    # @condition = @model.form_fields.include? "created_at" ? "created_at" : "id"
-    # @previous = @model.find(:first, :order => "#{@condition} DESC", :conditions => ["#{@condition} < ?", @item])
-    # @next = @model.find(:first, :order => "#{@condition} ASC", :conditions => ["#{@condition} > ?", @item])
+    @condition = ( @model.new.attributes.include? "created_at" ) ? "created_at" : "id"
+    @current_item = ( @condition == "created_at" ) ? @item.created_at : @item.id
+    @previous = @model.find(:first, :order => "#{@condition} DESC", :conditions => ["#{@condition} < ?", @current_item])
+    @next = @model.find(:first, :order => "#{@condition} ASC", :conditions => ["#{@condition} > ?", @current_item])
   end
 
   def update
