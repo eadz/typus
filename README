@@ -1,1 +1,13 @@
- -a
+== Doc
+
+To create the first user and copy the stylesheets ...
+
+	rake typus:init
+	rake typus:setup
+
+Default email and password
+
+	email. admin@foo.com
+	password. typuscms
+
+Enjoy it!
