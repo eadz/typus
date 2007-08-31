@@ -61,6 +61,10 @@ module TypusHelper
     end
   end
 
+  def page_title
+    "#{params[:model].capitalize if params[:model]} #{"&rsaquo;" if params[:model]} #{params[:action].capitalize if params[:action]}"
+  end
+
   def footer
     render :partial => "footer"
   end
