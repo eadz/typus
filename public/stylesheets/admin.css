@@ -546,3 +546,21 @@ h2 {
 .fieldWithErrors {
 	margin: -7px 0px 0px 0px;
 }
+
+/* search box */
+
+.box {
+	border: 1px solid #d3d3d3;
+	margin: 0px 0px 10px 0px;
+	padding: 5px 10px;
+}
+
+.box p {
+	margin: 5px 0px;
+}
+
+.separator {
+	border-top: 1px dotted #999;
+	margin: 20px 0px;
+}
+

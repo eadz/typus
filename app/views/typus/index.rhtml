@@ -1,9 +1,15 @@
 <h2>
 <div class="left"><%= @model.to_s.capitalize %></div>
-<div class="right"><%= link_to image_tag("typus/add.gif", :title => "New #{@model}"), :action => "new" %></div>
+<div class="right"><%= link_to_function image_tag("typus/search_right.gif"), "['search'].each(Element.toggle);" %>&nbsp;<%= link_to image_tag("typus/add.gif", :title => "New #{@model}"), :action => "new" %></div>
 </h2>
 
 <%= feedback %>
+
+<div id="search" style="display: none;" class="box">
+	<% form_tag :action => "index", :model => params[:model] do %>
+	<p><%= text_field_tag :search %>&nbsp;&nbsp;<%= submit_tag "Search" %></p>
+	<% end %>
+</div>
 
 <% if @model.count > 0 -%>
 
@@ -34,7 +40,7 @@
 		    <% elsif %w(verified is_admin).include? column -%>
 		      <td><%= status = item.send(column)? "Yes" : "No" %></td>
 		    <% elsif %w(created_at updated_at).include? column -%>
-		      <td><%= fmt_date(item.send(column)) %></td>
+		      <td width="80px"><%= fmt_date(item.send(column)) %></td>
 		    <% else -%>
 		      <td><%=h item.send(column) %></td>
 		    <% end -%>
@@ -48,8 +54,14 @@
 		<!-- -->
 
 	<% else -%>
+		
+		<div class="box" id="empty">
+		<p>There are no <strong><%= params[:model] %></strong> under this filter.</p>
+		</div>
 
-		<p>There are no <strong><%= params[:model] %></strong>.</p>
+		<script type="text/javascript">
+		  new Effect.Highlight('empty');
+		</script>
 
 	<% end -%>
 

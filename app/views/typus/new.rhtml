@@ -1,6 +1,6 @@
 <h2>
 <span class="left"><%= link_to "#{@model.to_s.pluralize}", :action => "index", :model => params[:model], :id => nil %> &rsaquo; New</span>
-<span class="right"><%= link_to image_tag("typus/back.gif", :title => "#{@model}"), :action => "index" %></span></h2>
+<span class="right"><%= link_to image_tag("typus/back.gif", :title => "#{@model}"), :action => "index", :model => params[:model] %></span></h2>
 
 <% form_tag :action => 'create' do %>
 	<%= render :partial => "form" %>
