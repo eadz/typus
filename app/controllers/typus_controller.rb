@@ -10,13 +10,13 @@ class TypusController < ApplicationController
     @fields = @model.list_fields
     if params[:status]
       @status = params[:status] == "true" ? true : false
-      @items = @model.find(:all, :conditions => ["status = ?", @status], :limit => "20")
+      @items = @model.find(:all, :conditions => ["status = ?", @status], :limit => TYPUS[:per_page])
     elsif params[:order_by]
       @order = params[:order_by]
       @sort_order = params[:sort_order]
-      @items = @model.find(:all, :order => "#{@order} #{@sort_order}", :limit => "30")
+      @items = @model.find(:all, :order => "#{@order} #{@sort_order}", :limit => TYPUS[:per_page])
     else
-      @items = @model.find(:all, :order => "id DESC", :limit => "40")
+      @items = @model.find(:all, :order => "id DESC", :limit => TYPUS[:per_page])
     end
   end
 

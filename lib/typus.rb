@@ -11,6 +11,7 @@ TYPUS[:app_description] = "Web Development for the Masses"
 TYPUS[:site_name] = "This is the site name"
 TYPUS[:site_description] = "This is the site description"
 TYPUS[:version] = "Typus 2.0a"
+TYPUS[:per_page] = 15
 TYPUS[:project_url] = "http://intraducibles.net/projects/typus"
 TYPUS[:licenses] = [["Creative Commons Attribution-NonCommercial-ShareAlike 2.5 License", "license-1"],
                     ["License 2", "license-2"],
