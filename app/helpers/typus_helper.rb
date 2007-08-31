@@ -9,7 +9,7 @@ module TypusHelper
   end
 
   def modules
-    @config = YAML.load_file("#{RAILS_ROOT}/config/admin.yml")
+    @config = YAML.load_file("#{RAILS_ROOT}/config/typus.yml")
     @modules = []
     @config.each do |i|
       @modules << i if i[1]["default"]
@@ -23,7 +23,7 @@ module TypusHelper
   end
 
   def sidebar
-    @config = YAML.load_file("#{RAILS_ROOT}/config/admin.yml")
+    @config = YAML.load_file("#{RAILS_ROOT}/config/typus.yml")
     @current = params[:controller].split("/")[1]
     @config.each do |i|
       @model = i if i[1]["module"] == @current

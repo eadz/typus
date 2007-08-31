@@ -24,14 +24,14 @@ Dir["#{RAILS_ROOT}/lib/*.rb"].each { |lib| require lib }
 class ActiveRecord::Base
 
   def self.list_fields
-    @config = YAML.load_file("#{RAILS_ROOT}/config/admin.yml")
+    @config = YAML.load_file("#{RAILS_ROOT}/config/typus.yml")
     @config = @config["#{self}"]["list"].split(" ")
     @config = %w( name ) if @config.size == 0
     return @config
   end
 
   def self.form_fields
-    @config = YAML.load_file("#{RAILS_ROOT}/config/admin.yml")
+    @config = YAML.load_file("#{RAILS_ROOT}/config/typus.yml")
     @config = @config["#{self}"]["form"].split(" ")
     @fields = Array.new
     @config.each do |i|
@@ -53,4 +53,4 @@ TYPUS[:text_filters] = [['<None>', "none"],
                         ['Textile', "textile"],
                         ['Markdown', "markdown"],
                         ["Test", "test"]]
-TYPUS[:admin] = YAML.load_file("#{RAILS_ROOT}/config/admin.yml")
+TYPUS[:admin] = YAML.load_file("#{RAILS_ROOT}/config/typus.yml")
