@@ -11,6 +11,9 @@ class TypusController < ApplicationController
     if params[:status]
       @status = params[:status] == "true" ? true : false
       @items = @model.find(:all, :conditions => ["status = ?", @status], :limit => TYPUS[:per_page])
+    elsif params[:search]
+      @search = "%#{params[:search].downcase}%"
+      @items = @model.find(:all, :order => 'title ASC', :conditions => [ 'LOWER(title) LIKE ?', @search ], :limit => TYPUS[:per_page])
     elsif params[:order_by]
       @order = params[:order_by]
       @sort_order = params[:sort_order]
