@@ -13,7 +13,8 @@ class TypusController < ApplicationController
       @item_pages, @items = paginate params[:model], :conditions => ["status = ?", @status], :order => "id DESC", :per_page => TYPUS[:per_page]
     elsif params[:search]
       @search = "%#{params[:search].downcase}%"
-      @items = @model.find(:all, :order => 'title ASC', :conditions => [ 'LOWER(title) LIKE ?', @search ], :limit => TYPUS[:per_page])
+      @item_pages, @items = paginate params[:model], :conditions => ["LOWER(title) LIKE ?", @search], :order => "id DESC", :per_page => TYPUS[:per_page]
+      # @items = @model.find(:all, :order => 'title ASC', :conditions => [ 'LOWER(title) LIKE ?', @search ], :limit => TYPUS[:per_page])
     else
       @item_pages, @items = paginate params[:model], :order => "id DESC", :per_page => TYPUS[:per_page]
     end
