@@ -35,8 +35,8 @@ class SessionsController < ApplicationController
         @password = generate_password(8)
         @user.password = @password
         AdminMailer.deliver_password(@user, @password)
-        if @person.save
-          flash[:email] = params[:person][:email]
+        if @user.save
+          flash[:email] = params[:user][:email]
           if RAILS_ENV == "development"
             flash[:notice] = "New password is #{@password}"
           else

@@ -19,6 +19,12 @@ Dir["#{File.dirname(__FILE__)}/lib/*.rb"].each { |lib| require lib }
 Dir["#{RAILS_ROOT}/lib/*.rb"].each { |lib| require lib }
 %w( jcode sha1 aws/s3 gettext/rails ).each { |lib| require lib }
 
+# Email Settings
+
+ActionMailer::Base.delivery_method = :sendmail
+ActionMailer::Base.raise_delivery_errors = true
+ActionMailer::Base.default_charset = "utf-8"
+
 # Add methods to AR:Base
 
 class ActiveRecord::Base
