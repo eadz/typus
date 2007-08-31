@@ -53,4 +53,3 @@ TYPUS[:text_filters] = [['<None>', "none"],
                         ['Textile', "textile"],
                         ['Markdown', "markdown"],
                         ["Test", "test"]]
-TYPUS[:admin] = YAML.load_file("#{RAILS_ROOT}/config/typus.yml")

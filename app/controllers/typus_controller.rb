@@ -83,7 +83,7 @@ private
     if params[:model]
       @model = params[:model].singularize.capitalize.inject(Object){ |klass, part| klass.const_get(part) }
     else
-      @model = Article
+      @model = User
     end
   end
 

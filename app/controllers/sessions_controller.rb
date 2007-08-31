@@ -8,9 +8,7 @@ class SessionsController < ApplicationController
 
   def create
     if request.post?
-      email = params[:user][:email]
-      password = params[:user][:password]
-      @user = User.authenticate(email, password, true)
+      @user = User.authenticate(params[:user])
       if @user
         session[:typus] = @user.id
         flash[:notice] = "Successfully logged in the system."
@@ -48,7 +46,7 @@ class SessionsController < ApplicationController
         redirect_to :action => "create"
       else
         flash[:error] = "Email doesn't exist on the system."
-        redirect_to :action => "recover"
+        redirect_to :action => "password_recover"
       end
     end
   end

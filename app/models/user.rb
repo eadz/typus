@@ -16,10 +16,6 @@ class User < ActiveRecord::Base
 
   has_many :ads
 
-  def to_param
-    "#{id}-#{full_name.to_url}"
-  end
-
   def full_name
     "#{first_name} #{last_name}"
   end

@@ -22,7 +22,7 @@
 		<% @items.each do |item| %>
 		  <tr class="<%= cycle('even', 'odd') %>" id="item_<%= item.id %>">
 		  <% @fields.each do |column| %>
-		    <% if %w(title name).include? column -%>
+		    <% if %w(title name full_name).include? column -%>
 		    <td><%= link_to item.send(column), :action => 'edit', :id => item.id %></td>
 		    <% elsif %w(email).include? column -%>
 		    <td><%= mail_to item.send(column), item.send(column), :title => "" %></td>
@@ -46,7 +46,7 @@
 
 	<% else -%>
 
-		<p>There are no articles.</p>
+		<p>There are no <strong><%= params[:model] %></strong>.</p>
 
 	<% end -%>
 
