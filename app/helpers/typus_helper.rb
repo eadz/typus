@@ -32,7 +32,7 @@ module TypusHelper
     @tonch = ""
     @config.each do |m|
       if m[1]["module"] == @module
-        @tonch += "<h2><a href=\"/admin/#{m[0].downcase.pluralize}\">#{m[0].pluralize.capitalize}</a> <small><a href=\"/admin/#{m[0].downcase.pluralize}/new\">New</a></small></h2>"
+        @tonch += "<h2><a href=\"/admin/#{m[0].downcase.pluralize}\">#{m[0].pluralize.capitalize}</a></h2>"
         @tonch += "<p>#{m[1]["copy"]}</p>" if m[1]["copy"]
         if m[1]["filters"]
           @tonch += "<ul>"

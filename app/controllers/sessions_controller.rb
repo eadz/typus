@@ -48,6 +48,8 @@ class SessionsController < ApplicationController
         flash[:error] = "Email doesn't exist on the system."
         redirect_to :action => "password_recover"
       end
+    else
+      flash[:notice] = nil
     end
   end
 

@@ -11,8 +11,10 @@ namespace :typus do
 
   desc "Install CSS and images"
   task :setup do
-    system "cp #{RAILS_ROOT}/vendor/plugins/typus/public/stylesheets/* #{RAILS_ROOT}/public/stylesheets"
-    system "cp #{RAILS_ROOT}/vendor/plugins/typus/public/images/* #{RAILS_ROOT}/public/images"
+    system "mkdir #{RAILS_ROOT}/public/stylesheets/typus"
+    system "mkdir #{RAILS_ROOT}/public/images/typus"
+    system "cp #{RAILS_ROOT}/vendor/plugins/typus/public/stylesheets/* #{RAILS_ROOT}/public/stylesheets/typus"
+    system "cp #{RAILS_ROOT}/vendor/plugins/typus/public/images/* #{RAILS_ROOT}/public/images/typus"
   end
 
 end
