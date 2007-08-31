@@ -1,0 +1,57 @@
+<h2><%= @model.to_s.capitalize %></h2>
+
+<%= feedback %>
+
+<% if @model.count > 0 -%>
+
+	<% if @items.size > 0 -%>
+
+		<!-- -->
+		
+		<table>
+		
+		<tr>
+		
+		<% @fields.each do |column| %>
+		
+		<th><a href="?order_by=<%= column %>&sort_order=<% if params[:order_by].include? column %><%= (@status = (params[:sort_order] == "asc") ? "desc" : "asc" ) %><% else %><%= "asc" %><% end %>"><div class="<% if params[:order_by].include? column %><%= (@status = (params[:sort_order] == "asc") ? "order_desc" : "order_asc" ) %><% else %><%= "order" %><% end %>"><%= column.humanize %></div></a></th>
+		<% end %>
+		<th>&nbsp;</th>
+		</tr>
+		
+		<% @items.each do |item| %>
+		  <tr class="<%= cycle('even', 'odd') %>" id="item_<%= item.id %>">
+		  <% @fields.each do |column| %>
+		    <% if %w(title name).include? column -%>
+		    <td><%= link_to item.send(column), :action => 'edit', :id => item.id %></td>
+		    <% elsif %w(email).include? column -%>
+		    <td><%= mail_to item.send(column), item.send(column), :title => "" %></td>
+		    <% elsif %w(status).include? column -%>
+		      <td><%= status = item.send(column)? "Active" : "Inactive" %></td>
+		    <% elsif %w(verified is_admin).include? column -%>
+		      <td><%= status = item.send(column)? "Yes" : "No" %></td>
+		    <% elsif %w(created_at updated_at).include? column -%>
+		      <td><%= fmt_date(item.send(column)) %></td>
+		    <% else -%>
+		      <td><%=h item.send(column) %></td>
+		    <% end -%>
+		  <% end %>
+		    <td width="15px"><%= link_to image_tag("trash.gif"), { :action => 'destroy', :id => item }, :confirm => "Remove this entry?" %></td>
+		  </tr>
+		<% end %>
+		
+		</table>
+		
+		<!-- -->
+
+	<% else -%>
+
+		<p>There are no articles.</p>
+
+	<% end -%>
+
+<% else -%>
+	
+	<p>Empty</p>
+
+<% end -%>

@@ -1,0 +1,4 @@
+<h1><%= link_to @preferences ? @preferences.site_name : "Typus" , "/admin" %> <small><%= link_to "Logout", :controller => "sessions", :action => "destroy" %></small></h1>
+<h2>Application Tagline</h2>
+
+<%= modules %>

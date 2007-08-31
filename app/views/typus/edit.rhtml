@@ -1,0 +1,8 @@
+<h2><%= link_to "#{@model.to_s.pluralize}", :action => "index", :model => params[:model], :id => nil %> &rsaquo; Edit</h2>
+
+<%= feedback %>
+
+<% form_tag :action => "update", :id => @item do %>
+	<%= render :partial => "form" %>
+	<p><%= submit_tag "Update #{@model.to_s.capitalize}" %></p>
+<% end %>

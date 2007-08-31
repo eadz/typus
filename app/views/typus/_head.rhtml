@@ -1,0 +1,33 @@
+<title>Typus &rsaquo; <%= controller.controller_name.capitalize %> <%= "&rsaquo; " + params[:action].capitalize unless params[:action] == "index" %></title>
+
+<!-- <%= "http://" + request.host + request.request_uri %> -->
+
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+
+<!-- Metas -->
+
+<meta http-equiv="imagetoolbar" content="no" />
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+<meta name="author" content="" />
+<meta name="copyright" content="" />
+<meta name="generator" content="" />
+
+<!-- Universal Charset -->
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<!-- Stylesheets -->
+
+<%= stylesheet_link_tag "typus", :media => "screen" %>
+
+<!-- Syndication -->
+
+<!-- <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="/index.xml" /> -->
+
+<!-- Javascripts -->
+
+<% javascript_include_tag :defaults %>
+<% javascript_include_tag 'application' %>
+<% javascript_include_tag 'niftycube' %>
+

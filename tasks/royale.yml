@@ -1,0 +1,12 @@
+ssh:
+  server: 127.0.0.1
+  user: francesc
+  password: syo724LG
+
+slicehost:
+  server: 123.123.123
+
+amazon_s3:
+  access_key_id:
+  secret_key_id:
+  
