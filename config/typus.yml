@@ -1,0 +1,39 @@
+Article:
+  list: title created_at status
+  form: title:string content:text:15 created_at:datetime status:boolean
+  filters: status date
+  module: content
+  default: true
+  order: title:asc
+
+Link:
+  list: name
+  form: name:string content:text:15
+  module: presentation
+  default: true
+  order: title:asc
+  filters: status
+
+Stylesheet:
+  list: name
+  form: name:string content:text:15
+  module: comptabilitat
+  default: true
+  order: name:asc
+  copy: Web site stylesheets.
+
+Card:
+  list: name phone
+  form: name:string phone:string
+  module: management
+  default: true
+  order: name:asc
+  copy: Aquest modul serveix per ...
+  filters: name
+
+User:
+  list: email
+  form: email:string
+  module: management
+  order: email:asc
+  filters: status

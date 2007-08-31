@@ -9,34 +9,17 @@ $LOAD_PATH << helper_path
 Dependencies.load_paths += [ controller_path, model_path, helper_path ]
 config.controller_paths << controller_path
 
-#ActionController::Routing::Routes.draw do |map|
-#  prefix = 'admin'
-#  map.login "#{prefix}/login", :controller => 'sessions', :action => 'create'
-#end
+# Unicode Support
 
-# Dir["#{File.dirname(__FILE__)}/lib/*.rb"].each { |lib| require lib }
+$KCODE = 'u'
 
-class ActionController::Routing::RouteSet
-  alias_method :draw_without_admin, :draw
-  def draw_with_admin
-    draw_without_admin do |map|
-      prefix = 'admin'
-      map.login "#{prefix}/login", :controller => 'sessions', :action => 'create'
-      map.logout "#{prefix}/logout", :controller => 'sessions', :action => 'destroy'
-      map.password_recover "#{prefix}/password_recover", :controller => 'sessions', :action => 'password_recover'
-      map.with_options :controller => 'typus' do |i|
-        i.admin "#{prefix}", :action => 'index'
-        i.connect "#{prefix}/-/:action/:id", :action => 'index', :requirements => { :model => nil }
-        i.connect "#{prefix}/asset/*path", :action => 'asset'
-        i.connect "#{prefix}/:model/:action", :action => 'index', :requirements => { :action => /[^0-9].*/, :id => nil }
-        i.connect "#{prefix}/:model/:id/:action", :action => 'edit', :requirements => { :id => /\d+/ }
-      end
-      yield map
-    end
-  end
-  alias_method :draw, :draw_with_admin
-end
+# Libraries required
 
+Dir["#{File.dirname(__FILE__)}/lib/*.rb"].each { |lib| require lib }
+Dir["#{RAILS_ROOT}/lib/*.rb"].each { |lib| require lib }
+%w( jcode sha1 aws/s3 gettext/rails ).each { |lib| require lib }
+
+# Add methods to AR:Base
 
 class ActiveRecord::Base
 
