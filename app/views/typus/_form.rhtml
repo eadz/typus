@@ -1,21 +1,23 @@
 <% @form_fields.each do |field| %>
 	<p><label><%= field[0].humanize %> <%= error_message_on :item, field[0] %></label>
-	<% if field[1] == "string" %>
+	<% case field[1] when "string" %>
 		<%= text_field :item, field[0], :class => "big" %>
-	<% elsif field[1] == "text" %>
+	<% when "text" %>
 		<%= text_area :item, field[0], :rows => "#{field[2]}" %>
-	<% elsif field[1] == "datetime" %>
+	<% when "datetime" %>
 		<%= datetime_select :item, field[0] %>
-	<% elsif field[1] == "password" %>
+	<% when "password" %>
 		<%= password_field :item, field[0], :class => "big" %>
-	<% elsif field[1] == "boolean" %>
+	<% when "boolean" %>
 		<%= check_box :item, field[0] %> Checked if active.
-	<% elsif field[1] == "file" %>
+	<% when "file" %>
 		<%= file_field :item, field[0], :style => "border: 0px;" %>
-	<% elsif field[1] == "tags" %>
+	<% when"tags" %>
 		<%= text_field :item, field[0], :value => @item.tags.join(", "), :class => "big" %>
-	<% elsif field[1] == "collection" %>
+	<% when "collection" %>
 		<% @collection = eval field[0].singularize.capitalize %>
 		<%= collection_select :item, "#{field[0]}_id", @collection.find(:all), :id, :name %>
+	<% else %>
+		<p>....
 	<% end %></p>
 <% end %>
