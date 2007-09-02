@@ -15,10 +15,7 @@
 	<% elsif field[1] == "tags" %>
 		<%= text_field :item, field[0], :value => @item.tags.join(", "), :class => "big" %>
 	<% elsif field[1] == "collection" %>
-		<% @collection = field[0].singularize.capitalize.inject(Object){ |klass, part| klass.const_get(part) } %>
+		<% @collection = eval field[0].singularize.capitalize %>
 		<%= collection_select :item, "#{field[0]}_id", @collection.find(:all), :id, :name %>
 	<% end %></p>
 <% end %>
-
-
-

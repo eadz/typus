@@ -85,11 +85,7 @@ private
     @fields = %w( id )
     params[:order_by] = params[:order_by] || @fields[0]
     params[:sort_order] = params[:sort_order] || "asc"
-    if params[:model]
-      @model = params[:model].singularize.capitalize.inject(Object){ |klass, part| klass.const_get(part) }
-    else
-      @model = User
-    end
+    @model = ( params[:model] ) ? (eval params[:model].singularize.capitalize) : User
   end
 
   def authenticate
