@@ -1,13 +1,15 @@
 class TypusController < ApplicationController
 
+  before_filter :set_workspace
+  before_filter :authenticate
+  before_filter :fields, :only => [ :index ]
+  before_filter :form_fields, :only => [ :new, :edit ]
+  before_filter :find_model, :only => [ :show, :edit, :update, :destroy, :status ]
+
   self.template_root = "#{RAILS_ROOT}/vendor/plugins/typus/app/views"
   layout 'typus'
 
-  before_filter :set_workspace
-  before_filter :authenticate
-
   def index
-    @fields = @model.list_fields
     if params[:status]
       @status = params[:status] == "true" ? true : false
       @item_pages, @items = paginate @model, :conditions => ["status = ?", @status], :order => "id DESC", :per_page => TYPUS[:per_page]
@@ -24,7 +26,6 @@ class TypusController < ApplicationController
   end
 
   def new
-    @form_fields = @model.form_fields
     @item = @model.new
   end
 
@@ -40,8 +41,6 @@ class TypusController < ApplicationController
   end
 
   def edit
-    @form_fields = @model.form_fields
-    @item = @model.find(params[:id])
     @condition = ( @model.new.attributes.include? "created_at" ) ? "created_at" : "id"
     @current_item = ( @condition == "created_at" ) ? @item.created_at : @item.id
     @previous = @model.find(:first, :order => "#{@condition} DESC", :conditions => ["#{@condition} < ?", @current_item])
@@ -49,7 +48,6 @@ class TypusController < ApplicationController
   end
 
   def update
-    @item = @model.find(params[:id])
     if @item.update_attributes(params[:item])
       flash[:notice] = "#{@model.to_s.capitalize} successfully updated."
       redirect_to :action => "edit", :id => @item
@@ -59,7 +57,7 @@ class TypusController < ApplicationController
   end
 
   def destroy
-    @model.find(params[:id]).destroy
+    @item.destroy
     flash[:notice] = "#{@model.to_s.capitalize} has ben successfully removed."
     redirect_to :action => "index", :model => params[:model], :controller => "typus", :id => nil
   end
@@ -73,13 +71,24 @@ class TypusController < ApplicationController
   end
 
   def status
-    @item = @model.find(params[:id])
     @item.toggle!("status")
     flash[:notice] = "#{@model.to_s.capitalize} status changed"
     redirect_to :action => "index"
   end
 
 private
+
+  def find_model
+    @item = @model.find(params[:id])
+  end
+
+  def fields
+    @fields = @model.list_fields
+  end
+
+  def form_fields
+    @form_fields = @model.form_fields
+  end
 
   def set_workspace
     @fields = %w( id )
