@@ -33,7 +33,7 @@ class TypusController < ApplicationController
     @item = @model.new(params[:item])
     if @item.save
       flash[:notice] = "#{@model.to_s.capitalize} successfully created."
-      redirect_to :action => "edit", :id => @item
+      redirect_to :action => "edit", :id => @item.id # , :model => params[:model]
     else
       @form_fields = @model.form_fields
       render :action => "new"
@@ -50,7 +50,7 @@ class TypusController < ApplicationController
   def update
     if @item.update_attributes(params[:item])
       flash[:notice] = "#{@model.to_s.capitalize} successfully updated."
-      redirect_to :action => "edit", :id => @item
+      redirect_to :action => "edit", :id => @item.id
     else
       render :action => "edit"
     end
