@@ -5,7 +5,7 @@
 
 <%= feedback %>
 
-<% form_tag :action => "update", :id => @item do %>
+<% form_tag :action => "update", :id => @item.id do %>
 	<%= render :partial => "form" %>
 	<p><%= submit_tag "Update #{@model.to_s.capitalize}" %></p>
 <% end %>

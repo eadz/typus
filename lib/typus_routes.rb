@@ -3,8 +3,8 @@ class ActionController::Routing::RouteSet
   def draw_with_admin
     draw_without_admin do |map|
       prefix = 'admin'
-      map.login "#{prefix}/login", :controller => 'sessions', :action => 'create'
-      map.logout "#{prefix}/logout", :controller => 'sessions', :action => 'destroy'
+      map.typus_login "#{prefix}/login", :controller => 'sessions', :action => 'create'
+      map.typus_logout "#{prefix}/logout", :controller => 'sessions', :action => 'destroy'
       map.password_recover "#{prefix}/password_recover", :controller => 'sessions', :action => 'password_recover'
       map.with_options :controller => 'typus' do |i|
         i.admin "#{prefix}", :action => 'index'
