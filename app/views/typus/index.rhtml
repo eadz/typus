@@ -34,7 +34,7 @@
 		    <% elsif %w(email).include? column -%>
 		    <td><%= mail_to item.send(column), item.send(column), :title => "" %></td>
 		    <% elsif %w(status).include? column -%>
-		      <td><%= status = item.send(column)? "Active" : "Inactive" %></td>
+		      <td><%= image_tag(status = item.send(column)? "typus/status_true.gif" : "typus/status_false.gif") %></td>
 		    <% elsif %w(verified is_admin).include? column -%>
 		      <td><%= status = item.send(column)? "Yes" : "No" %></td>
 		    <% elsif %w(created_at updated_at).include? column -%>

@@ -47,4 +47,18 @@ class ActiveRecord::Base
     return @fields
   end
 
+  def self.default_order
+    @config = YAML.load_file("#{RAILS_ROOT}/config/typus.yml")
+    @order = Array.new
+    if @config["#{self}"]["order"]
+      @config = @config["#{self}"]["order"].split(" ")
+      @config.each do |i|
+        @order << i.split(":")
+      end
+    else
+      @order << ["id", "asc"] # if @order.size == 0
+    end
+    return @order
+  end
+
 end

@@ -1,10 +1,10 @@
 class TypusController < ApplicationController
 
-  before_filter :set_workspace
   before_filter :authenticate
+  before_filter :set_model
+  before_filter :find_model, :only => [ :show, :edit, :update, :destroy, :status ]
   before_filter :fields, :only => [ :index ]
   before_filter :form_fields, :only => [ :new, :edit ]
-  before_filter :find_model, :only => [ :show, :edit, :update, :destroy, :status ]
 
   self.template_root = "#{RAILS_ROOT}/vendor/plugins/typus/app/views"
   layout 'typus'
@@ -21,7 +21,13 @@ class TypusController < ApplicationController
       @sort_order = params[:sort_order]
       @item_pages, @items = paginate @model, :order => "#{@order} #{@sort_order}", :per_page => TYPUS[:per_page]
     else
-      @item_pages, @items = paginate @model, :order => "id DESC", :per_page => TYPUS[:per_page]
+      @order = ""
+      params[:order_by] = @model.default_order[0][0]
+      params[:sort_order] = @model.default_order[0][1]
+      @model.default_order.each do |order|
+        @order += "#{order[0]} #{order[1].upcase }"
+      end
+      @item_pages, @items = paginate @model, :order => "#{@order}", :per_page => TYPUS[:per_page]
     end
   end
 
@@ -78,6 +84,10 @@ class TypusController < ApplicationController
 
 private
 
+  def set_model
+    @model = ( params[:model] ) ? (eval params[:model].singularize.capitalize) : User
+  end
+
   def find_model
     @item = @model.find(params[:id])
   end
@@ -88,13 +98,6 @@ private
 
   def form_fields
     @form_fields = @model.form_fields
-  end
-
-  def set_workspace
-    @fields = %w( id )
-    params[:order_by] = params[:order_by] || @fields[0]
-    params[:sort_order] = params[:sort_order] || "asc"
-    @model = ( params[:model] ) ? (eval params[:model].singularize.capitalize) : User
   end
 
   def authenticate
