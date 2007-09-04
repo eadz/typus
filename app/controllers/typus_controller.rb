@@ -10,12 +10,17 @@ class TypusController < ApplicationController
   layout 'typus'
 
   def index
+    params[:order_by] = params[:order_by] || "id"
+    params[:sort_order] = params[:sort_order] || "asc"
     if params[:status]
       @status = params[:status] == "true" ? true : false
       @item_pages, @items = paginate @model, :conditions => ["status = ?", @status], :order => "id DESC", :per_page => TYPUS[:per_page]
     elsif params[:search]
-      @search = "%#{params[:search].downcase}%"
-      @item_pages, @items = paginate @model, :conditions => ["LOWER(title) LIKE ?", @search], :order => "id DESC", :per_page => TYPUS[:per_page]
+      @search = []
+      @model.search_fields.each do |search|
+        @search << "LOWER(#{search}) LIKE '%#{params[:search]}%'"
+      end
+      @item_pages, @items = paginate @model, :conditions => "#{@search.join(" OR ")}"
     elsif params[:order_by]
       @order = params[:order_by]
       @sort_order = params[:sort_order]
@@ -66,14 +71,6 @@ class TypusController < ApplicationController
     @item.destroy
     flash[:notice] = "#{@model.to_s.capitalize} has ben successfully removed."
     redirect_to :action => "index", :model => params[:model], :controller => "typus", :id => nil
-  end
-
-  def search
-    unless params[:search] == ""
-      @items = @model.find(:all, :order => 'created_at DESC', :conditions => [ 'LOWER(body) LIKE ? OR LOWER(name) LIKE ?', '%' + params[:search] + '%', '%' + params[:search] + '%' ])
-    else
-      flash[:error] = "Please, insert a query string."
-    end
   end
 
   def status

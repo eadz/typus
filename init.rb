@@ -61,4 +61,16 @@ class ActiveRecord::Base
     return @order
   end
 
+  def self.search_fields
+    @config = YAML.load_file("#{RAILS_ROOT}/config/typus.yml")
+    @search = Array.new
+    if @config["#{self}"]["search"]
+      @config = @config["#{self}"]["search"].split(" ")
+      @config.each do |i|
+        @search << i # .split(":")
+      end
+    end
+    return @search
+  end
+
 end

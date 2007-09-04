@@ -1,6 +1,6 @@
 <h2>
 <div class="left"><%= link_to @model.to_s.capitalize, :model => params[:model], :action => "index" %></div>
-<div class="right"><%= link_to image_tag('typus/arrow_right.gif'), { :page => @item_pages.current.previous, :filter_by => params[:filter_by], :filter_id => params[:filter_id], :model => params[:model], :status => params[:status], :search => params[:search], :order_by => params[:order_by], :sort_order => params[:sort_order] } if @item_pages.current.previous %> <%= link_to image_tag('typus/arrow_left.gif'), { :page => @item_pages.current.next, :filter_by => params[:filter_by], :filter_id => params[:filter_id], :model => params[:model], :status => params[:status], :search => params[:search], :order_by => params[:order_by], :sort_order => params[:sort_order] } if @item_pages.current.next %><%= "&nbsp;" if @item_pages.current.next %><%= link_to_function image_tag("typus/search_right.gif"), "['search'].each(Element.toggle);" %>&nbsp;<%= link_to image_tag("typus/add.gif", :title => "New #{@model}"), :action => "new" %></div>
+<div class="right"><%= link_to image_tag('typus/arrow_right.gif'), { :page => @item_pages.current.previous, :filter_by => params[:filter_by], :filter_id => params[:filter_id], :model => params[:model], :status => params[:status], :search => params[:search], :order_by => params[:order_by], :sort_order => params[:sort_order] } if @item_pages.current.previous %> <%= link_to image_tag('typus/arrow_left.gif'), { :page => @item_pages.current.next, :filter_by => params[:filter_by], :filter_id => params[:filter_id], :model => params[:model], :status => params[:status], :search => params[:search], :order_by => params[:order_by], :sort_order => params[:sort_order] } if @item_pages.current.next %><%= "&nbsp;" if @item_pages.current.next %><%= link_to_function image_tag("typus/search_right.gif"), "['search'].each(Element.toggle);" if @model.search_fields.size > 0 %>&nbsp;<%= link_to image_tag("typus/add.gif", :title => "New #{@model}"), :action => "new" %></div>
 </h2>
 
 <%= feedback %>
@@ -29,7 +29,7 @@
 		<% @items.each do |item| %>
 		  <tr class="<%= cycle('even', 'odd') %>" id="item_<%= item.id %>">
 		  <% @fields.each do |column| %>
-		    <% if %w(id title name full_name).include? column -%>
+		    <% if %w(id title name full_name first_name last_name).include? column -%>
 		    <td><%= link_to item.send(column), :action => 'edit', :id => item.id %></td>
 		    <% elsif %w(email).include? column -%>
 		    <td><%= mail_to item.send(column), item.send(column), :title => "" %></td>
