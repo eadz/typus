@@ -14,7 +14,7 @@ class TypusController < ApplicationController
     params[:sort_order] = params[:sort_order] || "asc"
     if params[:status]
       @status = params[:status] == "true" ? true : false
-      @item_pages, @items = paginate @model, :conditions => ["status = ?", @status], :order => "id DESC", :per_page => TYPUS[:per_page]
+      @item_pages, @items = paginate @model, :conditions => ["status = ?", @status], :order => "id DESC", :per_page => TYPUS["per_page"]
     elsif params[:search]
       @search = []
       @model.search_fields.each do |search|
@@ -24,7 +24,7 @@ class TypusController < ApplicationController
     elsif params[:order_by]
       @order = params[:order_by]
       @sort_order = params[:sort_order]
-      @item_pages, @items = paginate @model, :order => "#{@order} #{@sort_order}", :per_page => TYPUS[:per_page]
+      @item_pages, @items = paginate @model, :order => "#{@order} #{@sort_order}", :per_page => TYPUS["per_page"]
     else
       @order = ""
       params[:order_by] = @model.default_order[0][0]
@@ -32,7 +32,7 @@ class TypusController < ApplicationController
       @model.default_order.each do |order|
         @order += "#{order[0]} #{order[1].upcase }"
       end
-      @item_pages, @items = paginate @model, :order => "#{@order}", :per_page => TYPUS[:per_page]
+      @item_pages, @items = paginate @model, :order => "#{@order}", :per_page => TYPUS["per_page"]
     end
   end
 
@@ -44,7 +44,7 @@ class TypusController < ApplicationController
     @item = @model.new(params[:item])
     if @item.save
       flash[:notice] = "#{@model.to_s.capitalize} successfully created."
-      redirect_to :action => "edit", :id => @item.id # , :model => params[:model]
+      redirect_to :action => "edit", :id => @item.id
     else
       @form_fields = @model.form_fields
       render :action => "new"

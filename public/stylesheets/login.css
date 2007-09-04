@@ -82,10 +82,9 @@ input:focus {
 }
 
 #notice-error {
-	background: #f0f0f0;
+	background: #000;
+	color: #FFF;
 	margin-bottom: 1em;
-	border-top: 1px solid #CC0000;
-	border-bottom: 1px solid #CC0000;
-	padding: 0.5em;
-	font-weight: bold;
+	border-left: 5px solid #CC0000;
+	padding: 5px 5px 5px 10px;
 }

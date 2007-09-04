@@ -1,3 +1,6 @@
+
+# Add new locations of the controllers, models & helpers
+
 controller_path = "#{File.dirname(__FILE__)}/app/controllers"
 model_path = "#{File.dirname(__FILE__)}/app/models"
 helper_path = "#{File.dirname(__FILE__)}/app/helpers"
@@ -40,9 +43,7 @@ class ActiveRecord::Base
     @config = YAML.load_file("#{RAILS_ROOT}/config/typus.yml")
     @config = @config["#{self}"]["form"].split(" ")
     @fields = Array.new
-    @config.each do |i|
-      @fields << i.split(":")
-    end
+    @config.each { |i| @fields << i.split(":") }
     @fields << [["name", "string"]] if @fields.size == 0
     return @fields
   end
@@ -52,9 +53,7 @@ class ActiveRecord::Base
     @order = Array.new
     if @config["#{self}"]["order"]
       @config = @config["#{self}"]["order"].split(" ")
-      @config.each do |i|
-        @order << i.split(":")
-      end
+      @config.each { |i| @order << i.split(":") }
     else
       @order << ["id", "asc"] # if @order.size == 0
     end
@@ -66,9 +65,7 @@ class ActiveRecord::Base
     @search = Array.new
     if @config["#{self}"]["search"]
       @config = @config["#{self}"]["search"].split(" ")
-      @config.each do |i|
-        @search << i # .split(":")
-      end
+      @config.each { |i| @search << i }
     end
     return @search
   end
