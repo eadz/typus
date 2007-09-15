@@ -8,10 +8,11 @@ namespace :typus do
     User.create(:first_name => 'First Name', :last_name => 'Last Name', :is_admin => true, :status => true, :email => 'admin@foo.com', :password => "typuscms", :password_confirmation => "typuscms")
     system "cp #{RAILS_ROOT}/vendor/plugins/typus/config/typus.yml #{RAILS_ROOT}/config"
     system "cp #{RAILS_ROOT}/vendor/plugins/typus/config/setup.yml #{RAILS_ROOT}/config"
+    Rake::Task["typus:setup_theme"].invoke
   end
 
   desc "Install CSS and images"
-  task :setup do
+  task :setup_theme do
     system "mkdir #{RAILS_ROOT}/public/stylesheets/typus"
     system "mkdir #{RAILS_ROOT}/public/images/typus"
     system "cp #{RAILS_ROOT}/vendor/plugins/typus/public/stylesheets/* #{RAILS_ROOT}/public/stylesheets/typus"
