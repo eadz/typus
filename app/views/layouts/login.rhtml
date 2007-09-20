@@ -4,19 +4,14 @@
 <html>
 
 <head>
-
-<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-<title><%= TYPUS["app_name"] %> | <%= TYPUS["app_description"] %></title>
-
-<%= stylesheet_link_tag "typus/login", :media => "screen" %>
-
+<%= head %>
 </head>
 
 <body onload="$('user_email').focus()">
 
 <div id="dialog">
 
-<h1><%= link_to TYPUS["app_name"], typus_login_url %></h1>
+<%= header %>
 
 <%= "<div id=\"notice\">" + flash[:notice] + "</div>" if flash[:notice] %>
 <%= "<div id=\"notice-error\">" + flash[:error] + "</div>" if flash[:error] %>
