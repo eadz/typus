@@ -34,14 +34,14 @@ class ActiveRecord::Base
 
   def self.list_fields
     @config = YAML.load_file("#{RAILS_ROOT}/config/typus.yml")
-    @config = @config["#{self}"]["list"].split(" ")
+    @config = @config["Models"]["#{self}"]["list"].split(" ")
     @config = %w( name ) if @config.size == 0
     return @config
   end
 
   def self.form_fields
     @config = YAML.load_file("#{RAILS_ROOT}/config/typus.yml")
-    @config = @config["#{self}"]["form"].split(" ")
+    @config = @config["Models"]["#{self}"]["form"].split(" ")
     @fields = Array.new
     @config.each { |i| @fields << i.split(":") }
     @fields << [["name", "string"]] if @fields.size == 0
@@ -51,8 +51,8 @@ class ActiveRecord::Base
   def self.default_order
     @config = YAML.load_file("#{RAILS_ROOT}/config/typus.yml")
     @order = Array.new
-    if @config["#{self}"]["order"]
-      @config = @config["#{self}"]["order"].split(" ")
+    if @config["Models"]["#{self}"]["order"]
+      @config = @config["Models"]["#{self}"]["order"].split(" ")
       @config.each { |i| @order << i.split(":") }
     else
       @order << ["id", "asc"] # if @order.size == 0
@@ -63,8 +63,8 @@ class ActiveRecord::Base
   def self.search_fields
     @config = YAML.load_file("#{RAILS_ROOT}/config/typus.yml")
     @search = Array.new
-    if @config["#{self}"]["search"]
-      @config = @config["#{self}"]["search"].split(" ")
+    if @config["Models"]["#{self}"]["search"]
+      @config = @config["Models"]["#{self}"]["search"].split(" ")
       @config.each { |i| @search << i }
     end
     return @search
