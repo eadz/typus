@@ -31,7 +31,7 @@ namespace :typus do
         typus = File.open("#{RAILS_ROOT}/config/typus.yml", "w+")
         typus.puts "Typus:"
         typus.puts "  app_name: Morning Labs"
-        typus.puts "  app_description: Web Development for the Masses·"
+        typus.puts "  app_description: Web Development for the Masses"
         typus.puts "  site_name: This is the site name"
         typus.puts "  site_description: This is the site description"
         typus.puts "  version: Typus 2.0a"
