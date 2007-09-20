@@ -11,26 +11,22 @@ module TypusHelper
   def modules
     @config = YAML.load_file("#{RAILS_ROOT}/config/typus.yml")
     @modules = []
-    @config.each do |i|
-      @modules << i if i[1]["default"]
-    end
+    @config["Models"].each { |i| @modules << i if i[1]["default"] }
     @list = "<ul>"
-    @modules.each do |i|
-      @list += "<li><a href=\"/admin/#{i[0].downcase.pluralize}\">#{i[1]["module"].capitalize}</a></li>"
-    end
+    @modules.each { |i| @list += "<li><a href=\"/admin/#{i[0].downcase.pluralize}\">#{i[1]["module"].capitalize}</a></li>" }
     @list += "</ul>"
     return @list
+  rescue
+    return "FixMe"
   end
 
   def sidebar
     @config = YAML.load_file("#{RAILS_ROOT}/config/typus.yml")
     @current = params[:controller].split("/")[1]
-    @config.each do |i|
-      @model = i if i[1]["module"] == @current
-    end
-    @module = @config["#{@model}"]["module"]
+    @config["Models"].each { |i| @model = i if i[1]["module"] == @current }
+    @module = @config["Models"]["#{@model}"]["module"]
     @tonch = ""
-    @config.each do |m|
+    @config["Models"].each do |m|
       if m[1]["module"] == @module
         @tonch += "<h2><a href=\"/admin/#{m[0].downcase.pluralize}\">#{m[0].pluralize.capitalize}</a></h2>"
         @tonch += "<p>#{m[1]["copy"]}</p>" if m[1]["copy"]
