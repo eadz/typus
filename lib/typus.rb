@@ -4,7 +4,3 @@ def generate_password(length)
   1.upto(length) { |i| newpass << chars[rand(chars.size-1)] }
   return newpass
 end
-
-if File.exists? "#{RAILS_ROOT}/config/setup.yml"
-  TYPUS = YAML.load_file("#{RAILS_ROOT}/config/setup.yml")
-end
