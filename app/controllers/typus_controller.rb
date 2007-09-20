@@ -4,7 +4,7 @@ class TypusController < ApplicationController
   before_filter :set_model
   before_filter :find_model, :only => [ :show, :edit, :update, :destroy, :status ]
   before_filter :fields, :only => [ :index ]
-  before_filter :form_fields, :only => [ :new, :edit ]
+  before_filter :form_fields, :only => [ :new, :edit, :update ]
 
   self.template_root = "#{RAILS_ROOT}/vendor/plugins/typus/app/views"
   layout 'typus'
