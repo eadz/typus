@@ -1,7 +1,0 @@
-User:
-  list: full_name email
-  form: first_name:string last_name:string email:string password:password password_confirmation:password is_admin:boolean status:boolean
-  module: system
-  default: true
-  order: email:asc
-  filters: status

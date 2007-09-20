@@ -1,0 +1,17 @@
+Typus:
+  app_name: Morning Labs
+  app_description: Web Development for the Masses
+  site_name: This is the site name
+  site_description: This is the site description
+  version: Typus 2.0a
+  per_page: 15
+  project_url: http://intraducibles.net/projects/typus
+
+Models:
+  User:
+    list: full_name email
+    form: first_name:string last_name:string email:string password:password password_confirmation:password is_admin:boolean status:boolean
+    module: system
+    default: true
+    order: email:asc
+    filters: status
