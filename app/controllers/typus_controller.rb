@@ -9,12 +9,14 @@ class TypusController < ApplicationController
   self.template_root = "#{RAILS_ROOT}/vendor/plugins/typus/app/views"
   layout 'typus'
 
+  PER_PAGE = 20
+
   def index
     params[:order_by] = params[:order_by] || "id"
     params[:sort_order] = params[:sort_order] || "asc"
     if params[:status]
       @status = params[:status] == "true" ? true : false
-      @item_pages, @items = paginate @model, :conditions => ["status = ?", @status], :order => "id DESC", :per_page => TYPUS["per_page"]
+      @item_pages, @items = paginate @model, :conditions => ["status = ?", @status], :order => "id DESC", :per_page => PER_PAGE
     elsif params[:search]
       @search = []
       @model.search_fields.each do |search|
@@ -24,7 +26,7 @@ class TypusController < ApplicationController
     elsif params[:order_by]
       @order = params[:order_by]
       @sort_order = params[:sort_order]
-      @item_pages, @items = paginate @model, :order => "#{@order} #{@sort_order}", :per_page => TYPUS["per_page"]
+      @item_pages, @items = paginate @model, :order => "#{@order} #{@sort_order}", :per_page => PER_PAGE
     else
       @order = ""
       params[:order_by] = @model.default_order[0][0]
@@ -32,7 +34,7 @@ class TypusController < ApplicationController
       @model.default_order.each do |order|
         @order += "#{order[0]} #{order[1].upcase }"
       end
-      @item_pages, @items = paginate @model, :order => "#{@order}", :per_page => TYPUS["per_page"]
+      @item_pages, @items = paginate @model, :order => "#{@order}", :per_page => PER_PAGE
     end
   end
 
