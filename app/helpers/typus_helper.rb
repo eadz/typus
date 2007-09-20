@@ -1,50 +1,63 @@
 module TypusHelper
 
+  TYPUS = YAML.load_file("#{RAILS_ROOT}/config/typus.yml")
+
   def head
-    render :partial => "head"
+    @block = "<title>#{TYPUS["Typus"]["app_name"]} &rsaquo; #{page_title}</title>"
+    @block += "<link rel=\"shortcut icon\" href=\"/favicon.ico\" type=\"image/x-icon\" />"
+    @block += "<meta http-equiv=\"imagetoolbar\" content=\"no\" />"
+    @block += "<meta name=\"description\" content=\"\" />"
+    @block += "<meta name=\"keywords\" content=\"\" />"
+    @block += "<meta name=\"author\" content=\"\" />"
+    @block += "<meta name=\"copyright\" content=\"\" />"
+    @block += "<meta name=\"generator\" content=\"\" />"
+    @block += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />"
+    @block += stylesheet_link_tag "typus/admin", :media => "screen"
+    @block += javascript_include_tag :defaults
+    return @block
   end
 
   def header
-    render :partial => "header"
+    @block += "<h1><a href=\"/admin\">#{TYPUS["Typus"]["app_name"]}</a> <small><a href=\"/admin/logout\">Logout</a></small></h1>"
+    @block += "<h2>#{TYPUS["Typus"]["app_description"]}</h2>"
+    return @block
   end
 
   def modules
-    @config = YAML.load_file("#{RAILS_ROOT}/config/typus.yml")
     @modules = []
-    @config["Models"].each { |i| @modules << i if i[1]["default"] }
-    @list = "<ul>"
-    @modules.each { |i| @list += "<li><a href=\"/admin/#{i[0].downcase.pluralize}\">#{i[1]["module"].capitalize}</a></li>" }
-    @list += "</ul>"
-    return @list
+    TYPUS["Models"].each { |i| @modules << i if i[1]["default"] }
+    @block = "<ul>"
+    @modules.each { |i| @block += "<li><a href=\"/admin/#{i[0].downcase.pluralize}\">#{i[1]["module"].capitalize}</a></li>" }
+    @block += "</ul>"
+    return @block
   rescue
     return "FixMe"
   end
 
   def sidebar
-    @config = YAML.load_file("#{RAILS_ROOT}/config/typus.yml")
     @current = params[:controller].split("/")[1]
-    @config["Models"].each { |i| @model = i if i[1]["module"] == @current }
-    @module = @config["Models"]["#{@model}"]["module"]
-    @tonch = ""
-    @config["Models"].each do |m|
+    TYPUS["Models"].each { |i| @model = i if i[1]["module"] == @current }
+    @module = TYPUS["Models"]["#{@model}"]["module"]
+    @block = ""
+    TYPUS["Models"].each do |m|
       if m[1]["module"] == @module
-        @tonch += "<h2><a href=\"/admin/#{m[0].downcase.pluralize}\">#{m[0].pluralize.capitalize}</a></h2>"
-        @tonch += "<p>#{m[1]["copy"]}</p>" if m[1]["copy"]
+        @block += "<h2><a href=\"/admin/#{m[0].downcase.pluralize}\">#{m[0].pluralize.capitalize}</a></h2>"
+        @block += "<p>#{m[1]["copy"]}</p>" if m[1]["copy"]
         if m[1]["filters"]
-          @tonch += "<ul>"
+          @block += "<ul>"
           m[1]["filters"].split(" ").each do |f|
             if f == "status"
-              @tonch += "<li><a href=\"/admin/#{m[0].downcase.pluralize}?status=true\">Active</a></li>"
-              @tonch += "<li><a href=\"/admin/#{m[0].downcase.pluralize}?status=false\">Inactive</a></li>"
+              @block += "<li><a href=\"/admin/#{m[0].downcase.pluralize}?status=true\">Active</a></li>"
+              @block += "<li><a href=\"/admin/#{m[0].downcase.pluralize}?status=false\">Inactive</a></li>"
             else
               
             end
           end
-          @tonch += "</ul>"
+          @block += "</ul>"
         end
       end
     end
-    return @tonch
+    return @block
   rescue
     return "FixMe"
   end
@@ -62,7 +75,8 @@ module TypusHelper
   end
 
   def footer
-    render :partial => "footer"
+    @block = "<p><a href=\"http://intraducibles.net/work/typus\">Typus #{TYPUS["Typus"]["version"]}</a></p>"
+    return @block
   end
 
   def fmt_date(date)
