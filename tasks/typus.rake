@@ -41,10 +41,10 @@ namespace :typus do
         typus.puts "Models:"
         typus.puts "  User:"
         typus.puts "    list: full_name email"
-        typus.puts "    form: first_name:string last_name:string email:string password:password password_confirmation:password is_admin:boolean status:boolean"
+        typus.puts "    form: first_name::string last_name::string email::string password::password password_confirmation::password is_admin::boolean status::boolean"
         typus.puts "    module: system"
         typus.puts "    default: true"
-        typus.puts "    order: email:asc"
+        typus.puts "    order: email::asc"
         typus.puts "    filters: status"
         typus.close
         models.each do |model|
