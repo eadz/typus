@@ -43,7 +43,7 @@ class ActiveRecord::Base
     @config = YAML.load_file("#{RAILS_ROOT}/config/typus.yml")
     @config = @config["Models"]["#{self}"]["form"].split(" ")
     @fields = Array.new
-    @config.each { |i| @fields << i.split(":") }
+    @config.each { |i| @fields << i.split("::") }
     @fields << [["name", "string"]] if @fields.size == 0
     return @fields
   end
@@ -53,7 +53,7 @@ class ActiveRecord::Base
     @order = Array.new
     if @config["Models"]["#{self}"]["order"]
       @config = @config["Models"]["#{self}"]["order"].split(" ")
-      @config.each { |i| @order << i.split(":") }
+      @config.each { |i| @order << i.split("::") }
     else
       @order << ["id", "asc"] # if @order.size == 0
     end
