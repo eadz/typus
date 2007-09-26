@@ -1,29 +1,37 @@
+/* ----------------------------------------------------------
+Title:     Typus
+Details:   Master styles for Typus
+Author:    fesplugas@intraducibles.net
+Updated:   September 26 2007
+---------------------------------------------------------- */
 
-/* ---[ * ]--- */
+/* reset all styles
+---------------------------------------------------------- */
 
 * {
 	margin: 0px;
 	padding: 0px;
 }
 
-/* ---[ experimenting ]--- */
+/* html
+---------------------------------------------------------- */
 
 html {
 	height: 100%;
 	margin-bottom: 1px;
 }
 
-/* ---[ body ]--- */
+/* body
+---------------------------------------------------------- */
 
 body {
 	color: #333;
 	font-family: "Lucida Grande", "Bitstream Vera Sans", Helvetica, Verdana, Arial, sans-serif;
 	font-size: 12px;
-	margin: 0px;
-	padding: 0px;
 }
 
-/* ---[ links ]--- */
+/* links
+---------------------------------------------------------- */
 
 a, 
 a:visited,
@@ -45,7 +53,8 @@ a:hover {
 	text-decoration: none;
 }
 
-/* ---[ header ]------------------------------- */
+/* header
+---------------------------------------------------------- */
 
 #header {
 	background: black;
@@ -102,13 +111,18 @@ a:hover {
 	background: transparent;
 }
 
-/* ---[ wrap:content ]------------------------------- */
+/* wrapper
+---------------------------------------------------------- */
+
+#wrapper {
+	width: 100%;
+}
+
+/* content
+---------------------------------------------------------- */
 
 #content {
-	float: left;
-	min-height: 450px;
-	padding: 15px;
-	width: 550px;
+	margin: 20px 300px 20px 20px;
 }
 
 #content a {
@@ -122,15 +136,15 @@ a:hover {
 
 #content h1 {
 	font-size: 1.8em;
-	padding: 5px 0px 5px 0px;
 	margin: 0px auto;
+	padding: 5px 0px;
 }
 
 #content h1 span.date {
-	display: none;
-	font-weight: normal;
-	font-site: 24px;
 	color: #ddd;
+	display: none;
+	font-size: 24px;
+	font-weight: normal;
 }
 
 #content h2 {
@@ -254,12 +268,13 @@ small {
 	text-align: left;
 }
 
-/*--- [ wrap:sidebar ]------  ------*/
+/* sidebar
+---------------------------------------------------------- */
 
 #sidebar {
-	float: left;
-	padding: 15px 15px 15px 15px;
-	width: 150px;
+	float: right;
+	margin: 0px 20px;
+	width: 230px;
 }
 
 #sidebar label {
@@ -313,23 +328,26 @@ small {
 	text-decoration: underline;
 }
 
-/* ---[ footer ]------------------------------- */
+/* footer
+---------------------------------------------------------- */
 
 #footer {
 	font-size: 10px;
-	padding: 15px;
+	margin: 20px;
 }
 
 #footer a {
-	color: black;
+	color: #000;
 	padding: 2px 3px;
 }
 
 #footer a:hover {
+	color: #FFF;
 	background: #0099CC;
 }
 
-/* ---[ forms ]------------------------------- */
+/* form
+---------------------------------------------------------- */
 
 form {
 	padding: 0px;
@@ -379,7 +397,8 @@ select {
 	border: 1px solid #999;
 }
 
-/*--- [ label ]------ format for the label ------*/
+/* label
+---------------------------------------------------------- */
 
 label {
 	font-weight: bold;
@@ -387,7 +406,8 @@ label {
 	margin: 5px 0px 3px 0px;
 }
 
-/*--- [ notice ]------ notice for rails ------*/
+/* notice & dialogs
+---------------------------------------------------------- */
 
 .dialog {
 	padding: 0px;
@@ -430,7 +450,8 @@ label {
 	padding: 5px;
 }
 
-/*--- [ html > body > table ] ---*/
+/* tables
+---------------------------------------------------------- */
 
 table {
 	background: black;
@@ -499,7 +520,8 @@ table a:hover {
 	color: black;
 }
 
-/*--- [ fieldset ]------  ------*/
+/* fieldsets
+---------------------------------------------------------- */
 
 fieldset {
 	border: 1px dotted #999;
@@ -518,23 +540,22 @@ fieldset.on legend {
 
 legend {
 	font-size: 15px;
-	padding: 0px 5px 0px 5px;
+	padding: 0px 5px;
 }
-
-
 
 fieldset input {
 	width: 100%;
 }
 
-/*--- [ headings ]------  ------*/
+/* headings
+---------------------------------------------------------- */
 
 h2 {
 	margin: 0px 0px 20px 0px;
 }
 
-
-/* Rails Errors */
+/* rails errors
+---------------------------------------------------------- */
 
 .formError {
 	display: inline;
@@ -545,7 +566,8 @@ h2 {
 	margin: -7px 0px 0px 0px;
 }
 
-/* search box */
+/* searchbox
+---------------------------------------------------------- */
 
 .box {
 	border: 1px solid #d3d3d3;
@@ -565,4 +587,3 @@ h2 {
 img {
 	border: 0px;
 }
-
