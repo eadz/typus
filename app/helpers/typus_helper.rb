@@ -49,8 +49,8 @@ module TypusHelper
               if %w( status verified blocked).include? f
                 @block += "<h3>Filter by #{f.capitalize}</h3>"
                 @block += "<ul>"
-                @block += "<li><a href=\"/admin/#{m[0].downcase.pluralize}?#{f}=true\">Active</a></li>"
-                @block += "<li><a href=\"/admin/#{m[0].downcase.pluralize}?#{f}=false\">Inactive</a></li>"
+                @block += "<li><a href=\"/admin/#{m[0].downcase.pluralize}?filter_by=#{f}&filter_id=true\">Active</a></li>"
+                @block += "<li><a href=\"/admin/#{m[0].downcase.pluralize}?filter_by=#{f}&filter_id=false\">Inactive</a></li>"
                 @block += "</ul>"
               end
             end
