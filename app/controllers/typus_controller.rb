@@ -14,14 +14,13 @@ class TypusController < ApplicationController
   def index
     params[:order_by] = params[:order_by] || "id"
     params[:sort_order] = params[:sort_order] || "asc"
-    if params[:status]
-      @status = params[:status] == "true" ? true : false
-      @item_pages, @items = paginate @model, :conditions => ["status = ?", @status], :order => "id DESC", :per_page => PER_PAGE
+    if params[:filter_by]
+      @filter_by = params[:filter_by]
+      @filter_id = params[:filter_id] == "true" ? true : false
+      @item_pages, @items = paginate @model, :conditions => ["#{@filter_by} = ?", @filter_id], :order => "id DESC", :per_page => PER_PAGE
     elsif params[:search]
       @search = []
-      @model.search_fields.each do |search|
-        @search << "LOWER(#{search}) LIKE '%#{params[:search]}%'"
-      end
+      @model.search_fields.each { |search| @search << "LOWER(#{search}) LIKE '%#{params[:search]}%'" }
       @item_pages, @items = paginate @model, :conditions => "#{@search.join(" OR ")}"
     elsif params[:order_by]
       @order = params[:order_by]
@@ -31,9 +30,7 @@ class TypusController < ApplicationController
       @order = ""
       params[:order_by] = @model.default_order[0][0]
       params[:sort_order] = @model.default_order[0][1]
-      @model.default_order.each do |order|
-        @order += "#{order[0]} #{order[1].upcase }"
-      end
+      @model.default_order.each { |order| @order += "#{order[0]} #{order[1].upcase }" }
       @item_pages, @items = paginate @model, :order => "#{@order}", :per_page => PER_PAGE
     end
   end
