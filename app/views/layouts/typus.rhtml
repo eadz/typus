@@ -10,22 +10,24 @@
 <body>
 
 <div id="header">
-<%= header %>
-<%= modules %>
+	<%= header %>
+	<%= modules %>
 </div>
 
-<div id="content">
-<%= yield %>
-</div>
+<div id="wrapper">
 
-<div id="sidebar">
-<%= sidebar %>
-</div>
+	<div id="sidebar">
+		<%= sidebar %>
+	</div>
 
-<br clear="all" />
+	<div id="content">
+		<%= yield %>
+	</div>
+	
+</div>
 
 <div id="footer">
-<%= footer %>
+	<%= footer %>
 </div>
 
 </body>
