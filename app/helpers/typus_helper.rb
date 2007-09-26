@@ -31,11 +31,11 @@ module TypusHelper
     @block += "</ul>"
     return @block
   rescue
-    return "FixMe"
+    return "FixMe: <strong>typus.yml</strong>"
   end
 
   def sidebar
-    @current = params[:controller].split("/")[1]
+    @current = params[:model] # .split("/")[1]
     TYPUS["Models"].each { |i| @model = i if i[1]["module"] == @current }
     @module = TYPUS["Models"]["#{@model}"]["module"]
     @block = ""
@@ -43,23 +43,24 @@ module TypusHelper
       if m[1]["module"] == @module
         @block += "<h2><a href=\"/admin/#{m[0].downcase.pluralize}\">#{m[0].pluralize.capitalize}</a></h2>"
         @block += "<p>#{m[1]["copy"]}</p>" if m[1]["copy"]
-        if m[1]["filters"]
-          @block += "<ul>"
-          m[1]["filters"].split(" ").each do |f|
-            if f == "status"
-              @block += "<li><a href=\"/admin/#{m[0].downcase.pluralize}?status=true\">Active</a></li>"
-              @block += "<li><a href=\"/admin/#{m[0].downcase.pluralize}?status=false\">Inactive</a></li>"
-            else
-              
+        if m[0].downcase.pluralize == @current
+          if m[1]["filters"]
+            m[1]["filters"].split(" ").each do |f|
+              if %w( status verified blocked).include? f
+                @block += "<h3>Filter by #{f.capitalize}</h3>"
+                @block += "<ul>"
+                @block += "<li><a href=\"/admin/#{m[0].downcase.pluralize}?#{f}=true\">Active</a></li>"
+                @block += "<li><a href=\"/admin/#{m[0].downcase.pluralize}?#{f}=false\">Inactive</a></li>"
+                @block += "</ul>"
+              end
             end
           end
-          @block += "</ul>"
         end
       end
     end
     return @block
   rescue
-    return "FixMe"
+    return "FixMe: <strong>typus.yml</strong>"
   end
 
   def feedback
