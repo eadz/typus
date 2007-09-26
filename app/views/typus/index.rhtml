@@ -54,7 +54,11 @@
 	<% else -%>
 		
 		<div class="box" id="empty">
-		<p>There are no <strong><%= params[:model] %></strong> under this filter.</p>
+		<% if params[:search] %>
+			<p>No <strong><%= params[:model] %></strong> match the search <strong><%= params[:search] %></strong></p>
+		<% else %>
+			<p>There are no <strong><%= params[:model] %></strong> with the filter <strong><%= params[:filter_by] %></strong> set to <strong><%= params[:filter_id] %></strong>. <%= link_to "Remove filter?", :action => "index", :model => params[:model] %></p>
+		<% end %>
 		</div>
 		
 		<script type="text/javascript">
