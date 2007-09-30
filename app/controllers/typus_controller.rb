@@ -21,7 +21,8 @@ class TypusController < ApplicationController
     elsif params[:search]
       @search = []
       @model.search_fields.each { |search| @search << "LOWER(#{search}) LIKE '%#{params[:search]}%'" }
-      @item_pages, @items = paginate @model, :conditions => "#{@search.join(" OR ")}"
+      @item_pages, @items = paginate @model, :conditions => "#{@search.join(" OR ")}", :per_page => 20
+      render :partial => "table"
     elsif params[:order_by]
       @order = params[:order_by]
       @sort_order = params[:sort_order]

@@ -1,74 +1,52 @@
 <h2>
 <div class="left"><%= link_to @model.to_s.capitalize, :model => params[:model], :action => "index" %></div>
-<div class="right"><%= link_to image_tag('typus/arrow_right.gif'), { :page => @item_pages.current.previous, :filter_by => params[:filter_by], :filter_id => params[:filter_id], :model => params[:model], :status => params[:status], :search => params[:search], :order_by => params[:order_by], :sort_order => params[:sort_order] } if @item_pages.current.previous %> <%= link_to image_tag('typus/arrow_left.gif'), { :page => @item_pages.current.next, :filter_by => params[:filter_by], :filter_id => params[:filter_id], :model => params[:model], :status => params[:status], :search => params[:search], :order_by => params[:order_by], :sort_order => params[:sort_order] } if @item_pages.current.next %><%= "&nbsp;" if @item_pages.current.next %><%= link_to_function image_tag("typus/search_right.gif"), "['search'].each(Element.toggle);" if @model.search_fields.size > 0 %><%= "&nbsp;" if @model.search_fields.size > 0 %><%= link_to image_tag("typus/add.gif", :title => "New #{@model}"), :action => "new" %></div>
+<div class="right"><%= link_to image_tag('typus/arrow_right.gif'), { :page => @item_pages.current.previous, :filter_by => params[:filter_by], :filter_id => params[:filter_id], :model => params[:model], :status => params[:status], :search => params[:search], :order_by => params[:order_by], :sort_order => params[:sort_order] } if @item_pages.current.previous %> <%= link_to image_tag('typus/arrow_left.gif'), { :page => @item_pages.current.next, :filter_by => params[:filter_by], :filter_id => params[:filter_id], :model => params[:model], :status => params[:status], :search => params[:search], :order_by => params[:order_by], :sort_order => params[:sort_order] } if @item_pages.current.next %><%= "&nbsp;" if @item_pages.current.next %><%= link_to_function image_tag("typus/search_right.gif"), "['search_box'].each(Element.toggle);" if @model.search_fields.size > 0 %><%= "&nbsp;" if @model.search_fields.size > 0 %><%= link_to image_tag("typus/add.gif", :title => "New #{@model}"), :action => "new" %></div>
 </h2>
 
 <%= feedback %>
 
+<!--
 <div id="search" <%= "style=\"display: none;\"" if !params[:search] %> class="box">
 	<% form_tag ({:action => 'index', :model => params[:model]}, :method => 'get') do %>
 	<p><%= text_field_tag :search, params[:search] %>&nbsp;&nbsp;<%= submit_tag "Search", :name => nil %></p>
 	<% end %>
 </div>
+-->
 
-<% if @model.count > 0 -%>
+<div id="search_box" <%= "style=\"display: none;\"" if !params[:search] %> class="box">
+	<p><input id="search" stylname="search" type="text" value=""> <span id="spinner" style="height: 40px; display: none;"><%= image_tag("typus/spinner.gif") %></span></p>
+	<%= observe_field 'search', :frequency => 0.5, :update => 'list', :url => { :action => 'index', :model => params[:model] }, :with => "'search=' + escape(value)", :before => "Element.show('spinner');", :complete => "Element.hide('spinner');" %>
+</div>
 
-	<% if @items.size > 0 -%>
+<div id="list">
+
+	<% if @model.count > 0 -%>
+
+		<% if @items.size > 0 -%>
 		
-		<table>
+			<%= render :partial => "table" %>
+			<!-- -->
 		
-		<tr>
+		<% else -%>
 		
-		<% @fields.each do |column| %>
+			<div class="box" id="empty">
+			<% if params[:search] %>
+				<p>No <strong><%= params[:model] %></strong> match the search <strong><%= params[:search] %></strong></p>
+			<% else %>
+				<p>There are no <strong><%= params[:model] %></strong> with the filter <strong><%= params[:filter_by] %></strong> set to <strong><%= params[:filter_id] %></strong>. <%= link_to "Remove filter?", :action => "index", :model => params[:model] %></p>
+			<% end %>
+			</div>
 		
-		<th><a href="?order_by=<%= column %>&sort_order=<% if params[:order_by].include? column %><%= (@status = (params[:sort_order] == "asc") ? "desc" : "asc" ) %><% else %><%= "asc" %><% end %>"><div class="<% if params[:order_by].include? column %><%= (@status = (params[:sort_order] == "asc") ? "order_desc" : "order_asc" ) %><% else %><%= "order" %><% end %>"><%= column.humanize %></div></a></th>
-		<% end %>
-		<th>&nbsp;</th>
-		</tr>
+			<script type="text/javascript">
+			  new Effect.Highlight('empty');
+			</script>
 		
-		<% @items.each do |item| %>
-		  <tr class="<%= cycle('even', 'odd') %>" id="item_<%= item.id %>">
-		  <% @fields.each do |column| %>
-		    <% if %w(id title name full_name first_name last_name).include? column -%>
-		    <td><%= link_to item.send(column), :action => 'edit', :id => item.id %></td>
-		    <% elsif %w(email).include? column -%>
-		    <td><%= mail_to item.send(column), item.send(column), :title => "" %></td>
-		    <% elsif %w(status).include? column -%>
-		      <td width="20px" align="center"><%= image_tag(status = item.send(column)? "typus/status_true.gif" : "typus/status_false.gif") %></td>
-		    <% elsif %w(verified is_admin).include? column -%>
-		      <td><%= status = item.send(column)? "Yes" : "No" %></td>
-		    <% elsif %w(created_at updated_at).include? column -%>
-		      <td width="80px"><%= fmt_date(item.send(column)) %></td>
-		    <% else -%>
-		      <td><%=h item.send(column) %></td>
-		    <% end -%>
-		  <% end %>
-		    <td width="10px"><%= link_to image_tag("typus/trash.gif"), { :action => 'destroy', :id => item }, :confirm => "Remove this entry?" %></td>
-		  </tr>
-		<% end %>
-		
-		</table>
-		
-		<!-- -->
-		
+		<% end -%>
+	
 	<% else -%>
-		
-		<div class="box" id="empty">
-		<% if params[:search] %>
-			<p>No <strong><%= params[:model] %></strong> match the search <strong><%= params[:search] %></strong></p>
-		<% else %>
-			<p>There are no <strong><%= params[:model] %></strong> with the filter <strong><%= params[:filter_by] %></strong> set to <strong><%= params[:filter_id] %></strong>. <%= link_to "Remove filter?", :action => "index", :model => params[:model] %></p>
-		<% end %>
-		</div>
-		
-		<script type="text/javascript">
-		  new Effect.Highlight('empty');
-		</script>
-		
+	
+		<p><%= link_to "Add the first #{params[:model].singularize}", :action => "new", :model => params[:model] %></p>
+	
 	<% end -%>
-	
-<% else -%>
-	
-	<p><%= link_to "Add the first #{params[:model].singularize}", :action => "new", :model => params[:model] %></p>
-	
-<% end -%>
+
+</div>
