@@ -14,10 +14,8 @@ namespace :typus do
 
   desc "Install CSS and images"
   task :setup_theme do
-    system "mkdir #{RAILS_ROOT}/public/stylesheets/typus"
-    system "mkdir #{RAILS_ROOT}/public/images/typus"
-    system "cp #{RAILS_ROOT}/vendor/plugins/typus/public/stylesheets/* #{RAILS_ROOT}/public/stylesheets/typus"
-    system "cp #{RAILS_ROOT}/vendor/plugins/typus/public/images/* #{RAILS_ROOT}/public/images/typus"
+    system "ln -s #{RAILS_ROOT}/vendor/plugins/typus/public/images #{RAILS_ROOT}/public/images/typus"
+    system "ln -s #{RAILS_ROOT}/vendor/plugins/typus/public/stylesheets #{RAILS_ROOT}/public/stylesheets/typus"
   end
 
   # FIXME
@@ -73,3 +71,4 @@ namespace :typus do
   end
 
 end
+
