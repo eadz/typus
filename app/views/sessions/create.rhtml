@@ -1,7 +1,0 @@
-<% form_tag :controller => 'sessions', :action => 'create' do %>
-<p><label for="email">Email</label>
-<%= text_field :user, :email, :size => "20", :class => "big" %></p>
-<p><label for="password">Password</label>
-<%= password_field :user, :password, :size => "20", :class => "big" %></p>
-<p><%= submit_tag "Login" %> <%= link_to "Forgot your password?", :controller => "sessions", :action => "password_recover" %></p>
-<% end %>
