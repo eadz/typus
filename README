@@ -1,0 +1,68 @@
+= Doc
+
+To create the first user and copy the stylesheets ...
+
+	rake typus:setup
+
+Default user and password
+
+	username. admin
+	password. typus
+
+== Contact
+
+You can contact me at <fesplugas@intraducibles.net>
+
+== Setting your own username and password
+
+You can set your `username` and `password` overwriting the following settings:
+
+  TYPUS['username']
+  TYPUS['password]
+
+You can place this settings in a initializer at `config/initializers/typus.rb`
+
+== Configuration file options
+
+If the configuration file is broken you'll see a `typus.yml` text on the admin interface.
+
+=== Lists
+
+  attribute
+  attribute::OPTIONS
+
+For example ...
+
+  language::LANGUAGES
+
+where `LANGUAGES` is defined at `config/initializers/typus.rb` as
+
+  LANGUAGES = [["Català", "ca"], ["English", "en"], ["Español", "es"]]
+
+=== Forms
+
+    attribute::string
+    attribute::text::10
+    attribute::collection <= The attribute is a `belong_to :attribute` relationship.
+    status::boolean
+    created_at::datetime
+    language::selector::LANGUAGES
+
+=== Filters
+
+  status::boolean
+  author
+  category
+
+=== Order
+
+  attribute::asc
+  attribute::desc
+
+=== Search
+
+  attribute1, attribute2
+
+== Licence
+
+.........

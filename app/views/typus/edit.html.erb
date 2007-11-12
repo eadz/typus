@@ -1,0 +1,11 @@
+<h2>
+<span class="left"><%= link_to "#{@model.to_s.pluralize}", :action => "index", :model => params[:model], :id => nil %> &rsaquo; Edit</span>
+<span class="right"></span>
+</h2>
+
+<% form_tag :action => "update", :id => @item.id do %>
+	<%= typus_form %>
+	<p><%= submit_tag "Update #{@model.to_s.capitalize}" %></p>
+<% end %>
+
+<%= typus_form_externals %>

@@ -1,0 +1,90 @@
+
+html {
+}
+
+body { 
+	font: 0.75em/1.4em "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, sans-serif;
+	background: #000;
+	color: #333;
+}
+
+a {
+	color: #333;
+	font-weight: bold;
+	text-decoration: none;
+	padding: 2px 3px;
+}
+
+a:hover {
+	color: #FFF;
+	background: #0099CC;
+}
+
+#dialog {
+  background-color: white;
+  margin: 8em auto;
+  border: 5px solid #0099CC;
+  padding: 15px 20px 10px 20px;
+  width: 400px;
+}
+
+h1 {
+	font-family: inherit;
+	color: #0099CC;
+	font-size: 160%;
+	margin-top: 5px;
+	margin-left: -3px;
+	margin-bottom: 0.75em;
+}
+
+h2 {
+	font-family: inherit;
+	color: #7A9496;
+	font-size: 120%;
+	margin-top: 1em;
+	margin-bottom: 0.75em;
+}
+
+p {
+	border: 0px;
+	padding: 0px;
+}
+
+label {
+	display: block;
+	font-weight: bold;
+	margin: 0px 0px 3px 0px;
+}
+
+input {
+	margin: 0px 10px 0px 0px;
+}
+
+input.big {
+	font-size: 20px;
+	font-family: georgia;
+	width: 98%;
+	border: 1px solid #d3d3d3;
+	padding: 3px 3px;
+}
+
+input:focus {
+	background-color: #FFFCE1;
+}
+
+#notice {
+	background: #f0f0f0;
+	margin-bottom: 1em;
+	border-top: 1px solid #0099CC;
+	border-bottom: 1px solid #0099CC;
+	padding: 0.5em;
+	font-weight: bold;
+}
+
+#notice-error {
+	background: #000;
+	color: #FFF;
+	margin-bottom: 1em;
+	border-left: 5px solid #CC0000;
+	padding: 5px 5px 5px 10px;
+}

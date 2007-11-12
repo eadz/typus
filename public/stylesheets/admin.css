@@ -1,0 +1,643 @@
+/* ----------------------------------------------------------
+Title:     Typus
+Details:   Master styles for Typus
+Author:    fesplugas@intraducibles.net
+Updated:   September 26 2007
+---------------------------------------------------------- */
+
+/* reset all styles
+---------------------------------------------------------- */
+
+* {
+	margin: 0px;
+	padding: 0px;
+}
+
+/* html
+---------------------------------------------------------- */
+
+html {
+	height: 100%;
+	margin-bottom: 1px;
+}
+
+/* body
+---------------------------------------------------------- */
+
+body {
+	color: #333;
+	font-family: "Lucida Grande", "Bitstream Vera Sans", Helvetica, Verdana, Arial, sans-serif;
+	font-size: 12px;
+}
+
+/* links
+---------------------------------------------------------- */
+
+a, 
+a:visited,
+a:link {
+	color: #000;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+a:active {
+	color: #333;
+	text-decoration: none;
+}
+
+a:hover {
+	background: #fffce6;
+	color: #333;
+	display: inline;
+	text-decoration: none;
+}
+
+/* header
+---------------------------------------------------------- */
+
+#header {
+	background: black;
+	margin: 0px;
+	padding: 10px 15px;
+}
+
+#header h1 {
+	color: white;
+	font-family: "Lucida Grande";
+	font-size: 18px;
+	font-weight: normal;
+}
+
+#header h1 a,
+#header h1 a:visited,
+#header h1 a:active,
+#header h1 a:link {
+	color: white;
+	font-size: 100%;
+	text-decoration: none;
+}
+
+#header h1 a:hover {
+	color: white;
+	text-decoration: none!important;
+}
+
+#header h1 small a {
+	color: red;
+}
+
+#header h2 {
+	display: none;
+}
+
+#header a {
+	color: #FFF;
+	font-size: 12px;
+	font-weight: normal;
+	padding: 0px 2px;
+}
+
+#header a:hover {
+	color: #FFF;
+	background: #0099CC;
+	padding: 0px 2px;
+}
+
+#header p {
+	margin: 5px 0px;
+}
+
+/* wrapper
+---------------------------------------------------------- */
+
+#wrapper {
+	width: 100%;
+}
+
+/* content
+---------------------------------------------------------- */
+
+#content {
+	margin: 20px 300px 20px 20px;
+}
+
+#content a {
+	color: #333;
+	text-decoration: none;
+}
+
+#content a:hover {
+	text-decoration: underline;
+}
+
+#content h1 {
+	font-size: 1.8em;
+	margin: 0px auto;
+	padding: 5px 0px;
+}
+
+#content h1 span.date {
+	color: #ddd;
+	display: none;
+	font-size: 24px;
+	font-weight: normal;
+}
+
+#content h2 {
+	height: 20px;
+	margin: 0px 0px 10px 0px;
+}
+
+#content .left {
+	float: left;
+}
+
+#content .right {
+	float: right;
+	text-align: left;
+	padding: 2px 0px 0px 0px;
+}
+
+
+small {
+	font-size: 75%;
+}
+
+#content h3 {
+	font-size: 1.2em;
+	margin: 0px;
+}
+
+#content h4 {
+	margin: 5px 0px -3px 0px;
+	padding: 0px;
+	font-weight: normal;
+	color: #555;
+	font-size: 11px;
+	margin-bottom: 1em;
+}
+
+#content p {
+	margin: 10px 0px;
+	padding: 0px;
+	line-height: 140%;
+}
+
+#content blockquote {
+	line-height: 1.5em;
+	color: #777;
+	padding: 0px 20px;
+	background: url(/inc/i/blockquote.gif) no-repeat 0px 3px;
+	text-align: left;
+	margin: 20px 0px 20px 30px;
+}
+
+#content blockquote[cite]:after {
+	border: 1px solid #cc0000;
+	content: "" attr(cite);
+	display: block;
+	margin: 0px;
+	color: #960;
+	font-size: 90%;
+	text-align: right;
+}
+
+#content blockquote[title]:after {
+	content: "" attr(title);
+	display: block;
+	margin: 0px;
+	color: #960;
+	font-size: 90%;
+	text-align: right;
+}
+
+#content ul {
+	margin: 10px 20px;
+	padding: 0px;
+}
+
+#content li {
+	line-height: 150%;
+}
+
+#content code {
+	font-color: #353;
+	font-family: monospace, Bitstream Vera Sans Mono, Courier New, monospace;
+}
+
+#content pre {
+	margin: 20px;
+	padding: 10px;
+	background-color: #000;
+	color: #fff;
+	font-family: monaco, "Bitstream Vera Sans Mono", courier, monospace;
+}
+
+#content strong {
+	color: #000;
+}
+
+#content em {
+	background-color: #ffc;
+}
+
+#content dl {
+	width: 100%;
+	clear: left;
+}
+
+#content dt {
+	width: 100%; 
+	text-align: left;
+	float: left;
+	padding: 3px;
+	margin-top: 5px;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+#content dd {
+	width: 100%;
+	margin: 0px;
+	padding: 0px;
+	float: left;
+	text-align: left;
+}
+
+/* sidebar
+---------------------------------------------------------- */
+
+#sidebar {
+	float: right;
+	margin: 0px 20px;
+	width: 230px;
+}
+
+#sidebar label {
+	font-size: 15px;
+}
+
+#sidebar h2 {
+	border: none;
+	padding: 0px;
+	margin: 0px 0px 10px 0px;
+}
+
+#sidebar p {
+	margin: 0px 0px 15px 0px;
+}
+
+#sidebar form {
+	margin: 0px 0px 10px 0px;
+}
+
+#sidebar h3 {
+	border: none;
+	padding: 0px;
+	margin: 10px 0px 5px 0px;
+}
+
+#sidebar ul {
+	line-height: 150%;
+	padding: 0px;
+	margin: 0px 0px 15px 0px;
+}
+
+#sidebar li {
+	list-style: none;
+	line-height: 150%;
+	padding: 0px;
+	margin: 0px;
+}
+
+#sidebar ul ul {
+	margin: 0px;
+	padding: 0px;
+}
+
+#sidebar a {
+	color: #333;
+	text-decoration: none;
+}
+
+#sidebar a.on {
+	color: #FFF;
+	background: #0099CC;
+	padding: 0px 2px;
+}
+
+#sidebar a:hover {
+	text-decoration: underline;
+}
+
+#sidebar a.on:hover {
+	text-decoration: none;
+}
+
+/* footer
+---------------------------------------------------------- */
+
+#footer {
+	font-size: 10px;
+	margin: 20px;
+}
+
+#footer a {
+	color: #000;
+	padding: 2px 3px;
+}
+
+#footer a:hover {
+	color: #FFF;
+	background: #0099CC;
+}
+
+/* form
+---------------------------------------------------------- */
+
+form {
+	padding: 0px;
+	margin: 0px;
+}
+
+input {
+	border: 1px solid #999;
+	background-color: #fff;
+	color: #000;
+	padding: 2px;
+	margin: 0px;
+	font-size: 12px;
+}
+
+input.big {
+	font-weight: normal;
+	font-size: 20px;
+	font-family: Georgia, monaco;
+	width: 100%;
+}
+
+.button {
+}
+
+input:focus,
+textarea:focus {
+	background-color: #FFFCE1;
+}
+
+input:hover {
+}
+
+input.submit {
+	color: red;
+}
+
+textarea {
+	border: 1px solid #999;
+	font-family: Monaco, "Courier New", Courier, monospace;
+	font-size: 12px;
+	padding: 1px;
+	width: 100%;
+}
+
+select {
+	border: 1px solid #999;
+}
+
+/* label
+---------------------------------------------------------- */
+
+label {
+	font-weight: bold;
+	display: block;
+	margin: 5px 0px 3px 0px;
+}
+
+/* notice & dialogs
+---------------------------------------------------------- */
+
+.dialog {
+	padding: 0px;
+	margin: 10px 0px 20px 0px;
+}
+
+#notice {
+	font-weight: bold;
+	display: block;
+	color: #FFF;
+	padding: 10px;
+	margin: 10px 0px;
+	border-left: 5px solid #0099CC;
+	background: #000;
+}
+
+#notice-error {
+	font-weight: bold;
+	display: block;
+	color: #CC0000;
+	padding: 5px;
+	margin: 10px 0px;
+	border-top: 1px solid #CC0000;
+	border-bottom: 1px solid #CC0000;
+	background: #f5f5f5;
+}
+
+#info {
+	border: 1px solid #cccc66;
+	background-color: #ffffcc;
+	padding: 5px 10px;
+	text-align: left;
+}
+
+#section {
+	width: 230px;
+	height: 300px;
+	float: left;
+	margin: 0px 0px 10px 5px;
+	padding: 5px;
+}
+
+/* tables
+---------------------------------------------------------- */
+
+table {
+	background: black;
+	border-collapse: collapse;
+	border-spacing: 0px;
+	color: black;
+	font-weight: normal!important;
+	margin: 0px;
+	padding: 0px;
+	width: 100%;
+}
+
+table th {
+	color: white;
+	padding: 3px 4px;
+	text-align: left;
+}
+
+table th a {
+	color: white!important;
+}
+
+table th a:hover {
+	text-decoration: none!important;
+}
+
+table tr.even {
+    background: white!important;
+}
+
+table tr.even:hover,
+table tr.odd:hover {
+	color: white;
+	background: #0099CC!important;
+}
+
+table tr.even:hover a,
+table tr.odd:hover a {
+	color: white!important;
+}
+
+table tr.even:hover a:hover,
+table tr.odd:hover a:hover {
+	background: transparent!important;
+}
+
+table tr.odd {
+    background: #F5F5F5!important;
+}
+
+table td {
+	border: none;
+	font-weight: normal;
+	padding: 3px 4px;
+	vertical-align: top;
+}
+
+table a,
+table a:link,
+table a:visited,
+table a:active {
+	font-weight: normal;
+}
+
+table a:hover {
+	color: black;
+}
+
+/* fieldsets
+---------------------------------------------------------- */
+
+fieldset {
+	border: 1px dotted #999;
+	padding: 10px;
+	margin: 0px 0px 20px 0px;
+}
+
+fieldset.on {
+	border: 1px solid #0099CC;
+}
+
+fieldset.on legend {
+	color: #0099CC;
+	text-transform: uppercase;
+}
+
+legend {
+	font-size: 15px;
+	padding: 0px 5px;
+}
+
+fieldset input {
+	width: 100%;
+}
+
+/* headings
+---------------------------------------------------------- */
+
+h2 {
+	margin: 0px 0px 20px 0px;
+}
+
+/* rails errors
+---------------------------------------------------------- */
+
+.formError {
+	display: inline;
+	color: green;
+}
+
+.fieldWithErrors {
+	margin: -7px 0px 0px 0px;
+}
+
+/* searchbox
+---------------------------------------------------------- */
+
+.box {
+	border: 1px solid #d3d3d3;
+	margin: 0px 0px 10px 0px;
+	padding: 5px 10px;
+}
+
+.box p {
+	margin: 5px 0px;
+}
+
+.separator {
+	border-top: 1px dotted #999;
+	margin: 20px 0px;
+}
+
+img {
+	border: 0px;
+}
+
+
+/* pagination
+---------------------------------------------------------- */
+
+.pagination {
+	margin: 3px;
+	padding: 3px;
+	margin: 10px auto;
+	text-align: center;
+}
+
+.pagination a {
+	color: #0099CC;
+	margin: 2px;
+	padding: 2px 3px;
+	text-decoration: none;
+}
+.pagination a:hover,
+.pagination a:active {
+	color: #000;
+}
+.pagination span.current {
+	background-color: #0099CC;
+	color: #FFF;
+	font-weight: bold;
+	margin: 2px;
+	padding: 2px 3px;
+}
+
+.pagination span.disabled {
+	color: #ddd;
+	margin: 2px;
+	padding: 2px 3px;
+}
+
+/* feedback
+-----------------*/
+
+h1 span.feedback {
+	color: #FFF;
+	background: #0099CC;
+	font-size: 75%;
+	font-weight: bold!important;
+	margin: 0px 0px 0px 5px;
+	padding: 3px 5px;
+}

@@ -1,0 +1,43 @@
+<h2>
+<div class="left"><%= link_to @model.to_s.pluralize.capitalize, :model => params[:model], :action => "index" %></div>
+<div class="right"></div>
+</h2>
+
+<div id="search_box" <%= "style=\"display: none;\"" if !params[:search] %> class="box">
+	<p><input id="search" stylname="search" type="text" value=""> <span id="spinner" style="height: 40px; display: none;"><%= image_tag("typus/spinner.gif") %></span></p>
+	<%= observe_field 'search', :frequency => 0.5, :update => 'list', :url => { :action => 'index', :model => params[:model] }, :with => "'search=' + escape(value)", :before => "Element.show('spinner');", :complete => "Element.hide('spinner');" %>
+</div>
+
+<div id="list">
+
+	<% if @model.count > 0 -%>
+
+		<% if @items.size > 0 -%>
+		
+			<%= render :partial => "table" %>
+		
+		<% else -%>
+		
+			<div class="box" id="empty">
+			<% if params[:search] %>
+				<p>No <strong><%= params[:model] %></strong> match the search <strong><%= params[:search] %></strong></p>
+			<% else %>
+				<p>There are no <strong><%= params[:model] %></strong> with the filter <strong><%= params[:filter_by].humanize %></strong> set to <strong><%= params[:filter_id].humanize %></strong>. <%= link_to "Remove filter?", :action => "index", :model => params[:model] %></p>
+			<% end %>
+			</div>
+		
+			<script type="text/javascript">
+			  new Effect.Highlight('empty');
+			</script>
+		
+		<% end -%>
+	
+	<% else -%>
+	
+		<p><%= link_to "Add the first #{params[:model].singularize}", :action => "new", :model => params[:model] %></p>
+	
+	<% end -%>
+	
+	<%= will_paginate @items %>
+
+</div>

@@ -1,0 +1,9 @@
+<h2>
+<span class="left"><%= link_to "#{@model.to_s.pluralize}", :action => "index", :model => params[:model], :id => nil %> &rsaquo; New</span>
+<span class="right"></span>
+</h2>
+
+<% form_tag :action => 'create' do %>
+	<%= typus_form %>
+	<p><%= submit_tag "Create #{@model}" %></p>
+<% end %>
