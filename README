@@ -63,6 +63,13 @@ where `LANGUAGES` is defined at `config/initializers/typus.rb` as
 
   attribute1, attribute2
 
+== Integration with Capistrano
+
+  deploy.task :restart, :roles => :app do
+  run "cd #{current_path} && rake db:migrate RAILS_ENV=production"
+    run "cd #{current_path} && rake typus:setup"
+  end
+
 == Licence
 
 .........
