@@ -1,14 +1,19 @@
 require File.dirname(__FILE__) + '/../../../../config/environment'
 
 namespace :typus do
-  
-  desc "Generate typus.yml & Admin Interface Assets"
-  task :setup do
+
+
+  desc "Admin Interface Assets"
+  task :theme do
     puts "Creating symlinks ..."
     %w( images stylesheets ).each do |symlink|
       puts "=> Added symlink for #{symlink}"
       system "ln -s #{RAILS_ROOT}/vendor/plugins/typus/public/#{symlink} #{RAILS_ROOT}/public/#{symlink}/typus"
     end
+  end
+
+  desc "Generate typus.yml"
+  task :setup do
     begin
       MODEL_DIR = File.join(RAILS_ROOT, "app/models")
       Dir.chdir(MODEL_DIR)
