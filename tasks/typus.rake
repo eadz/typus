@@ -20,12 +20,12 @@ namespace :typus do
         typus.puts "# ------------------------------------------------"
         typus.puts "#"
         typus.puts "# Post:"
-        typus.puts "#   list: title"
+        typus.puts "#   list: title::string created_at::datetime"
         typus.puts "#   form: title::string body::text::10 status::boolean created_at::datetime"
-        typus.puts "#   module: content"
-        typus.puts "#   order: created_at"
-        typus.puts "#   filters: status"
+        typus.puts "#   order: created_at::asc"
+        typus.puts "#   filters: status::boolean created_at::datetime"
         typus.puts "#   search: title body"
+        typus.puts "#   module: content"
         typus.puts "#   copy: Some text to describe the model"
         typus.puts "#"
         typus.puts "# ------------------------------------------------"
@@ -39,7 +39,7 @@ namespace :typus do
           list = class_attributes
           list.delete("content")
           list.delete("body")
-          typus.puts "  list: #{list.join(" ")}"
+          typus.puts "  list: #{list.join("::string ")}"
           typus.puts "  form:"
           typus.puts "  module:"
           typus.puts "  order:"

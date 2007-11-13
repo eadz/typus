@@ -74,29 +74,30 @@ module TypusHelper
       # Actions end
       if @model["filters"]
         @block += "<h2>Filter</h2>"
-        @model["filters"].split(" ").each do |f|
-          if %w( status verified blocked ).include? f
-            @block += "<h3>By #{f.humanize}</h3>\n"
+        # @model.filters ...
+        Post.filters.each do |f|
+          if f[1] == "boolean"
+            @block += "<h3>By #{f[0].humanize}</h3>\n"
             @block += "<ul>\n"
             @status = params[:filter_id] == "true" ? "on" : "off"
-            @block += "<li><a class=\"#{@status}\" href=\"/#{TYPUS['prefix']}/#{params[:model]}?filter_by=#{f}&filter_id=true\">Active</a></li>\n"
+            @block += "<li><a class=\"#{@status}\" href=\"/#{TYPUS['prefix']}/#{params[:model]}?filter_by=#{f[0]}&filter_id=true\">Active</a></li>\n"
             @status = params[:filter_id] == "false" ? "on" : "off"
-            @block += "<li><a class=\"#{@status}\" href=\"/#{TYPUS['prefix']}/#{params[:model]}?filter_by=#{f}&filter_id=false\">Inactive</a></li>\n"
+            @block += "<li><a class=\"#{@status}\" href=\"/#{TYPUS['prefix']}/#{params[:model]}?filter_by=#{f[0]}&filter_id=false\">Inactive</a></li>\n"
             @block += "</ul>\n"
-          elsif %w( created_at updated_at ).include? f
-            @block += "<h3>By #{f.humanize}</h3>\n"
+          elsif f[1] == "datetime"
+            @block += "<h3>By #{f[0].humanize}</h3>\n"
             @block += "<ul>\n"
             %w( today past_7_days this_month this_year).each do |timeline|
               @status = params[:filter_id] == timeline ? "on" : "off"
-              @block += "<li><a class=\"#{@status}\" href=\"/#{TYPUS['prefix']}/#{params[:model]}?filter_by=#{f}&filter_id=#{timeline}\">#{timeline.humanize.capitalize}</a></li>\n"
+              @block += "<li><a class=\"#{@status}\" href=\"/#{TYPUS['prefix']}/#{params[:model]}?filter_by=#{f[0]}&filter_id=#{timeline}\">#{timeline.humanize.capitalize}</a></li>\n"
             end
             @block += "</ul>\n"
-          else
-            @block += "<h3>By #{f.humanize}</h3>"
-            @model = eval f.capitalize
+          elsif f[1] == "collection"
+            @block += "<h3>By #{f[0].humanize}</h3>"
+            @model = eval f[0].capitalize
             @block += "<ul>\n"
             @model.find(:all).each do |item|
-              @block += "<li><a href=\"/#{TYPUS['prefix']}/#{params[:model]}?filter_by=#{f}_id&filter_id=#{item.id}\">#{item.name}</a></li>\n"
+              @block += "<li><a href=\"/#{TYPUS['prefix']}/#{params[:model]}?filter_by=#{f[0]}_id&filter_id=#{item.id}\">#{item.name}</a></li>\n"
             end
             @block += "</ul>\n"
           end
@@ -104,8 +105,8 @@ module TypusHelper
       end
     end
     return @block
-  rescue
-    return "FixMe: <strong>typus.yml</strong>"
+#  rescue
+#    return "FixMe: <strong>typus.yml</strong>"
   end
 
   def feedback

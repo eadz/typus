@@ -3,8 +3,7 @@
 <tr>
 
 <% @fields.each do |column| %>
-
-<th><a href="?order_by=<%= column.split("::")[0] %>&sort_order=<% if params[:order_by].include? column %><%= (@status = (params[:sort_order] == "asc") ? "desc" : "asc" ) %><% else %><%= "asc" %><% end %>"><div class="<% if params[:order_by].include? column %><%= (@status = (params[:sort_order] == "asc") ? "order_desc" : "order_asc" ) %><% else %><%= "order" %><% end %>"><%= column.split("::")[0].humanize %></div></a></th>
+<th><a href="?order_by=<%= column[0] %>&sort_order=<% if params[:order_by].include? column[0] %><%= (@status = (params[:sort_order] == "asc") ? "desc" : "asc" ) %><% else %><%= "asc" %><% end %>"><div class="<% if params[:order_by].include? column[0] %><%= (@status = (params[:sort_order] == "asc") ? "order_desc" : "order_asc" ) %><% else %><%= "order" %><% end %>"><%= column[0].humanize %></div></a></th>
 <% end %>
 <th>&nbsp;</th>
 </tr>
@@ -13,23 +12,20 @@
   <tr class="<%= cycle('even', 'odd') %>" id="item_<%= item.id %>">
   <% @fields.each do |column| %>
     
-    <% if %w(id title name first_name last_name).include? column -%>
-    <td><%= link_to item.send(column), :action => 'edit', :id => item.id %></td>
-    <% elsif %w(email).include? column -%>
-    <td><%= mail_to item.send(column), item.send(column), :title => "" %></td>
-    <% elsif %w(status).include? column -%>
-      <td width="20px" align="center"><%= image_tag(status = item.send(column)? "typus/status_true.gif" : "typus/status_false.gif") %></td>
-    <% elsif %w(verified is_admin).include? column -%>
-      <td><%= status = item.send(column)? "Yes" : "No" %></td>
-    <% elsif %w(created_at updated_at).include? column -%>
-      <td width="80px"><%= fmt_date(item.send(column)) %></td>
-    
-    <% elsif column.include? ("_id") -%>
-      <% rel_model = eval column.split("_id")[0].capitalize %>
+    <% if column[1] == "string" -%>
+    	<td><%= link_to item.send(column[0]), :action => 'edit', :id => item.id %></td>
+    <% elsif column[1] == "email" -%>
+    	<td><%= mail_to item.send(column), item.send(column), :title => "" %></td>
+    <% elsif column[1] == "boolean" -%>
+    	<td width="20px" align="center"><%= image_tag(status = item.send(column[0])? "typus/status_true.gif" : "typus/status_false.gif") %></td>
+    <% elsif column[1] == "datetime" -%>
+    	<td width="80px"><%= fmt_date(item.send(column[0])) %></td>
+    <% elsif column[1] == "collection" -%>
+      <% rel_model = eval column[0].capitalize %>
       
-      <% if item.send(column) %>
-        <% attribute = item.send(column.split("_id")[0]).name %>
-        <% attribute_id = item.send(column.split("_id")[0]).id %>
+      <% if item.send(column[0]) %>
+        <% attribute = item.send(column[0]).name %>
+        <% attribute_id = item.send(column[0]).id %>
       <% end %>
       
       <td><% if attribute %><a href="/<%= TYPUS['prefix'] %>/<%= rel_model.to_s.downcase.pluralize %>/<%= attribute_id %>"><%= attribute %></a><% end %></td>

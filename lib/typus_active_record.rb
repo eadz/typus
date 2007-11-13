@@ -7,8 +7,10 @@ class ActiveRecord::Base
   def self.list_fields
     @config = YAML.load_file("#{RAILS_ROOT}/config/typus.yml")
     @config = @config["#{self}"]["list"].split(" ")
-    @config = %w( name ) if @config.size == 0
-    return @config
+    @fields = Array.new
+    @config.each { |i| @fields << i.split("::") }
+    @fields << [["name", "string"]] if @fields.size == 0
+    return @fields
   end
 
   def self.form_fields
@@ -50,6 +52,14 @@ class ActiveRecord::Base
       @config.each { |i| @search << i }
     end
     return @search
+  end
+
+  def self.filters
+    @config = YAML.load_file("#{RAILS_ROOT}/config/typus.yml")
+    @filters = Array.new
+    @config = @config["#{self}"]["filters"].split(" ")
+    @config.each { |i| @filters << i.split("::") }
+    return @filters
   end
 
 end
