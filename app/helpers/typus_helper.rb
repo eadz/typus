@@ -74,8 +74,9 @@ module TypusHelper
       # Actions end
       if @model["filters"]
         @block += "<h2>Filter</h2>"
-        # @model.filters ...
-        Post.filters.each do |f|
+        # TODO: Cleanup this eval
+        @current_model = eval params[:model].singularize.capitalize
+        @current_model.filters.each do |f|
           if f[1] == "boolean"
             @block += "<h3>By #{f[0].humanize}</h3>\n"
             @block += "<ul>\n"
@@ -105,8 +106,8 @@ module TypusHelper
       end
     end
     return @block
-#  rescue
-#    return "FixMe: <strong>typus.yml</strong>"
+  rescue
+    return "FixMe: <strong>typus.yml</strong>"
   end
 
   def feedback
