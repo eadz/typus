@@ -2,6 +2,10 @@ require File.dirname(__FILE__) + '/../../../../config/environment'
 
 namespace :typus do
 
+  desc "Update from the latest trunk"
+  task :update do
+    system "cd #{RAILS_ROOT}/vendor/plugins && hg pull && hg upda"
+  end
 
   desc "Admin Interface Assets"
   task :theme do
