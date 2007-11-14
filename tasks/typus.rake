@@ -2,9 +2,14 @@ require File.dirname(__FILE__) + '/../../../../config/environment'
 
 namespace :typus do
 
+  desc "Commit fixes to Typus"
+  task :commit do
+    system "cd #{RAILS_ROOT}/vendor/plugins/typus && hg push"
+  end
+
   desc "Update from the latest trunk"
   task :update do
-    system "cd #{RAILS_ROOT}/vendor/plugins && hg pull && hg upda"
+    system "cd #{RAILS_ROOT}/vendor/plugins/typus && hg pull && hg update"
   end
 
   desc "Admin Interface Assets"
