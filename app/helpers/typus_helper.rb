@@ -58,11 +58,10 @@ module TypusHelper
 
   def sidebar
     if params[:model]
-      @model = params[:model].singularize.capitalize
-      @model = MODELS[@model]
-      @block = ""
+      @model = eval params[:model].singularize.capitalize
+      
       # Actions
-      @block += "<h2>Actions</h2>\n"
+      @block = "<h2>Actions</h2>\n"
       @block += "<ul>\n"
       if params[:action] != "new"
         @block += "<li><a href=\"/#{TYPUS['prefix']}/#{params[:model]}/new\">Add new #{params[:model].singularize}</a></li>\n"
@@ -70,23 +69,26 @@ module TypusHelper
       if %w(edit new).include? params[:action]
         @block += "<li><a href=\"/#{TYPUS['prefix']}/#{params[:model]}\">Back to #{params[:model]}</a></li>\n"
       end
+      @block += "</ul>\n"
+      
+      # Search
+      
       # @block += "<li>Search</li>\n"
       # @block += "#{link_to_function "Search", "['search_box'].each(Element.toggle);"}" # if @model.search_fields.size > 0
-      # PREVIOUS AND NEXT
-      @block += "</ul>\n"
+      
+      # Previous and next item
       @block += "<ul>\n"
       @block += "<li>#{link_to "Next #{params[:model].singularize}", :action => "edit", :id => @next.id}</li>" if @next
       @block += "<li>#{link_to "Previous #{params[:model].singularize}", :action => 'edit', :id => @previous.id}</li>" if @previous
       @block += "</ul>\n"
-      # Actions end
+      
+      # Filters (only shown on index page)
       
       if params[:action] == "index"
       
-        if @model["filters"]
+        if MODELS[@model.to_s]["filters"]
           @block += "<h2>Filter</h2>"
-          # TODO: Cleanup this eval
-          @current_model = eval params[:model].singularize.capitalize
-          @current_model.filters.each do |f|
+          @model.filters.each do |f|
             if f[1] == "boolean"
               @block += "<h3>By #{f[0].humanize}</h3>\n"
               @block += "<ul>\n"
