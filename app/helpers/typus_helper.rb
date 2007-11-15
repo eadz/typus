@@ -64,7 +64,12 @@ module TypusHelper
       # Actions
       @block += "<h2>Actions</h2>\n"
       @block += "<ul>\n"
-      @block += "<li><a href=\"/#{TYPUS['prefix']}/#{params[:model]}/new\">Add new #{params[:model].singularize}</a></li>\n"
+      if params[:action] != "new"
+        @block += "<li><a href=\"/#{TYPUS['prefix']}/#{params[:model]}/new\">Add new #{params[:model].singularize}</a></li>\n"
+      end
+      if %w(edit new).include? params[:action]
+        @block += "<li><a href=\"/#{TYPUS['prefix']}/#{params[:model]}\">Back to #{params[:model]}</a></li>\n"
+      end
       # @block += "<li>Search</li>\n"
       # @block += "#{link_to_function "Search", "['search_box'].each(Element.toggle);"}" # if @model.search_fields.size > 0
       # PREVIOUS AND NEXT
@@ -74,35 +79,39 @@ module TypusHelper
       @block += "<li>#{link_to "Previous #{params[:model].singularize}", :action => 'edit', :id => @previous.id}</li>" if @previous
       @block += "</ul>\n"
       # Actions end
-      if @model["filters"]
-        @block += "<h2>Filter</h2>"
-        # TODO: Cleanup this eval
-        @current_model = eval params[:model].singularize.capitalize
-        @current_model.filters.each do |f|
-          if f[1] == "boolean"
-            @block += "<h3>By #{f[0].humanize}</h3>\n"
-            @block += "<ul>\n"
-            @status = params[:filter_id] == "true" ? "on" : "off"
-            @block += "<li><a class=\"#{@status}\" href=\"/#{TYPUS['prefix']}/#{params[:model]}?filter_by=#{f[0]}&filter_id=true\">Active</a></li>\n"
-            @status = params[:filter_id] == "false" ? "on" : "off"
-            @block += "<li><a class=\"#{@status}\" href=\"/#{TYPUS['prefix']}/#{params[:model]}?filter_by=#{f[0]}&filter_id=false\">Inactive</a></li>\n"
-            @block += "</ul>\n"
-          elsif f[1] == "datetime"
-            @block += "<h3>By #{f[0].humanize}</h3>\n"
-            @block += "<ul>\n"
-            %w( today past_7_days this_month this_year).each do |timeline|
-              @status = params[:filter_id] == timeline ? "on" : "off"
-              @block += "<li><a class=\"#{@status}\" href=\"/#{TYPUS['prefix']}/#{params[:model]}?filter_by=#{f[0]}&filter_id=#{timeline}\">#{timeline.humanize.capitalize}</a></li>\n"
+      
+      if params[:action] == "index"
+      
+        if @model["filters"]
+          @block += "<h2>Filter</h2>"
+          # TODO: Cleanup this eval
+          @current_model = eval params[:model].singularize.capitalize
+          @current_model.filters.each do |f|
+            if f[1] == "boolean"
+              @block += "<h3>By #{f[0].humanize}</h3>\n"
+              @block += "<ul>\n"
+              @status = params[:filter_id] == "true" ? "on" : "off"
+              @block += "<li><a class=\"#{@status}\" href=\"/#{TYPUS['prefix']}/#{params[:model]}?filter_by=#{f[0]}&filter_id=true\">Active</a></li>\n"
+              @status = params[:filter_id] == "false" ? "on" : "off"
+              @block += "<li><a class=\"#{@status}\" href=\"/#{TYPUS['prefix']}/#{params[:model]}?filter_by=#{f[0]}&filter_id=false\">Inactive</a></li>\n"
+              @block += "</ul>\n"
+            elsif f[1] == "datetime"
+              @block += "<h3>By #{f[0].humanize}</h3>\n"
+              @block += "<ul>\n"
+              %w( today past_7_days this_month this_year).each do |timeline|
+                @status = params[:filter_id] == timeline ? "on" : "off"
+                @block += "<li><a class=\"#{@status}\" href=\"/#{TYPUS['prefix']}/#{params[:model]}?filter_by=#{f[0]}&filter_id=#{timeline}\">#{timeline.humanize.capitalize}</a></li>\n"
+              end
+              @block += "</ul>\n"
+            elsif f[1] == "collection"
+              @block += "<h3>By #{f[0].humanize}</h3>"
+              @model = eval f[0].capitalize
+              @block += "<ul>\n"
+              @model.find(:all).each do |item|
+                @block += "<li><a href=\"/#{TYPUS['prefix']}/#{params[:model]}?filter_by=#{f[0]}_id&filter_id=#{item.id}\">#{item.name}</a></li>\n"
+              end
+              @block += "</ul>\n"
             end
-            @block += "</ul>\n"
-          elsif f[1] == "collection"
-            @block += "<h3>By #{f[0].humanize}</h3>"
-            @model = eval f[0].capitalize
-            @block += "<ul>\n"
-            @model.find(:all).each do |item|
-              @block += "<li><a href=\"/#{TYPUS['prefix']}/#{params[:model]}?filter_by=#{f[0]}_id&filter_id=#{item.id}\">#{item.name}</a></li>\n"
-            end
-            @block += "</ul>\n"
           end
         end
       end
