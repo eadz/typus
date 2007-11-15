@@ -8,7 +8,7 @@ end
 TYPUS = Hash.new
 TYPUS['app_name'] = 'Typus Admin Interface'
 TYPUS['app_description'] = 'Web Development for the Masses'
-TYPUS['per_page'] = 15
+TYPUS['per_page'] = 20
 TYPUS['prefix'] = 'admin'
 TYPUS['app_username'] = 'admin'
 TYPUS['app_password'] = (RAILS_ENV == "development") ? 'typus' : Digest::SHA1.hexdigest((rand(255)).to_s).slice(0..15)
