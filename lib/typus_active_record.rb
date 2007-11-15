@@ -1,9 +1,5 @@
 class ActiveRecord::Base
 
-#  def name
-#    "object_#{id}"
-#  end
-
   def self.list_fields
     @config = YAML.load_file("#{RAILS_ROOT}/config/typus.yml")
     @config = @config["#{self}"]["list"].split(" ")
