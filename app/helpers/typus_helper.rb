@@ -19,7 +19,9 @@ module TypusHelper
   end
 
   def header
-    @block = "<h1>#{TYPUS['app_name']} <span class=\"feedback\">#{flash[:notice]}</span></h1>\n"
+    @block = "<h1>#{TYPUS['app_name']}"
+    @block += "<span class=\"feedback\">#{flash[:notice]}</span>" if flash[:notice]
+    @block += "</h1>\n"
     @block += "<h2>#{TYPUS['app_description']}</h2>"
     return @block
   end
