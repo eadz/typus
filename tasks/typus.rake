@@ -14,10 +14,10 @@ namespace :typus do
 
   desc "Admin Interface Assets"
   task :theme do
-    puts "Creating symlinks ..."
-    %w( images stylesheets ).each do |symlink|
-      puts "=> Added symlink for #{symlink}"
-      system "ln -s #{RAILS_ROOT}/vendor/plugins/typus/public/#{symlink} #{RAILS_ROOT}/public/#{symlink}/typus"
+    puts "Coping admin interface assets ..."
+    %w( images stylesheets ).each do |folder|
+      puts "=> Added *#{folder}* assets"
+      system "cp #{RAILS_ROOT}/vendor/plugins/typus/public/#{folder}/* #{RAILS_ROOT}/public/#{folder}/"
     end
   end
 

@@ -12,7 +12,7 @@ module TypusHelper
     @block += "<meta name=\"copyright\" content=\"\" />\n"
     @block += "<meta name=\"generator\" content=\"\" />\n"
     @block += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n"
-    @block += stylesheet_link_tag "typus/admin", :media => "screen"
+    @block += stylesheet_link_tag "typus", :media => "screen"
     @block += "\n"
     @block += javascript_include_tag :defaults
     return @block
@@ -147,7 +147,7 @@ module TypusHelper
   def typus_form
     @block = ""
     @form_fields.each do |field|
-      @block += "<p><label>#{field[0].humanize} #{error_message_on :item, field[0]}</label>"
+      @block += "<p><label>#{field[0].humanize}</label> #{error_message_on :item, field[0]}"
       case field[1]
       when "string"
         @block += text_field :item, field[0], :class => "big"
