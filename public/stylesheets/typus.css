@@ -573,6 +573,11 @@ h2 {
 	margin: -7px 0px 0px 0px;
 }
 
+.errorExplanation {
+	border: 1px solid #999;
+	padding: 10px 10px 5px 10px;
+}
+
 /* searchbox
 ---------------------------------------------------------- */
 
