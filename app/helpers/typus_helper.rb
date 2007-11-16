@@ -146,8 +146,12 @@ module TypusHelper
 
   def typus_form
     @block = ""
+    
+    @block += error_messages_for :item, :header_tag => "h3"
+    
     @form_fields.each do |field|
-      @block += "<p><label>#{field[0].humanize}</label> #{error_message_on :item, field[0]}"
+      @block += "<p><label>#{field[0].humanize}</label>"
+      #  #{error_message_on :item, field[0]}
       case field[1]
       when "string"
         @block += text_field :item, field[0], :class => "big"
