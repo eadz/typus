@@ -84,9 +84,7 @@ module TypusHelper
       if MODELS[@model.to_s]["actions"]
         @block += "<h2>More Actions</h2>"
         @block += "<ul>"
-        @model.actions.each do |a|
-          @block += "<li><a href=\"/#{TYPUS['prefix']}/#{params[:model]}/#{a[0]}\">#{a[0].humanize}</a></li>" if a[1] == params[:action]
-        end
+        @model.actions.each { |a| @block += "<li><a href=\"/#{TYPUS['prefix']}/#{params[:model]}/#{a[0]}\">#{a[0].humanize}</a></li>" if a[1] == params[:action] }
         @block += "</ul>"
       end
       
@@ -108,6 +106,8 @@ module TypusHelper
           @model.filters.each do |f|
             case f[1]
             when "boolean"
+              # @current_request = (request.env['QUERY_STRING']) ? request.env['QUERY_STRING'].split("&") : ""
+              # @current_request = (@current_request - ["#{f[0]}=true"]).join("&")
               @block += "<h3>By #{f[0].humanize}</h3>\n"
               @block += "<ul>\n"
               @status = params[:status] == "true" ? "on" : "off"
@@ -118,8 +118,13 @@ module TypusHelper
             when "datetime"
               @block += "<h3>By #{f[0].humanize}</h3>\n"
               @block += "<ul>\n"
-              %w( today past_7_days this_month this_year).each do |timeline|
+              # This cleans the request
+              # current_request = (request.env['QUERY_STRING']) ? request.env['QUERY_STRING'].split("&") : ""
+              @filters = %w(today past_7_days this_month this_year)
+              # @filters.each { |timeline| current_request.delete("#{f[0]}=#{timeline}") }
+              @filters.each do |timeline|
                 @status = params[:created_at] == timeline ? "on" : "off"
+                # current_request = "&#{current_request.join("&")}" if current_request.size > 0
                 @block += "<li><a class=\"#{@status}\" href=\"/#{TYPUS['prefix']}/#{params[:model]}?#{f[0]}=#{timeline}\">#{timeline.humanize.capitalize}</a></li>\n"
               end
               @block += "</ul>\n"
@@ -135,8 +140,8 @@ module TypusHelper
       end
     end
     return @block
-  rescue
-    return "FixMe: <strong>typus.yml</strong>"
+#  rescue
+#    return "FixMe: <strong>typus.yml</strong>"
   end
 
   def feedback
