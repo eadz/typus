@@ -162,7 +162,7 @@ module TypusHelper
       when "tags"
         @block += text_field :item, field[0], :value => @item.tags.join(", "), :class => "big"
       when "selector"
-        @values = LANGUAGES
+        @values = eval field[2]
         @block += select :item, field[0], @values.collect { |p| [ "#{p[0]} (#{p[1]})", p[1] ] }
       when "collection"
         @collection = eval field[0].singularize.capitalize
