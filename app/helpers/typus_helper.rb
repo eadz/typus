@@ -31,15 +31,14 @@ module TypusHelper
     if params[:model]
       @block += "<p>"
       @block += "<a href=\"/#{TYPUS['prefix']}/\">Home</a>"
-      if params[:action] == "index"
+      case params[:action]
+      when "index"
         @block += " &rsaquo; #{params[:model].capitalize}</li>\n"
-      else
+      when "edit"
         @block += " &rsaquo; <a href=\"/#{TYPUS['prefix']}/#{params[:model]}\">#{params[:model].capitalize}</a></li>\n"
-      end
-      if params[:action] == "edit"
         @block += " &rsaquo; Edit</li>\n"
-      end
-      if params[:action] == "new"
+      when "new"
+        @block += " &rsaquo; <a href=\"/#{TYPUS['prefix']}/#{params[:model]}\">#{params[:model].capitalize}</a></li>\n"
         @block += " &rsaquo; New</li>\n"
       end
       @block += "</p>"
@@ -51,7 +50,6 @@ module TypusHelper
     @block = "<ul>\n"
     MODELS.each { |model| @block += "<li><a href=\"/#{TYPUS['prefix']}/#{model[0].downcase.pluralize}\">#{model[0].pluralize}</a> <small><a href=\"/#{TYPUS['prefix']}/#{model[0].downcase.pluralize}/new\">Add</a></small><br />#{model[1]['copy']}</li>\n" }
     @block += "</ul>\n"
-    return @block
   rescue
     return "<ul><li>FixMe: <strong>typus.yml</strong></li></ul>"
   end
@@ -72,7 +70,6 @@ module TypusHelper
       @block += "</ul>\n"
       
       # Search
-      
       # @block += "<li>Search</li>\n"
       # @block += "#{link_to_function "Search", "['search_box'].each(Element.toggle);"}" # if @model.search_fields.size > 0
       
@@ -89,7 +86,8 @@ module TypusHelper
         if MODELS[@model.to_s]["filters"]
           @block += "<h2>Filter</h2>"
           @model.filters.each do |f|
-            if f[1] == "boolean"
+            case f[1]
+            when "boolean"
               @block += "<h3>By #{f[0].humanize}</h3>\n"
               @block += "<ul>\n"
               @status = params[:filter_id] == "true" ? "on" : "off"
@@ -97,7 +95,7 @@ module TypusHelper
               @status = params[:filter_id] == "false" ? "on" : "off"
               @block += "<li><a class=\"#{@status}\" href=\"/#{TYPUS['prefix']}/#{params[:model]}?filter_by=#{f[0]}&filter_id=false\">Inactive</a></li>\n"
               @block += "</ul>\n"
-            elsif f[1] == "datetime"
+            when "datetime"
               @block += "<h3>By #{f[0].humanize}</h3>\n"
               @block += "<ul>\n"
               %w( today past_7_days this_month this_year).each do |timeline|
@@ -105,7 +103,7 @@ module TypusHelper
                 @block += "<li><a class=\"#{@status}\" href=\"/#{TYPUS['prefix']}/#{params[:model]}?filter_by=#{f[0]}&filter_id=#{timeline}\">#{timeline.humanize.capitalize}</a></li>\n"
               end
               @block += "</ul>\n"
-            elsif f[1] == "collection"
+            when "collection"
               @block += "<h3>By #{f[0].humanize}</h3>"
               @model = eval f[0].capitalize
               @block += "<ul>\n"
@@ -119,8 +117,8 @@ module TypusHelper
       end
     end
     return @block
-  rescue
-    return "FixMe: <strong>typus.yml</strong>"
+#  rescue
+#    return "FixMe: <strong>typus.yml</strong>"
   end
 
   def feedback
@@ -137,7 +135,6 @@ module TypusHelper
 
   def footer
     @block = "<p><a href=\"http://intraducibles.net/work/typus\">Typus #{TYPUS["Typus"]["version"]}</a></p>"
-    return @block
   end
 
   def fmt_date(date)
@@ -146,12 +143,9 @@ module TypusHelper
 
   def typus_form
     @block = ""
-    
     @block += error_messages_for :item, :header_tag => "h3"
-    
     @form_fields.each do |field|
       @block += "<p><label>#{field[0].humanize}</label>"
-      #  #{error_message_on :item, field[0]}
       case field[1]
       when "string"
         @block += text_field :item, field[0], :class => "big"
@@ -195,7 +189,6 @@ module TypusHelper
     @block = ""
     @form_fields_externals.each do |field|
       model_to_relate = eval field[0].singularize.capitalize
-      
       @block += "<h2 style=\"margin: 20px 0px 0px 0px;\">#{field[0].capitalize}</h2>"
       @block += form_tag :action => "relate", :related => "#{field[0]}"
       @block += "<p>"
@@ -208,7 +201,6 @@ module TypusHelper
         @block += "<li>#{item.name} <small>#{link_to "Remove", :action => "unrelate", :unrelated => field[0], :unrelated_id => item.id, :id => params[:id]}</small></li>"
       end
       @block += "</ul>"
-      
     end
     return @block
   end
