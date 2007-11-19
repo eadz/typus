@@ -19,6 +19,14 @@ class TypusController < ApplicationController
       @query.split("&").each do |q|
         @the_param = q.split("=")[0].split("_id")[0]
         @the_query = q.split("=")[1]
+        
+        # If it's a query
+        if @the_param == "q"
+          @search = Array.new
+          @model.search_fields.each { |search| @search << "LOWER(#{search}) LIKE '%#{@the_query}%'" }
+          @conditions += "(#{@search.join(" OR ")}) AND "
+        end
+        
         @model.filters.each do |f|
           filter_type = f[1] if f[0].to_s == @the_param.to_s
           # And the common defined types of data
@@ -26,55 +34,29 @@ class TypusController < ApplicationController
           when "boolean"
             @conditions += "#{f[0]} = '#{@the_query[0..0]}' AND "
           when "datetime"
-            
+            case @the_query
+            when "today":         @start_date, @end_date = Time.today, Time.today.tomorrow
+            when "past_7_days":   @start_date, @end_date = Time.today.monday, Time.today.monday.next_week
+            when "this_month":    @start_date, @end_date = Time.today.last_month, Time.today.tomorrow
+            when "this_year":     @start_date, @end_date = Time.today.last_year, Time.today.tomorrow
+            end
+            @start_date = @start_date.strftime("%Y-%m-%d %H:%M:%S")
+            @end_date = @end_date.strftime("%Y-%m-%d %H:%M:%S")
+            @conditions += "created_at > '#{@start_date}' AND created_at < '#{@end_date}' AND "
           when "collection"
             @conditions += "#{f[0]}_id = #{@the_query} AND "
           end
         end
-        
       end
-      
       @conditions += "1 = 1"
       @order = params[:order_by]
       @sort_order = params[:sort_order]
-      @items = @model.paginate :page => params[:page], :per_page => TYPUS['per_page'], :order => "#{@order} #{@sort_order}",  :conditions => ["#{@conditions}"]
+      @items = @model.paginate :page => params[:page], :per_page => TYPUS['per_page'], :order => "#{@order} #{@sort_order}",  :conditions => "#{@conditions}"
     else
       @order = params[:order_by]
       @sort_order = params[:sort_order]
       @items = @model.paginate :page => params[:page], :per_page => TYPUS['per_page'], :order => "#{@order} #{@sort_order}"
     end
-
-#    if params[:created_at] # == "created_at"
-      # @filter_by = params[:filter_by]
-#      case params[:created_at]
-#      when "today"
-#        @start_date, @end_date = Time.today, Time.today.tomorrow
-#      when "past_7_days"
-#        @start_date, @end_date = Time.today.monday, Time.today.monday.next_week
-#      when "this_month"
-#        @start_date, @end_date = Time.today.last_month, Time.today.tomorrow
-#      when "this_year"
-#        @start_date, @end_date = Time.today.last_year, Time.today.tomorrow
-#      end
-#      @items = @model.paginate :page => params[:page], :per_page => TYPUS['per_page'], :conditions => ["created_at > ? AND created_at < ?", @start_date, @end_date], :order => "id DESC"
-#    elsif params[:status]
-#      @status = params[:status] == "true" ? true : false
-#      @items = @model.paginate :page => params[:page], :per_page => TYPUS['per_page'], :conditions => ["status = ?", @status], :order => "id DESC"
-#    elsif params[:filter_by]
-#      @filter_by = params[:filter_by]
-#      @filter_id = params[:filter_id]
-#      @items = @model.paginate :page => params[:page], :per_page => TYPUS['per_page'], :conditions => ["#{@filter_by} = ?", @filter_id], :order => "id DESC"
-#    elsif params[:q]
-#      @search = []
-#      @model.search_fields.each { |search| @search << "LOWER(#{search}) LIKE '%#{params[:q]}%'" }
-#      @items = @model.paginate :page => params[:page], :per_page => TYPUS['per_page'], :conditions => "#{@search.join(" OR ")}"
-#      # render :partial => "table"
-#    elsif params[:order_by]
-#      @order = params[:order_by]
-#      @sort_order = params[:sort_order]
-#      @items = @model.paginate :page => params[:page], :per_page => TYPUS['per_page'], :order => "#{@order} #{@sort_order}"
-#    end
-    
   end
 
   def new
