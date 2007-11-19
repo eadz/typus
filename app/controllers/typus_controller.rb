@@ -12,9 +12,9 @@ class TypusController < ApplicationController
 
   def index
     set_order
+    @conditions = ""
     # Get all the params and process them ...
     if request.env['QUERY_STRING']
-      @conditions = ""
       @query = request.env['QUERY_STRING']
       @query.split("&").each do |q|
         @the_param = q.split("=")[0].split("_id")[0]
@@ -48,15 +48,11 @@ class TypusController < ApplicationController
           end
         end
       end
-      @conditions += "1 = 1"
-      @order = params[:order_by]
-      @sort_order = params[:sort_order]
-      @items = @model.paginate :page => params[:page], :per_page => TYPUS['per_page'], :order => "#{@order} #{@sort_order}",  :conditions => "#{@conditions}"
-    else
-      @order = params[:order_by]
-      @sort_order = params[:sort_order]
-      @items = @model.paginate :page => params[:page], :per_page => TYPUS['per_page'], :order => "#{@order} #{@sort_order}"
     end
+    @conditions += "1 = 1"
+    @order = params[:order_by]
+    @sort_order = params[:sort_order]
+    @items = @model.paginate :page => params[:page], :per_page => TYPUS['per_page'], :order => "#{@order} #{@sort_order}", :conditions => "#{@conditions}"
   end
 
   def new
