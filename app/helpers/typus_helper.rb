@@ -50,6 +50,7 @@ module TypusHelper
     @block = "<ul>\n"
     MODELS.each { |model| @block += "<li><a href=\"/#{TYPUS['prefix']}/#{model[0].downcase.pluralize}\">#{model[0].pluralize}</a> <small><a href=\"/#{TYPUS['prefix']}/#{model[0].downcase.pluralize}/new\">Add</a></small><br />#{model[1]['copy']}</li>\n" }
     @block += "</ul>\n"
+    return @block
   rescue
     return "<ul><li>FixMe: <strong>typus.yml</strong></li></ul>"
   end
@@ -101,7 +102,6 @@ module TypusHelper
       
       # Filters (only shown on index page)
       if params[:action] == "index"
-      
         if MODELS[@model.to_s]["filters"]
           @block += "<h2>Filter</h2>"
           @block += "<a href=\"/#{TYPUS['prefix']}/#{params[:model]}\">Show All</a>" if request.env['QUERY_STRING']
@@ -110,16 +110,16 @@ module TypusHelper
             when "boolean"
               @block += "<h3>By #{f[0].humanize}</h3>\n"
               @block += "<ul>\n"
-              @status = params[:filter_id] == "true" ? "on" : "off"
+              @status = params[:status] == "true" ? "on" : "off"
               @block += "<li><a class=\"#{@status}\" href=\"/#{TYPUS['prefix']}/#{params[:model]}?#{f[0]}=true\">Active</a></li>\n"
-              @status = params[:filter_id] == "false" ? "on" : "off"
+              @status = params[:status] == "false" ? "on" : "off"
               @block += "<li><a class=\"#{@status}\" href=\"/#{TYPUS['prefix']}/#{params[:model]}?#{f[0]}=false\">Inactive</a></li>\n"
               @block += "</ul>\n"
             when "datetime"
               @block += "<h3>By #{f[0].humanize}</h3>\n"
               @block += "<ul>\n"
               %w( today past_7_days this_month this_year).each do |timeline|
-                @status = params[:filter_id] == timeline ? "on" : "off"
+                @status = params[:created_at] == timeline ? "on" : "off"
                 @block += "<li><a class=\"#{@status}\" href=\"/#{TYPUS['prefix']}/#{params[:model]}?#{f[0]}=#{timeline}\">#{timeline.humanize.capitalize}</a></li>\n"
               end
               @block += "</ul>\n"
@@ -127,9 +127,7 @@ module TypusHelper
               @block += "<h3>By #{f[0].humanize}</h3>"
               @model = eval f[0].capitalize
               @block += "<ul>\n"
-              @model.find(:all).each do |item|
-                @block += "<li><a href=\"/#{TYPUS['prefix']}/#{params[:model]}?#{f[0]}_id=#{item.id}\">#{item.name}</a></li>\n"
-              end
+              @model.find(:all).each { |item| @block += "<li><a href=\"/#{TYPUS['prefix']}/#{params[:model]}?#{f[0]}_id=#{item.id}\">#{item.name}</a></li>\n" }
               @block += "</ul>\n"
             end
           end
