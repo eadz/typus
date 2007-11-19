@@ -32,7 +32,9 @@ class TypusController < ApplicationController
           # And the common defined types of data
           case filter_type
           when "boolean"
-            @conditions += "#{f[0]} = '#{@the_query[0..0]}' AND "
+            @status = (@the_query == 'true') ? 1 : 0
+            @conditions += "#{f[0]} = '#{@status}' AND "
+            # @conditions += "#{f[0]} = '#{@the_query[0..0]}' AND "
           when "datetime"
             case @the_query
             when "today":         @start_date, @end_date = Time.today, Time.today.tomorrow
