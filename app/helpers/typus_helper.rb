@@ -58,29 +58,48 @@ module TypusHelper
     if params[:model]
       @model = eval params[:model].singularize.capitalize
       
-      # Actions
+      # Default Actions
       @block = "<h2>Actions</h2>\n"
-      @block += "<ul>\n"
-      if params[:action] != "new"
+      case params[:action]
+      when "index"
+        @block += "<ul>\n"
         @block += "<li><a href=\"/#{TYPUS['prefix']}/#{params[:model]}/new\">Add new #{params[:model].singularize}</a></li>\n"
+        @block += "</ul>\n"
+      when "new"
+        @block += "<ul>\n"
+        @block += "<li><a href=\"/#{TYPUS['prefix']}/#{params[:model]}\">Back to list</a></li>\n"
+        @block += "</ul>\n"
+      when "edit"
+        @block += "<ul>\n"
+        @block += "<li>#{link_to "Next #{params[:model].singularize}", :action => "edit", :id => @next.id}</li>" if @next
+        @block += "<li>#{link_to "Previous #{params[:model].singularize}", :action => 'edit', :id => @previous.id}</li>" if @previous
+        @block += "</ul>\n"
+        @block += "<ul>\n"
+        @block += "<li><a href=\"/#{TYPUS['prefix']}/#{params[:model]}\">Back to list</a></li>\n"
+        @block += "</ul>\n"
       end
-      if %w(edit new).include? params[:action]
-        @block += "<li><a href=\"/#{TYPUS['prefix']}/#{params[:model]}\">Back to #{params[:model]}</a></li>\n"
+      
+      # Extra Actions
+      if MODELS[@model.to_s]["actions"]
+        @block += "<h2>More Actions</h2>"
+        @block += "<ul>"
+        @model.actions.each do |a|
+          @block += "<li><a href=\"/#{TYPUS['prefix']}/#{params[:model]}/#{a[0]}\">#{a[0].humanize}</a></li>" if a[1] == params[:action]
+        end
+        @block += "</ul>"
       end
-      @block += "</ul>\n"
       
       # Search
-      # @block += "<li>Search</li>\n"
-      # @block += "#{link_to_function "Search", "['search_box'].each(Element.toggle);"}" # if @model.search_fields.size > 0
-      
-      # Previous and next item
-      @block += "<ul>\n"
-      @block += "<li>#{link_to "Next #{params[:model].singularize}", :action => "edit", :id => @next.id}</li>" if @next
-      @block += "<li>#{link_to "Previous #{params[:model].singularize}", :action => 'edit', :id => @previous.id}</li>" if @previous
-      @block += "</ul>\n"
+      if params[:action] == "index"
+        if MODELS[@model.to_s]["search"]
+          @block += "<h2>Search</h2>\n"
+          @block += "<form action=\"/#{TYPUS['prefix']}/#{params[:model]}\" method=\"get\">"
+          @block += "<p><input id=\"q\" name=\"q\" type=\"text\" value=\"#{params[:q]}\"/></p>"
+          @block += "</form>"
+        end
+      end
       
       # Filters (only shown on index page)
-      
       if params[:action] == "index"
       
         if MODELS[@model.to_s]["filters"]
@@ -91,16 +110,16 @@ module TypusHelper
               @block += "<h3>By #{f[0].humanize}</h3>\n"
               @block += "<ul>\n"
               @status = params[:filter_id] == "true" ? "on" : "off"
-              @block += "<li><a class=\"#{@status}\" href=\"/#{TYPUS['prefix']}/#{params[:model]}?filter_by=#{f[0]}&filter_id=true\">Active</a></li>\n"
+              @block += "<li><a class=\"#{@status}\" href=\"/#{TYPUS['prefix']}/#{params[:model]}?#{f[0]}=true\">Active</a></li>\n"
               @status = params[:filter_id] == "false" ? "on" : "off"
-              @block += "<li><a class=\"#{@status}\" href=\"/#{TYPUS['prefix']}/#{params[:model]}?filter_by=#{f[0]}&filter_id=false\">Inactive</a></li>\n"
+              @block += "<li><a class=\"#{@status}\" href=\"/#{TYPUS['prefix']}/#{params[:model]}?#{f[0]}=false\">Inactive</a></li>\n"
               @block += "</ul>\n"
             when "datetime"
               @block += "<h3>By #{f[0].humanize}</h3>\n"
               @block += "<ul>\n"
               %w( today past_7_days this_month this_year).each do |timeline|
                 @status = params[:filter_id] == timeline ? "on" : "off"
-                @block += "<li><a class=\"#{@status}\" href=\"/#{TYPUS['prefix']}/#{params[:model]}?filter_by=#{f[0]}&filter_id=#{timeline}\">#{timeline.humanize.capitalize}</a></li>\n"
+                @block += "<li><a class=\"#{@status}\" href=\"/#{TYPUS['prefix']}/#{params[:model]}?#{f[0]}=#{timeline}\">#{timeline.humanize.capitalize}</a></li>\n"
               end
               @block += "</ul>\n"
             when "collection"
@@ -108,7 +127,7 @@ module TypusHelper
               @model = eval f[0].capitalize
               @block += "<ul>\n"
               @model.find(:all).each do |item|
-                @block += "<li><a href=\"/#{TYPUS['prefix']}/#{params[:model]}?filter_by=#{f[0]}_id&filter_id=#{item.id}\">#{item.name}</a></li>\n"
+                @block += "<li><a href=\"/#{TYPUS['prefix']}/#{params[:model]}?#{f[0]}_id=#{item.id}\">#{item.name}</a></li>\n"
               end
               @block += "</ul>\n"
             end
@@ -117,8 +136,8 @@ module TypusHelper
       end
     end
     return @block
-#  rescue
-#    return "FixMe: <strong>typus.yml</strong>"
+  rescue
+    return "FixMe: <strong>typus.yml</strong>"
   end
 
   def feedback
@@ -171,9 +190,7 @@ module TypusHelper
         multiple = eval field[0].singularize.capitalize
         rel_model = "#{field[0].singularize}" + "_id"
         current_model = eval params[:model].singularize.capitalize
-        if params[:id]
-          @selected = current_model.find(params[:id]).send(field[0]).collect { |t| t.send(rel_model).to_i }
-        end
+        @selected = current_model.find(params[:id]).send(field[0]).collect { |t| t.send(rel_model).to_i } if params[:id]
         @block += "<select name=\"item[tag_ids][]\" multiple=\"multiple\">"
         @block += options_from_collection_for_select(multiple.find(:all), :id, :name, @selected)
         @block += "</select>"
@@ -197,9 +214,7 @@ module TypusHelper
       current_model = eval params[:model].singularize.capitalize
       items = current_model.find(params[:id]).send(field[0])
       @block += "<ul>"
-      items.each do |item|
-        @block += "<li>#{item.name} <small>#{link_to "Remove", :action => "unrelate", :unrelated => field[0], :unrelated_id => item.id, :id => params[:id]}</small></li>"
-      end
+      items.each { |item| @block += "<li>#{item.name} <small>#{link_to "Remove", :action => "unrelate", :unrelated => field[0], :unrelated_id => item.id, :id => params[:id]}</small></li>" }
       @block += "</ul>"
     end
     return @block

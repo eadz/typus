@@ -58,4 +58,12 @@ class ActiveRecord::Base
     return @filters
   end
 
+  def self.actions
+    @config = YAML.load_file("#{RAILS_ROOT}/config/typus.yml")
+    @actions = Array.new
+    @config = @config["#{self}"]["actions"].split(" ")
+    @config.each { |i| @actions << i.split("::") }
+    return @actions
+  end
+
 end

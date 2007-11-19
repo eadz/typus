@@ -12,37 +12,69 @@ class TypusController < ApplicationController
 
   def index
     set_order
-    if params[:filter_by] == "created_at"
-      @filter_by = params[:filter_by]
-      case params[:filter_id]
-      when "today"
-        @start_date, @end_date = Time.today, Time.today.tomorrow
-      when "past_7_days"
-        @start_date, @end_date = Time.today.monday, Time.today.monday.next_week
-      when "this_month"
-        @start_date, @end_date = Time.today.last_month, Time.today.tomorrow
-      when "this_year"
-        @start_date, @end_date = Time.today.last_year, Time.today.tomorrow
+    # Get all the params and process them ...
+    if request.env['QUERY_STRING']
+      @conditions = ""
+      @query = request.env['QUERY_STRING']
+      @query.split("&").each do |q|
+        @the_param = q.split("=")[0].split("_id")[0]
+        @the_query = q.split("=")[1]
+        @model.filters.each do |f|
+          filter_type = f[1] if f[0].to_s == @the_param.to_s
+          # And the common defined types of data
+          case filter_type
+          when "boolean"
+            @conditions += "#{f[0]} = '#{@the_query[0..0]}' AND "
+          when "datetime"
+            
+          when "collection"
+            @conditions += "#{f[0]}_id = #{@the_query} AND "
+          end
+        end
+        
       end
-      @items = @model.paginate :page => params[:page], :per_page => TYPUS['per_page'], :conditions => ["#{@filter_by} > ? AND #{@filter_by} < ?", @start_date, @end_date], :order => "id DESC"
-    elsif params[:filter_by] == "status"
-      @filter_by = params[:filter_by]
-      @filter_id = params[:filter_id] == "true" ? true : false
-      @items = @model.paginate :page => params[:page], :per_page => TYPUS['per_page'], :conditions => ["#{@filter_by} = ?", @filter_id], :order => "id DESC"
-    elsif params[:filter_by]
-      @filter_by = params[:filter_by]
-      @filter_id = params[:filter_id] # == "true" ? true : false
-      @items = @model.paginate :page => params[:page], :per_page => TYPUS['per_page'], :conditions => ["#{@filter_by} = ?", @filter_id], :order => "id DESC"
-    elsif params[:search]
-      @search = []
-      @model.search_fields.each { |search| @search << "LOWER(#{search}) LIKE '%#{params[:search]}%'" }
-      @items = @model.paginate :page => params[:page], :per_page => TYPUS['per_page'], :conditions => "#{@search.join(" OR ")}"
-      render :partial => "table"
-    elsif params[:order_by]
+      
+      @conditions += "1 = 1"
+      @order = params[:order_by]
+      @sort_order = params[:sort_order]
+      @items = @model.paginate :page => params[:page], :per_page => TYPUS['per_page'], :order => "#{@order} #{@sort_order}",  :conditions => ["#{@conditions}"]
+    else
       @order = params[:order_by]
       @sort_order = params[:sort_order]
       @items = @model.paginate :page => params[:page], :per_page => TYPUS['per_page'], :order => "#{@order} #{@sort_order}"
     end
+
+#    if params[:created_at] # == "created_at"
+      # @filter_by = params[:filter_by]
+#      case params[:created_at]
+#      when "today"
+#        @start_date, @end_date = Time.today, Time.today.tomorrow
+#      when "past_7_days"
+#        @start_date, @end_date = Time.today.monday, Time.today.monday.next_week
+#      when "this_month"
+#        @start_date, @end_date = Time.today.last_month, Time.today.tomorrow
+#      when "this_year"
+#        @start_date, @end_date = Time.today.last_year, Time.today.tomorrow
+#      end
+#      @items = @model.paginate :page => params[:page], :per_page => TYPUS['per_page'], :conditions => ["created_at > ? AND created_at < ?", @start_date, @end_date], :order => "id DESC"
+#    elsif params[:status]
+#      @status = params[:status] == "true" ? true : false
+#      @items = @model.paginate :page => params[:page], :per_page => TYPUS['per_page'], :conditions => ["status = ?", @status], :order => "id DESC"
+#    elsif params[:filter_by]
+#      @filter_by = params[:filter_by]
+#      @filter_id = params[:filter_id]
+#      @items = @model.paginate :page => params[:page], :per_page => TYPUS['per_page'], :conditions => ["#{@filter_by} = ?", @filter_id], :order => "id DESC"
+#    elsif params[:q]
+#      @search = []
+#      @model.search_fields.each { |search| @search << "LOWER(#{search}) LIKE '%#{params[:q]}%'" }
+#      @items = @model.paginate :page => params[:page], :per_page => TYPUS['per_page'], :conditions => "#{@search.join(" OR ")}"
+#      # render :partial => "table"
+#    elsif params[:order_by]
+#      @order = params[:order_by]
+#      @sort_order = params[:sort_order]
+#      @items = @model.paginate :page => params[:page], :per_page => TYPUS['per_page'], :order => "#{@order} #{@sort_order}"
+#    end
+    
   end
 
   def new

@@ -3,10 +3,12 @@
 <div class="right"></div>
 </h2>
 
-<div id="search_box" <%= "style=\"display: none;\"" if !params[:search] %> class="box">
+<!--
+	<div id="search_box" <%= "style=\"display: none;\"" if !params[:search] %> class="box">
 	<p><input id="search" stylname="search" type="text" value=""> <span id="spinner" style="height: 40px; display: none;"><%= image_tag("typus_spinner.gif") %></span></p>
 	<%= observe_field 'search', :frequency => 0.5, :update => 'list', :url => { :action => 'index', :model => params[:model] }, :with => "'search=' + escape(value)", :before => "Element.show('spinner');", :complete => "Element.hide('spinner');" %>
 </div>
+-->
 
 <div id="list">
 
@@ -19,10 +21,10 @@
 		<% else -%>
 		
 			<div class="box" id="empty">
-			<% if params[:search] %>
-				<p>No <strong><%= params[:model] %></strong> match the search <strong><%= params[:search] %></strong></p>
+			<% if params[:q] %>
+				<p>No <strong><%= params[:model] %></strong> match the search <strong><%= params[:q] %></strong></p>
 			<% else %>
-				<p>There are no <strong><%= params[:model] %></strong> with the filter <strong><%= params[:filter_by].humanize %></strong> set to <strong><%= params[:filter_id].humanize %></strong>. <%= link_to "Remove filter?", :action => "index", :model => params[:model] %></p>
+				<p>There are no <strong><%= params[:model] %></strong> with the filter <strong> params[:filter_by].humanize</strong> set to <strong>params[:filter_id].humanize</strong>. <%= link_to "Remove filter?", :action => "index", :model => params[:model] %></p>
 			<% end %>
 			</div>
 		
