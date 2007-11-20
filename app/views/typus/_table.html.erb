@@ -9,40 +9,21 @@
 </tr>
 
 <% @items.each do |item| %>
-  <tr class="<%= cycle('even', 'odd') %>" id="item_<%= item.id %>">
-  <% @fields.each do |column| %>
-    
-    <% if column[1] == "string" -%>
-    	<td><%= link_to item.send(column[0]), :action => 'edit', :id => item.id %></td>
-    <% elsif column[1] == "email" -%>
-    	<td><%= mail_to item.send(column), item.send(column), :title => "" %></td>
-    <% elsif column[1] == "boolean" -%>
-    	<td width="20px" align="center"><%= image_tag(status = item.send(column[0])? "typus_status_true.gif" : "typus_status_false.gif") %></td>
-    <% elsif column[1] == "datetime" -%>
-    	<td width="80px"><%= fmt_date(item.send(column[0])) %></td>
-    <% elsif column[1] == "collection" -%>
-      <% rel_model = eval column[0].capitalize %>
-      
-      <% if item.send(column[0]) %>
-        <% attribute = item.send(column[0]).name %>
-        <% attribute_id = item.send(column[0]).id %>
-      <% end %>
-      
-      <td><% if attribute %><a href="/<%= TYPUS['prefix'] %>/<%= rel_model.to_s.downcase.pluralize %>/<%= attribute_id %>"><%= attribute %></a><% end %></td>
-
-    <% elsif column.include? ("::") %>
-      
-      <% @element = "" %>
-      
-      <% (eval column.split("::")[-1]).each { |element| @element = element[0] if element[1] == item.send(column.split("::")[0]) } %>
-    
-      <td><%= @element %></td>
-    <% else %>
-      <td><%= item.send(column) %></td>
-    <% end -%>
-  <% end %>
-    <td width="10px"><%= link_to image_tag("typus_trash.gif"), { :action => 'destroy', :id => item.id }, :confirm => "Remove this entry?" %></td>
-  </tr>
+	<tr class="<%= cycle('even', 'odd') %>" id="item_<%= item.id %>">
+	<% @fields.each do |column| %>
+		<% case column[1]
+			when "string" -%>
+			<td><%= link_to item.send(column[0]), :action => "edit", :id => item.id %></td>
+		<% when "boolean" -%>
+			<td width="20px" align="center"><%= image_tag(status = item.send(column[0])? "typus_status_true.gif" : "typus_status_false.gif") %></td>
+		<% when "datetime" -%>
+			<td width="80px"><%= fmt_date(item.send(column[0])) %></td>
+		<% when "collection" -%>
+			<td><%= item.send(column[0]).name if item.send(column[0]) %></td>
+	<% end -%>
+<% end %>
+		<td width="10px"><%= link_to image_tag("typus_trash.gif"), { :action => 'destroy', :id => item.id }, :confirm => "Remove this entry?" %></td>
+	</tr>
 <% end %>
 
 </table>

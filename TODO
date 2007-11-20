@@ -2,4 +2,4 @@
 [ ] Sort by Collection is not working. (sort_by=category&sort_order=asc)
 [ ] Sidebar filters should read current filters.
 [ ] Dashboard listings should show groups.
-[ ] ...
+[ ] "More Actions" should be only be shown when they exist.
