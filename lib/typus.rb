@@ -10,4 +10,7 @@ TYPUS['app_name'] = 'Typus Admin Interface'
 TYPUS['app_description'] = 'Web Development for the Masses'
 TYPUS['per_page'] = 20
 TYPUS['prefix'] = 'admin'
-TYPUS['admins'] = [["admin", "typus"]]
+TYPUS['app_username'] = 'admin'
+TYPUS['app_password'] = 'typus'
+
+# TYPUS['admins'] = [["admin", "typus"]]
