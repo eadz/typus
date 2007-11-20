@@ -56,6 +56,8 @@ module TypusHelper
   end
 
   def sidebar
+    @current_request = (request.env['QUERY_STRING']) ? request.env['QUERY_STRING'].split("&") : []
+    
     if params[:model]
       @model = eval params[:model].singularize.capitalize
       
@@ -107,22 +109,23 @@ module TypusHelper
           @model.filters.each do |f|
             case f[1]
             when "boolean"
-              @current_request = (request.env['QUERY_STRING']) ? request.env['QUERY_STRING'].split("&") : []
+              @filters = %w( true false )
               @block += "<h3>By #{f[0].humanize}</h3>\n"
               @block += "<ul>\n"
-              @status = params[:status] == "true" ? "on" : "off"
-              @block += "<li><a class=\"#{@status}\" href=\"/#{TYPUS['prefix']}/#{params[:model]}?#{f[0]}=true&#{(@current_request.delete_if { |x| x.include? "#{f[0]}" }).join("&")}\">Active</a></li>\n"
-              @status = params[:status] == "false" ? "on" : "off"
-              @block += "<li><a class=\"#{@status}\" href=\"/#{TYPUS['prefix']}/#{params[:model]}?#{f[0]}=false&#{(@current_request.delete_if { |x| x.include? "#{f[0]}" }).join("&")}\">Inactive</a></li>\n"
+              @filters.each do |status|
+                @current_request = (request.env['QUERY_STRING']) ? request.env['QUERY_STRING'].split("&") : []
+                @status = (@current_request.include? "#{f[0]}=#{status}") ? "on" : "off"
+                @block += "<li><a class=\"#{@status}\" href=\"/#{TYPUS['prefix']}/#{params[:model]}?#{(@current_request.delete_if { |x| x.include? "#{f[0]}" } + ["#{f[0]}=#{status}"]).join("&")}\">#{status.capitalize}</a></li>\n"
+              end
               @block += "</ul>\n"
             when "datetime"
+              @filters = %w(today past_7_days this_month this_year)
               @block += "<h3>By #{f[0].humanize}</h3>\n"
               @block += "<ul>\n"
-              @filters = %w(today past_7_days this_month this_year)
               @filters.each do |timeline|
-                @status = params[:created_at] == timeline ? "on" : "off"
                 @current_request = (request.env['QUERY_STRING']) ? request.env['QUERY_STRING'].split("&") : []
-                @block += "<li><a class=\"#{@status}\" href=\"/#{TYPUS['prefix']}/#{params[:model]}?#{f[0]}=#{timeline}&#{(@current_request.delete_if { |x| x.include? "#{f[0]}" }).join("&")}\">#{timeline.humanize.capitalize}</a></li>\n"
+                @status = (@current_request.include? "#{f[0]}=#{timeline}") ? "on" : "off"
+                @block += "<li><a class=\"#{@status}\" href=\"/#{TYPUS['prefix']}/#{params[:model]}?#{(@current_request.delete_if { |x| x.include? "#{f[0]}" } + ["#{f[0]}=#{timeline}"]).join("&")}\">#{timeline.humanize.capitalize}</a></li>\n"
               end
               @block += "</ul>\n"
             when "collection"
@@ -137,8 +140,8 @@ module TypusHelper
       end
     end
     return @block
-#  rescue
-#    return "FixMe: <strong>typus.yml</strong>"
+  rescue
+    return "FixMe: <strong>typus.yml</strong>"
   end
 
   def feedback

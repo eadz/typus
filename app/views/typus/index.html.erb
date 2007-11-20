@@ -5,24 +5,24 @@
 
 <div id="list">
 
+	<!-- Query -->
+	<% if request.env['QUERY_STRING'] %>
+	<div class="box" id="empty">
+		<p><strong><%= params[:model].capitalize %></strong> filtered by <%= request.env['QUERY_STRING'] %>. <%= link_to "Remove filter?", :action => "index", :model => params[:model] %></p>
+	</div>
+	<script type="text/javascript">new Effect.Highlight('empty');</script>
+	<% end %>
+	<!-- /Query -->
+
+	<!-- Listing -->
 	<% if @items.size > 0 -%>
 		<%= render :partial => "table" %>
-	<% else -%>
-		<div class="box" id="empty">
-		<% if params[:q] %>
-			<p>No <strong><%= params[:model] %></strong> match the search <strong><%= params[:q] %></strong></p>
-		<% else %>
-			<% if @model.count == 0 %>
-			<p><%= link_to "Add the first #{params[:model].singularize}", :action => "new", :model => params[:model] %></p>
-			<% else %>
-			<p>There are no <strong><%= params[:model] %></strong> under this filter. <%= link_to "Remove filter?", :action => "index", :model => params[:model] %></p>
-		<% end %>
-		<% end %>
-		</div>
-		<script type="text/javascript">new Effect.Highlight('empty');</script>
-	
-	<% end -%>
-	
-	<%= will_paginate @items %>
+		<%= will_paginate @items %>
+	<% end %>
+	<!-- /Listing -->
+
+	<% if @model.count == 0 %>
+	<p><%= link_to "Add the first #{params[:model].singularize}", :action => "new", :model => params[:model] %></p>
+	<% end %>
 
 </div>
