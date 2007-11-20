@@ -18,9 +18,9 @@ class TypusController < ApplicationController
     # Get all the params and process them ...
     if request.env['QUERY_STRING']
       @query = request.env['QUERY_STRING']
-      @query.split("&").each do |q|
-        @the_param = q.split("=")[0].split("_id")[0]
-        @the_query = q.split("=")[1]
+      @query.split("&").each do |query|
+        @the_param = query.split("=")[0].split("_id")[0]
+        @the_query = query.split("=")[1]
         
         # If it's a query
         if @the_param == "q"
