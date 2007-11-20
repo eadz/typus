@@ -19,22 +19,16 @@ module TypusHelper
   end
 
   def header
-    @block = "<div class=\"left\">"
     @block += "<h1>#{TYPUS['app_name']}"
     @block += "<span class=\"feedback\">#{flash[:notice]}</span>" if flash[:notice]
     @block += "</h1>\n"
-    @block += "<h2>#{TYPUS['app_description']}</h2>"
-    @block += "</div>"
-    @block += "<div class\"right\">"
-    @block += "<a href=\"/#{TYPUS['prefix']}/logout\">Logout</a>"
-    @block += "</div>"
+    @block += "<h2>#{TYPUS['app_description']}</h2>\n"
     return @block
   end
 
   def breadcrumbs
-    @block = ""
+    @block = "<p>"
     if params[:model]
-      @block += "<p>"
       @block += "<a href=\"/#{TYPUS['prefix']}/\">Home</a>"
       case params[:action]
       when "index"
@@ -46,8 +40,10 @@ module TypusHelper
         @block += " &rsaquo; <a href=\"/#{TYPUS['prefix']}/#{params[:model]}\">#{params[:model].capitalize}</a></li>\n"
         @block += " &rsaquo; New</li>\n"
       end
-      @block += "</p>"
+    else
+      @block += "Home"
     end
+    @block += "</p>"
     return @block
   end
 
@@ -70,11 +66,13 @@ module TypusHelper
   def sidebar
     @current_request = (request.env['QUERY_STRING']) ? request.env['QUERY_STRING'].split("&") : []
     
+    @block = ""
+    
     if params[:model]
       @model = eval params[:model].singularize.capitalize
       
       # Default Actions
-      @block = "<h2>Actions</h2>\n"
+      @block += "<h2>Actions</h2>\n"
       case params[:action]
       when "index"
         @block += "<ul>\n"
