@@ -19,10 +19,15 @@ module TypusHelper
   end
 
   def header
-    @block = "<h1>#{TYPUS['app_name']}"
+    @block = "<div class=\"left\">"
+    @block += "<h1>#{TYPUS['app_name']}"
     @block += "<span class=\"feedback\">#{flash[:notice]}</span>" if flash[:notice]
     @block += "</h1>\n"
     @block += "<h2>#{TYPUS['app_description']}</h2>"
+    @block += "</div>"
+    @block += "<div class\"right\">"
+    @block += "<a href=\"/#{TYPUS['prefix']}/logout\">Logout</a>"
+    @block += "</div>"
     return @block
   end
 

@@ -9,6 +9,8 @@ class ActionController::Routing::RouteSet
     draw_without_admin do |map|
       map.with_options :controller => 'typus' do |i|
         i.admin "#{@prefix}", :action => 'dashboard'
+        i.typus_login "#{@prefix}/login", :action => 'login'
+        i.typus_logout "#{@prefix}/logout", :action => 'logout'
         i.connect "#{@prefix}/:model/:action", :action => 'index', :requirements => { :action => /[^0-9].*/, :id => nil }
         i.connect "#{@prefix}/:model/:id/:action", :action => 'edit', :requirements => { :id => /\d+/ }
       end

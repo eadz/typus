@@ -2,8 +2,8 @@ class TypusController < ApplicationController
 
   DB = YAML.load_file("#{RAILS_ROOT}/config/database.yml")[RAILS_ENV]
 
-  before_filter :authenticate
-  before_filter :set_model, :except => [ :dashboard ]
+  before_filter :authenticate, :except => [ :login, :logout ]
+  before_filter :set_model, :except => [ :dashboard, :login, :logout ]
   before_filter :find_model, :only => [ :show, :edit, :update, :destroy, :status ]
   before_filter :fields, :only => [ :index ]
   before_filter :form_fields, :only => [ :new, :edit, :update ]
@@ -120,6 +120,25 @@ class TypusController < ApplicationController
     redirect_to :action => "edit", :id => params[:id]
   end
 
+  def login
+    if request.post?
+      if params[:user][:name] == TYPUS['app_username'] && params[:user][:password] == TYPUS['app_password']
+        session[:typus] = true
+        redirect_to :action => "dashboard"
+      else
+        flash[:error] = "Username/Password Incorrect"
+        redirect_to :action => "login"
+      end
+    else
+      render :layout => "typus_login"
+    end
+  end
+
+  def logout
+    reset_session
+    redirect_to :action => "login"
+  end
+
 private
 
   def set_model
@@ -149,10 +168,11 @@ private
   private
 
   def authenticate
-    authenticate_or_request_with_http_basic(realm = TYPUS['app_name']) do |user_name, password|
-      user_name == TYPUS['app_username'] && password == TYPUS['app_password']
-      # TYPUS['admins'].each { |user| user_name == user[0] && password == user[1] }
-    end
+    redirect_to :action => "login" unless session[:typus]
+    # authenticate_or_request_with_http_basic(realm = TYPUS['app_name']) do |user_name, password|
+      # user_name == TYPUS['app_username'] && password == TYPUS['app_password']
+      ## TYPUS['admins'].each { |user| user_name == user[0] && password == user[1] }
+    #end
   end
 
 end
