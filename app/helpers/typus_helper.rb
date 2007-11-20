@@ -95,7 +95,7 @@ module TypusHelper
         if MODELS[@model.to_s]["search"]
           @block += "<h2>Search</h2>\n"
           @block += "<form action=\"/#{TYPUS['prefix']}/#{params[:model]}\" method=\"get\">"
-          @block += "<p><input id=\"q\" name=\"q\" type=\"text\" value=\"#{params[:q]}\"/></p>"
+          @block += "<p><input id=\"query\" name=\"query\" type=\"text\" value=\"#{params[:query]}\"/></p>"
           @block += "</form>"
         end
       end
@@ -223,6 +223,14 @@ module TypusHelper
       @block += "</ul>"
     end
     return @block
+  end
+
+  def process_query(query)
+    @query = ""
+    query.split("&").each do |q|
+      @query += "<strong>#{q.split("=")[0].humanize.downcase}</strong> is <strong>#{q.split("=")[1].humanize.downcase}</strong>, "
+    end
+    return @query
   end
 
 end
