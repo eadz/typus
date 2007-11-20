@@ -60,6 +60,7 @@ a:hover {
 	background: black;
 	margin: 0px;
 	padding: 10px 15px;
+	height: 40px;
 }
 
 #header h1 {
@@ -106,6 +107,14 @@ a:hover {
 
 #header p {
 	margin: 5px 0px;
+}
+
+#header .left {
+	float: left;
+}
+
+#header .right {
+	float: right;
 }
 
 /* wrapper
@@ -158,7 +167,6 @@ a:hover {
 	text-align: left;
 	padding: 2px 0px 0px 0px;
 }
-
 
 small {
 	font-size: 75%;
