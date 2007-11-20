@@ -150,7 +150,7 @@ private
 
   def authenticate
     authenticate_or_request_with_http_basic(realm = TYPUS['app_name']) do |user_name, password|
-      user_name == TYPUS['app_username'] && password == TYPUS['app_password']
+      TYPUS['admins'].each { |user| user_name == user[0] && password == user[1] }
     end
   end
 
