@@ -166,7 +166,7 @@ small {
 
 #content h3 {
 	font-size: 1.2em;
-	margin: 0px;
+	margin: 15px 0px 0px 0px;
 }
 
 #content h4 {
@@ -213,12 +213,14 @@ small {
 }
 
 #content ul {
-	margin: 10px 20px;
+	margin: 5px 0px;
 	padding: 0px;
 }
 
 #content li {
 	line-height: 150%;
+	list-style: none;
+	margin: 5px 0px;
 }
 
 #content code {
