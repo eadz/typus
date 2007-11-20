@@ -47,12 +47,19 @@ module TypusHelper
   end
 
   def modules
-    @block = "<ul>\n"
-    MODELS.each { |model| @block += "<li><a href=\"/#{TYPUS['prefix']}/#{model[0].downcase.pluralize}\">#{model[0].pluralize}</a> <small><a href=\"/#{TYPUS['prefix']}/#{model[0].downcase.pluralize}/new\">Add</a></small><br />#{model[1]['copy']}</li>\n" }
-    @block += "</ul>\n"
+    @block = ""
+    @models = MODELS.to_a
+    @modules = []
+    @models.each { |model| @modules += model[1]['module'].to_a }
+    @modules.uniq.each do |m|
+      @block += "<h3>#{m.capitalize}</h3>"
+      @block += "<ul>"
+      MODELS.each do |model|
+        @block += "<li><a href=\"/#{TYPUS['prefix']}/#{model[0].downcase.pluralize}\">#{model[0].pluralize}</a> <small><a href=\"/#{TYPUS['prefix']}/#{model[0].downcase.pluralize}/new\">Add</a></small><br />#{model[1]['copy']}</li>\n" if model[1]['module'] == m
+      end
+      @block += "</ul>"
+    end
     return @block
-  rescue
-    return "<ul><li>FixMe: <strong>typus.yml</strong></li></ul>"
   end
 
   def sidebar
