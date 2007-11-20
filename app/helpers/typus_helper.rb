@@ -102,7 +102,6 @@ module TypusHelper
       if params[:action] == "index"
         if MODELS[@model.to_s]["filters"]
           @block += "<h2>Filter</h2>"
-          @block += "<a href=\"/#{TYPUS['prefix']}/#{params[:model]}\">Show All</a>" if request.env['QUERY_STRING']
           @model.filters.each do |f|
             case f[1]
             when "boolean"
