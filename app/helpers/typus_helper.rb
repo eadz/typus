@@ -105,26 +105,22 @@ module TypusHelper
           @model.filters.each do |f|
             case f[1]
             when "boolean"
-              # @current_request = (request.env['QUERY_STRING']) ? request.env['QUERY_STRING'].split("&") : ""
-              # @current_request = (@current_request - ["#{f[0]}=true"]).join("&")
+              @current_request = (request.env['QUERY_STRING']) ? request.env['QUERY_STRING'].split("&") : []
               @block += "<h3>By #{f[0].humanize}</h3>\n"
               @block += "<ul>\n"
               @status = params[:status] == "true" ? "on" : "off"
-              @block += "<li><a class=\"#{@status}\" href=\"/#{TYPUS['prefix']}/#{params[:model]}?#{f[0]}=true\">Active</a></li>\n"
+              @block += "<li><a class=\"#{@status}\" href=\"/#{TYPUS['prefix']}/#{params[:model]}?#{f[0]}=true&#{(@current_request.delete_if { |x| x.include? "#{f[0]}" }).join("&")}\">Active</a></li>\n"
               @status = params[:status] == "false" ? "on" : "off"
-              @block += "<li><a class=\"#{@status}\" href=\"/#{TYPUS['prefix']}/#{params[:model]}?#{f[0]}=false\">Inactive</a></li>\n"
+              @block += "<li><a class=\"#{@status}\" href=\"/#{TYPUS['prefix']}/#{params[:model]}?#{f[0]}=false&#{(@current_request.delete_if { |x| x.include? "#{f[0]}" }).join("&")}\">Inactive</a></li>\n"
               @block += "</ul>\n"
             when "datetime"
               @block += "<h3>By #{f[0].humanize}</h3>\n"
               @block += "<ul>\n"
-              # This cleans the request
-              # current_request = (request.env['QUERY_STRING']) ? request.env['QUERY_STRING'].split("&") : ""
               @filters = %w(today past_7_days this_month this_year)
-              # @filters.each { |timeline| current_request.delete("#{f[0]}=#{timeline}") }
               @filters.each do |timeline|
                 @status = params[:created_at] == timeline ? "on" : "off"
-                # current_request = "&#{current_request.join("&")}" if current_request.size > 0
-                @block += "<li><a class=\"#{@status}\" href=\"/#{TYPUS['prefix']}/#{params[:model]}?#{f[0]}=#{timeline}\">#{timeline.humanize.capitalize}</a></li>\n"
+                @current_request = (request.env['QUERY_STRING']) ? request.env['QUERY_STRING'].split("&") : []
+                @block += "<li><a class=\"#{@status}\" href=\"/#{TYPUS['prefix']}/#{params[:model]}?#{f[0]}=#{timeline}&#{(@current_request.delete_if { |x| x.include? "#{f[0]}" }).join("&")}\">#{timeline.humanize.capitalize}</a></li>\n"
               end
               @block += "</ul>\n"
             when "collection"
