@@ -215,6 +215,7 @@ module TypusHelper
       @block += "<p>"
       @block += select "model_id_to_relate", :related_id, (model_to_relate.find(:all) - @item.send(field[0])).map { |f| [f.name, f.id] }
       @block += "&nbsp; #{submit_tag "Add #{field[0].singularize}"}</p>"
+      @block += "</form>"
       current_model = eval params[:model].singularize.capitalize
       items = current_model.find(params[:id]).send(field[0])
       @block += "<ul>"
