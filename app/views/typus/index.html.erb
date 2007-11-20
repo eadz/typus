@@ -1,5 +1,5 @@
 <h2>
-<div class="left"><%= link_to @model.to_s.pluralize.capitalize, :model => params[:model], :action => "index" %> <%= "<small><a href=\"/#{TYPUS['prefix']}/#{params[:model]}\">Show All</a></small>" if request.env['QUERY_STRING'] %></div>
+<div class="left"><%= link_to @model.to_s.pluralize.capitalize, :model => params[:model], :action => "index" %></div>
 <div class="right"></div>
 </h2>
 

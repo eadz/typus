@@ -101,7 +101,9 @@ module TypusHelper
       # Filters (only shown on index page)
       if params[:action] == "index"
         if MODELS[@model.to_s]["filters"]
-          @block += "<h2>Filter</h2>"
+          @block += "<h2>Filter"
+          @block += " <small><a href=\"/#{TYPUS['prefix']}/#{params[:model]}\">Remove</a></small>" if request.env['QUERY_STRING']
+          @block += "</h2>"
           @model.filters.each do |f|
             case f[1]
             when "boolean"
