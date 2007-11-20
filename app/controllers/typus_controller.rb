@@ -23,38 +23,36 @@ class TypusController < ApplicationController
         @the_query = query.split("=")[1]
         
         # If it's a query
-        if @the_param == "q"
+        if @the_param == "query"
           @search = Array.new
           @model.search_fields.each { |search| @search << "LOWER(#{search}) LIKE '%#{@the_query}%'" }
           @conditions += "(#{@search.join(" OR ")}) AND "
         end
         
-        #if @model.filters
-          @model.filters.each do |f|
-            filter_type = f[1] if f[0].to_s == @the_param.to_s
-            # And the common defined types of data
-            case filter_type
-            when "boolean"
-              if %w(sqlite3 sqlite).include? DB['adapter']
-                @conditions += "#{f[0]} = '#{@the_query[0..0]}' AND "
-              else
-                @status = (@the_query == 'true') ? 1 : 0
-                @conditions += "#{f[0]} = '#{@status}' AND "
-              end
-            when "datetime"
-              case @the_query
-              when "today":         @start_date, @end_date = Time.today, Time.today.tomorrow
-              when "past_7_days":   @start_date, @end_date = Time.today.monday, Time.today.monday.next_week
-              when "this_month":    @start_date, @end_date = Time.today.last_month, Time.today.tomorrow
-              when "this_year":     @start_date, @end_date = Time.today.last_year, Time.today.tomorrow
-              end
-              @start_date = @start_date.strftime("%Y-%m-%d %H:%M:%S")
-              @end_date = @end_date.strftime("%Y-%m-%d %H:%M:%S")
-              @conditions += "created_at > '#{@start_date}' AND created_at < '#{@end_date}' AND "
-            when "collection"
-              @conditions += "#{f[0]}_id = #{@the_query} AND "
+        @model.filters.each do |f|
+          filter_type = f[1] if f[0].to_s == @the_param.to_s
+          # And the common defined types of data
+          case filter_type
+          when "boolean"
+            if %w(sqlite3 sqlite).include? DB['adapter']
+              @conditions += "#{f[0]} = '#{@the_query[0..0]}' AND "
+            else
+              @status = (@the_query == 'true') ? 1 : 0
+              @conditions += "#{f[0]} = '#{@status}' AND "
             end
-          #end
+          when "datetime"
+            case @the_query
+            when "today":         @start_date, @end_date = Time.today, Time.today.tomorrow
+            when "past_7_days":   @start_date, @end_date = Time.today.monday, Time.today.monday.next_week
+            when "this_month":    @start_date, @end_date = Time.today.last_month, Time.today.tomorrow
+            when "this_year":     @start_date, @end_date = Time.today.last_year, Time.today.tomorrow
+            end
+            @start_date = @start_date.strftime("%Y-%m-%d %H:%M:%S")
+            @end_date = @end_date.strftime("%Y-%m-%d %H:%M:%S")
+            @conditions += "created_at > '#{@start_date}' AND created_at < '#{@end_date}' AND "
+          when "collection"
+            @conditions += "#{f[0]}_id = #{@the_query} AND "
+          end
         end
       end
     end
@@ -62,8 +60,6 @@ class TypusController < ApplicationController
     @order = params[:order_by]
     @sort_order = params[:sort_order]
     @items = @model.paginate :page => params[:page], :per_page => TYPUS['per_page'], :order => "#{@order} #{@sort_order}", :conditions => "#{@conditions}"
-#  rescue
-#    render :text => request.env['QUERY_STRING'].split("&").inspect
   end
 
   def new

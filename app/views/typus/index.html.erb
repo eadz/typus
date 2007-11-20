@@ -8,7 +8,7 @@
 	<!-- Query -->
 	<% if request.env['QUERY_STRING'] %>
 	<div class="box" id="empty">
-		<p><strong><%= params[:model].capitalize %></strong> filtered by <%= request.env['QUERY_STRING'] %>. <%= link_to "Remove filter?", :action => "index", :model => params[:model] %></p>
+		<p><strong><%= params[:model].capitalize %></strong> where <%= process_query(request.env['QUERY_STRING']) %> <%= link_to "remove filter?", :action => "index", :model => params[:model] %></p>
 	</div>
 	<script type="text/javascript">new Effect.Highlight('empty');</script>
 	<% end %>
