@@ -199,7 +199,12 @@ module TypusHelper
         @block += select :item, field[0], @values.collect { |p| [ "#{p[0]} (#{p[1]})", p[1] ] }
       when "collection"
         @collection = eval field[0].singularize.capitalize
-        @block += collection_select :item, "#{field[0]}_id", @collection.find(:all), :id, :name, :include_blank => true
+        
+        if @collection.new.methods.include? "name"
+          @block += collection_select :item, "#{field[0]}_id", @collection.find(:all), :id, :name, :include_blank => true
+        else
+          @block += select :item, "#{field[0]}_id", @collection.find(:all).collect { |p| ["#{@collection}##{p.id}", p.id] }, :include_blank => true
+        end
       when "multiple"
         multiple = eval field[0].singularize.capitalize
         rel_model = "#{field[0].singularize}" + "_id"

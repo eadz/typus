@@ -19,7 +19,15 @@
 		<% when "datetime" -%>
 			<td width="80px"><%= fmt_date(item.send(column[0])) %></td>
 		<% when "collection" -%>
-			<td><%= item.send(column[0]).name if item.send(column[0]) %></td>
+
+			<% this_model = eval column[0].capitalize %>
+				
+				<% if this_model.new.methods.include? "name" %>
+					<td><%= item.send(column[0]).name if item.send(column[0]) %></td>
+				<% else %>
+					<td><%= "#{this_model}##{item.send(column[0]).id}" if item.send(column[0]) %></td>
+				<% end %>
+
 	<% end -%>
 <% end %>
 		<td width="10px"><%= link_to image_tag("typus_trash.gif"), { :action => 'destroy', :id => item.id }, :confirm => "Remove this entry?" %></td>
