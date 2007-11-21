@@ -1,7 +1,9 @@
 class TypusController < ApplicationController
 
-  before_filter :authenticate
-  before_filter :set_model, :except => [ :dashboard ]
+  DB = YAML.load_file("#{RAILS_ROOT}/config/database.yml")[RAILS_ENV]
+
+  before_filter :authenticate, :except => [ :login, :logout ]
+  before_filter :set_model, :except => [ :dashboard, :login, :logout ]
   before_filter :find_model, :only => [ :show, :edit, :update, :destroy, :status ]
   before_filter :fields, :only => [ :index ]
   before_filter :form_fields, :only => [ :new, :edit, :update ]
@@ -12,37 +14,52 @@ class TypusController < ApplicationController
 
   def index
     set_order
-    if params[:filter_by] == "created_at"
-      @filter_by = params[:filter_by]
-      case params[:filter_id]
-      when "today"
-        @start_date, @end_date = Time.today, Time.today.tomorrow
-      when "past_7_days"
-        @start_date, @end_date = Time.today.monday, Time.today.monday.next_week
-      when "this_month"
-        @start_date, @end_date = Time.today.last_month, Time.today.tomorrow
-      when "this_year"
-        @start_date, @end_date = Time.today.last_year, Time.today.tomorrow
+    @conditions = ""
+    # Get all the params and process them ...
+    if request.env['QUERY_STRING']
+      @query = request.env['QUERY_STRING']
+      @query.split("&").each do |query|
+        @the_param = query.split("=")[0].split("_id")[0]
+        @the_query = query.split("=")[1]
+        
+        # If it's a query
+        if @the_param == "query"
+          @search = Array.new
+          @model.search_fields.each { |search| @search << "LOWER(#{search}) LIKE '%#{@the_query}%'" }
+          @conditions += "(#{@search.join(" OR ")}) AND "
+        end
+        
+        @model.filters.each do |f|
+          filter_type = f[1] if f[0].to_s == @the_param.to_s
+          # And the common defined types of data
+          case filter_type
+          when "boolean"
+            if %w(sqlite3 sqlite).include? DB['adapter']
+              @conditions += "#{f[0]} = '#{@the_query[0..0]}' AND "
+            else
+              @status = (@the_query == 'true') ? 1 : 0
+              @conditions += "#{f[0]} = '#{@status}' AND "
+            end
+          when "datetime"
+            case @the_query
+            when "today":         @start_date, @end_date = Time.today, Time.today.tomorrow
+            when "past_7_days":   @start_date, @end_date = Time.today.monday, Time.today.monday.next_week
+            when "this_month":    @start_date, @end_date = Time.today.last_month, Time.today.tomorrow
+            when "this_year":     @start_date, @end_date = Time.today.last_year, Time.today.tomorrow
+            end
+            @start_date = @start_date.strftime("%Y-%m-%d %H:%M:%S")
+            @end_date = @end_date.strftime("%Y-%m-%d %H:%M:%S")
+            @conditions += "created_at > '#{@start_date}' AND created_at < '#{@end_date}' AND "
+          when "collection"
+            @conditions += "#{f[0]}_id = #{@the_query} AND "
+          end
+        end
       end
-      @items = @model.paginate :page => params[:page], :per_page => TYPUS['per_page'], :conditions => ["#{@filter_by} > ? AND #{@filter_by} < ?", @start_date, @end_date], :order => "id DESC"
-    elsif params[:filter_by] == "status"
-      @filter_by = params[:filter_by]
-      @filter_id = params[:filter_id] == "true" ? true : false
-      @items = @model.paginate :page => params[:page], :per_page => TYPUS['per_page'], :conditions => ["#{@filter_by} = ?", @filter_id], :order => "id DESC"
-    elsif params[:filter_by]
-      @filter_by = params[:filter_by]
-      @filter_id = params[:filter_id] # == "true" ? true : false
-      @items = @model.paginate :page => params[:page], :per_page => TYPUS['per_page'], :conditions => ["#{@filter_by} = ?", @filter_id], :order => "id DESC"
-    elsif params[:search]
-      @search = []
-      @model.search_fields.each { |search| @search << "LOWER(#{search}) LIKE '%#{params[:search]}%'" }
-      @items = @model.paginate :page => params[:page], :per_page => TYPUS['per_page'], :conditions => "#{@search.join(" OR ")}"
-      render :partial => "table"
-    elsif params[:order_by]
-      @order = params[:order_by]
-      @sort_order = params[:sort_order]
-      @items = @model.paginate :page => params[:page], :per_page => TYPUS['per_page'], :order => "#{@order} #{@sort_order}"
     end
+    @conditions += "1 = 1"
+    @order = params[:order_by]
+    @sort_order = params[:sort_order]
+    @items = @model.paginate :page => params[:page], :per_page => TYPUS['per_page'], :order => "#{@order} #{@sort_order}", :conditions => "#{@conditions}"
   end
 
   def new
@@ -103,6 +120,25 @@ class TypusController < ApplicationController
     redirect_to :action => "edit", :id => params[:id]
   end
 
+  def login
+    if request.post?
+      if params[:user][:name] == TYPUS['app_username'] && params[:user][:password] == TYPUS['app_password']
+        session[:typus] = true
+        redirect_to :action => "dashboard"
+      else
+        flash[:error] = "Username/Password Incorrect"
+        redirect_to :action => "login"
+      end
+    else
+      render :layout => "typus_login"
+    end
+  end
+
+  def logout
+    reset_session
+    redirect_to :action => "login"
+  end
+
 private
 
   def set_model
@@ -132,9 +168,11 @@ private
   private
 
   def authenticate
-    authenticate_or_request_with_http_basic(realm = TYPUS['app_name']) do |user_name, password|
-      user_name == TYPUS['app_username'] && password == TYPUS['app_password']
-    end
+    redirect_to :action => "login" unless session[:typus]
+    # authenticate_or_request_with_http_basic(realm = TYPUS['app_name']) do |user_name, password|
+      # user_name == TYPUS['app_username'] && password == TYPUS['app_password']
+      ## TYPUS['admins'].each { |user| user_name == user[0] && password == user[1] }
+    #end
   end
 
 end

@@ -60,6 +60,7 @@ a:hover {
 	background: black;
 	margin: 0px;
 	padding: 10px 15px;
+	height: 40px;
 }
 
 #header h1 {
@@ -106,6 +107,14 @@ a:hover {
 
 #header p {
 	margin: 5px 0px;
+}
+
+#header .left {
+	float: left;
+}
+
+#header .right {
+	float: right;
 }
 
 /* wrapper
@@ -159,14 +168,13 @@ a:hover {
 	padding: 2px 0px 0px 0px;
 }
 
-
 small {
 	font-size: 75%;
 }
 
 #content h3 {
 	font-size: 1.2em;
-	margin: 0px;
+	margin: 15px 0px 0px 0px;
 }
 
 #content h4 {
@@ -213,12 +221,14 @@ small {
 }
 
 #content ul {
-	margin: 10px 20px;
+	margin: 5px 0px;
 	padding: 0px;
 }
 
 #content li {
 	line-height: 150%;
+	list-style: none;
+	margin: 5px 0px;
 }
 
 #content code {
@@ -573,6 +583,11 @@ h2 {
 	margin: -7px 0px 0px 0px;
 }
 
+.errorExplanation {
+	border: 1px solid #999;
+	padding: 10px 10px 5px 10px;
+}
+
 /* searchbox
 ---------------------------------------------------------- */
 
@@ -600,9 +615,11 @@ img {
 ---------------------------------------------------------- */
 
 .pagination {
+	border-top: 1px solid #F5F5F5;
+	border-bottom: 1px solid #F5F5F5;
 	margin: 3px;
-	padding: 3px;
-	margin: 10px auto;
+	padding: 10px 0px;
+	margin: 25px auto;
 	text-align: center;
 }
 

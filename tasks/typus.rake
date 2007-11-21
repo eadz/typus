@@ -1,14 +1,28 @@
 require File.dirname(__FILE__) + '/../../../../config/environment'
 
 namespace :typus do
-  
-  desc "Generate typus.yml & Admin Interface Assets"
-  task :setup do
-    puts "Creating symlinks ..."
-    %w( images stylesheets ).each do |symlink|
-      puts "=> Added symlink for #{symlink}"
-      system "ln -s #{RAILS_ROOT}/vendor/plugins/typus/public/#{symlink} #{RAILS_ROOT}/public/#{symlink}/typus"
+
+  desc "Commit fixes to Typus"
+  task :commit do
+    system "cd #{RAILS_ROOT}/vendor/plugins/typus && hg push"
+  end
+
+  desc "Update from the latest trunk"
+  task :update do
+    system "cd #{RAILS_ROOT}/vendor/plugins/typus && hg pull && hg update"
+  end
+
+  desc "Admin Interface Assets"
+  task :theme do
+    puts "Coping admin interface assets ..."
+    %w( images stylesheets ).each do |folder|
+      puts "=> Added *#{folder}* assets"
+      system "cp #{RAILS_ROOT}/vendor/plugins/typus/public/#{folder}/* #{RAILS_ROOT}/public/#{folder}/"
     end
+  end
+
+  desc "Generate typus.yml"
+  task :setup do
     begin
       MODEL_DIR = File.join(RAILS_ROOT, "app/models")
       Dir.chdir(MODEL_DIR)
@@ -20,12 +34,12 @@ namespace :typus do
         typus.puts "# ------------------------------------------------"
         typus.puts "#"
         typus.puts "# Post:"
-        typus.puts "#   list: title"
+        typus.puts "#   list: title::string created_at::datetime"
         typus.puts "#   form: title::string body::text::10 status::boolean created_at::datetime"
-        typus.puts "#   module: content"
-        typus.puts "#   order: created_at"
-        typus.puts "#   filters: status"
+        typus.puts "#   order: created_at::asc"
+        typus.puts "#   filters: status::boolean created_at::datetime"
         typus.puts "#   search: title body"
+        typus.puts "#   module: content"
         typus.puts "#   copy: Some text to describe the model"
         typus.puts "#"
         typus.puts "# ------------------------------------------------"
@@ -39,7 +53,7 @@ namespace :typus do
           list = class_attributes
           list.delete("content")
           list.delete("body")
-          typus.puts "  list: #{list.join(" ")}"
+          typus.puts "  list: #{list.join("::string ")}"
           typus.puts "  form:"
           typus.puts "  module:"
           typus.puts "  order:"
