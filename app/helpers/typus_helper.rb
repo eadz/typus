@@ -48,18 +48,20 @@ module TypusHelper
   end
 
   def modules
-    @block = ""
+    @block = "<div id=\"list\">"
     @models = MODELS.to_a
     @modules = []
     @models.each { |model| @modules += model[1]['module'].to_a }
     @modules.uniq.each do |m|
-      @block += "<h3>#{m.capitalize}</h3>"
-      @block += "<ul>"
+      @block += "<table>\n"
+      @block += "<tr><th colspan=\"2\">#{m.capitalize}</th></tr>\n"
       MODELS.each do |model|
-        @block += "<li><a href=\"/#{TYPUS['prefix']}/#{model[0].downcase.pluralize}\">#{model[0].pluralize}</a> <small><a href=\"/#{TYPUS['prefix']}/#{model[0].downcase.pluralize}/new\">Add</a></small><br />#{model[1]['copy']}</li>\n" if model[1]['module'] == m
+        @block += "<tr class=\"#{cycle('even', 'odd')}\"><td><a href=\"/#{TYPUS['prefix']}/#{model[0].downcase.pluralize}\">#{model[0].pluralize}</a><br /><small>#{model[1]['copy']}</small></td><td align=\"right\" valign=\"bottom\"><small><a href=\"/#{TYPUS['prefix']}/#{model[0].downcase.pluralize}/new\">Add</a></small></td></tr>\n" if model[1]['module'] == m
       end
-      @block += "</ul>"
+      @block += "</table>\n"
+      @block += "<br /><div style=\"clear\"></div>"
     end
+    @block += "</div>"
     return @block
   end
 
@@ -199,7 +201,6 @@ module TypusHelper
         @block += select :item, field[0], @values.collect { |p| [ "#{p[0]} (#{p[1]})", p[1] ] }
       when "collection"
         @collection = eval field[0].singularize.capitalize
-        
         if @collection.new.methods.include? "name"
           @block += collection_select :item, "#{field[0]}_id", @collection.find(:all), :id, :name, :include_blank => true
         else
