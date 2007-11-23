@@ -70,7 +70,7 @@ class TypusController < ApplicationController
     @item = @model.new(params[:item])
     if @item.save
       flash[:notice] = "#{@model.to_s.capitalize} successfully created."
-      redirect_to :action => "edit", :id => @item.id
+      redirect_to :action => 'index' # :action => "edit", :id => @item.id
     else
       @form_fields = @model.form_fields
       render :action => "new"
