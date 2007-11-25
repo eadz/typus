@@ -1,3 +1,6 @@
+Typus
+=====
+
 = Doc
 
 To create the first user and copy the stylesheets ...
@@ -70,6 +73,9 @@ where `LANGUAGES` is defined at `config/initializers/typus.rb` as
     run "cd #{current_path} && rake typus:setup"
   end
 
-== Licence
+Example
+=======
 
-.........
+Example goes here.
+
+Copyright (c) 2007 Francesc Esplugas Martí, released under the MIT license

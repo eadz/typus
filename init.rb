@@ -1,9 +1,19 @@
-# Add new locations of the controllers, models & helpers
-ActionController::Base.view_paths << File.join(File.dirname(__FILE__), 'app', 'views')
-%w( controllers models helpers ).each { |m| Dependencies.load_paths << File.join(File.dirname(__FILE__), 'app', m) }
+begin
 
-# Load gems
-%w( sha1 ).each { |lib| require lib }
+  ActionController::Base.view_paths << File.join(File.dirname(__FILE__), 'app', 'views')
 
-# Libraries required
-Dir[File.join(File.dirname(__FILE__), 'lib', '*.rb')].each { |lib| require lib }
+  %w( controllers models helpers ).each do |m|
+    Dependencies.load_paths << File.join(File.dirname(__FILE__), 'app', m)
+  end
+
+  %w( sha1 ).each { |lib| require lib }
+
+  require "#{RAILS_ROOT}/vendor/plugins/will_paginate/lib/will_paginate"
+  require 'typus'
+  Typus.enable
+
+rescue LoadError
+  puts "\n************************************************************************"
+  puts "**      Install the will_paginate plugin to make Typus work           **"
+  puts "************************************************************************\n\n"
+end

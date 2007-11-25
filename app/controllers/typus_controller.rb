@@ -9,7 +9,6 @@ class TypusController < ApplicationController
   before_filter :form_fields, :only => [ :new, :edit, :update ]
 
   def dashboard
-    
   end
 
   def index
@@ -59,7 +58,7 @@ class TypusController < ApplicationController
     @conditions += "1 = 1"
     @order = params[:order_by]
     @sort_order = params[:sort_order]
-    @items = @model.paginate :page => params[:page], :per_page => TYPUS['per_page'], :order => "#{@order} #{@sort_order}", :conditions => "#{@conditions}"
+    @items = @model.paginate :page => params[:page], :per_page => Typus::Configuration.per_page, :order => "#{@order} #{@sort_order}", :conditions => "#{@conditions}"
   end
 
   def new
@@ -122,7 +121,7 @@ class TypusController < ApplicationController
 
   def login
     if request.post?
-      if params[:user][:name] == TYPUS['app_username'] && params[:user][:password] == TYPUS['app_password']
+      if params[:user][:name] == Typus::Configuration.username && params[:user][:password] == Typus::Configuration.password
         session[:typus] = true
         redirect_to :action => "dashboard"
       else
