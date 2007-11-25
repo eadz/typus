@@ -22,7 +22,7 @@
 
 			<% this_model = eval column[0].capitalize %>
 				
-				<% if this_model.new.methods.include? "name" %>
+				<% if (this_model.new.attributes.include? 'name') || (this_model.new.methods.include? 'name') %>
 					<td><%= item.send(column[0]).name if item.send(column[0]) %></td>
 				<% else %>
 					<td><%= "#{this_model}##{item.send(column[0]).id}" if item.send(column[0]) %></td>
