@@ -58,7 +58,7 @@ class TypusController < ApplicationController
     @conditions += "1 = 1"
     @order = params[:order_by]
     @sort_order = params[:sort_order]
-    @items = @model.paginate :page => params[:page], :per_page => Typus::Configuration.per_page, :order => "#{@order} #{@sort_order}", :conditions => "#{@conditions}"
+    @items = @model.paginate :page => params[:page], :per_page => Typus::Configuration.options[:per_page], :order => "#{@order} #{@sort_order}", :conditions => "#{@conditions}"
   end
 
   def new

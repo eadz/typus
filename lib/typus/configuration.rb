@@ -2,33 +2,16 @@ module Typus
 
   module Configuration
 
-    class << self
+    @@options = { 
+        :app_name => 'Typus Admin Interface',
+        :app_description => 'Web Development for the Masses',
+        :per_page => 20,
+        :prefix => 'admin',
+        :username => 'admin',
+        :password => 'typus',
+        }
 
-      def app_name
-        "Typus Admin Interface"
-      end
-
-      def app_description
-        "Web Development for the Masses"
-      end
-
-      def per_page
-        20
-      end
-
-      def prefix
-        'admin'
-      end
-
-      def username
-        'admin'
-      end
-
-      def password
-        'typus'
-      end
-
-    end
+    mattr_reader :options
 
   end
 

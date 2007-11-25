@@ -3,7 +3,7 @@ module TypusHelper
   MODELS = YAML.load_file("#{RAILS_ROOT}/config/typus.yml")
 
   def head
-    @block = "<title>#{Typus::Configuration.app_name} &rsaquo; #{page_title}</title>\n"
+    @block = "<title>#{Typus::Configuration.options[:app_name]} &rsaquo; #{page_title}</title>\n"
     @block += "<link rel=\"shortcut icon\" href=\"/favicon.ico\" type=\"image/x-icon\" />\n"
     @block += "<meta http-equiv=\"imagetoolbar\" content=\"no\" />\n"
     @block += "<meta name=\"description\" content=\"\" />\n"
@@ -19,25 +19,25 @@ module TypusHelper
   end
 
   def header
-    @block += "<h1>#{Typus::Configuration.app_name}"
+    @block += "<h1>#{Typus::Configuration.options[:app_name]}"
     @block += "<span class=\"feedback\">#{flash[:notice]}</span>" if flash[:notice]
     @block += "</h1>\n"
-    @block += "<h2>#{Typus::Configuration.app_description}</h2>\n"
+    @block += "<h2>#{Typus::Configuration.options[:app_description]}</h2>\n"
     return @block
   end
 
   def breadcrumbs
     @block = "<p>"
     if params[:model]
-      @block += "<a href=\"/#{Typus::Configuration.prefix}/\">Home</a>"
+      @block += "<a href=\"/#{Typus::Configuration.options[:prefix]}/\">Home</a>"
       case params[:action]
       when "index"
         @block += " &rsaquo; #{params[:model].capitalize}</li>\n"
       when "edit"
-        @block += " &rsaquo; <a href=\"/#{Typus::Configuration.prefix}/#{params[:model]}\">#{params[:model].capitalize}</a></li>\n"
+        @block += " &rsaquo; <a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}\">#{params[:model].capitalize}</a></li>\n"
         @block += " &rsaquo; Edit</li>\n"
       when "new"
-        @block += " &rsaquo; <a href=\"/#{Typus::Configuration.prefix}/#{params[:model]}\">#{params[:model].capitalize}</a></li>\n"
+        @block += " &rsaquo; <a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}\">#{params[:model].capitalize}</a></li>\n"
         @block += " &rsaquo; New</li>\n"
       end
     else
@@ -56,7 +56,7 @@ module TypusHelper
       @block += "<table>\n"
       @block += "<tr><th colspan=\"2\">#{m.capitalize}</th></tr>\n"
       MODELS.each do |model|
-        @block += "<tr class=\"#{cycle('even', 'odd')}\"><td><a href=\"/#{Typus::Configuration.prefix}/#{model[0].downcase.pluralize}\">#{model[0].pluralize}</a><br /><small>#{model[1]['copy']}</small></td><td align=\"right\" valign=\"bottom\"><small><a href=\"/#{Typus::Configuration.prefix}/#{model[0].downcase.pluralize}/new\">Add</a></small></td></tr>\n" if model[1]['module'] == m
+        @block += "<tr class=\"#{cycle('even', 'odd')}\"><td><a href=\"/#{Typus::Configuration.options[:prefix]}/#{model[0].downcase.pluralize}\">#{model[0].pluralize}</a><br /><small>#{model[1]['copy']}</small></td><td align=\"right\" valign=\"bottom\"><small><a href=\"/#{Typus::Configuration.options[:prefix]}/#{model[0].downcase.pluralize}/new\">Add</a></small></td></tr>\n" if model[1]['module'] == m
       end
       @block += "</table>\n"
       @block += "<br /><div style=\"clear\"></div>"
@@ -78,11 +78,11 @@ module TypusHelper
       case params[:action]
       when "index"
         @block += "<ul>\n"
-        @block += "<li><a href=\"/#{Typus::Configuration.prefix}/#{params[:model]}/new\">Add new #{params[:model].singularize}</a></li>\n"
+        @block += "<li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}/new\">Add new #{params[:model].singularize}</a></li>\n"
         @block += "</ul>\n"
       when "new"
         @block += "<ul>\n"
-        @block += "<li><a href=\"/#{Typus::Configuration.prefix}/#{params[:model]}\">Back to list</a></li>\n"
+        @block += "<li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}\">Back to list</a></li>\n"
         @block += "</ul>\n"
       when "edit"
         @block += "<ul>\n"
@@ -90,7 +90,7 @@ module TypusHelper
         @block += "<li>#{link_to "Previous #{params[:model].singularize}", :action => 'edit', :id => @previous.id}</li>" if @previous
         @block += "</ul>\n"
         @block += "<ul>\n"
-        @block += "<li><a href=\"/#{Typus::Configuration.prefix}/#{params[:model]}\">Back to list</a></li>\n"
+        @block += "<li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}\">Back to list</a></li>\n"
         @block += "</ul>\n"
       end
       
@@ -98,7 +98,7 @@ module TypusHelper
       if MODELS[@model.to_s]["actions"]
         @block += "<h2>More Actions</h2>"
         @block += "<ul>"
-        @model.actions.each { |a| @block += "<li><a href=\"/#{Typus::Configuration.prefix}/#{params[:model]}/#{a[0]}\">#{a[0].humanize}</a></li>" if a[1] == params[:action] }
+        @model.actions.each { |a| @block += "<li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}/#{a[0]}\">#{a[0].humanize}</a></li>" if a[1] == params[:action] }
         @block += "</ul>"
       end
       
@@ -106,7 +106,7 @@ module TypusHelper
       if params[:action] == "index"
         if MODELS[@model.to_s]["search"]
           @block += "<h2>Search</h2>\n"
-          @block += "<form action=\"/#{Typus::Configuration.prefix}/#{params[:model]}\" method=\"get\">"
+          @block += "<form action=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}\" method=\"get\">"
           @block += "<p><input id=\"query\" name=\"query\" type=\"text\" value=\"#{params[:query]}\"/></p>"
           @block += "</form>"
         end
@@ -116,7 +116,7 @@ module TypusHelper
       if params[:action] == "index"
         if MODELS[@model.to_s]["filters"]
           @block += "<h2>Filter"
-          @block += " <small><a href=\"/#{Typus::Configuration.prefix}/#{params[:model]}\">Remove</a></small>" if request.env['QUERY_STRING']
+          @block += " <small><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}\">Remove</a></small>" if request.env['QUERY_STRING']
           @block += "</h2>"
           @model.filters.each do |f|
             case f[1]
@@ -127,7 +127,7 @@ module TypusHelper
               @filters.each do |status|
                 @current_request = (request.env['QUERY_STRING']) ? request.env['QUERY_STRING'].split("&") : []
                 @status = (@current_request.include? "#{f[0]}=#{status}") ? "on" : "off"
-                @block += "<li><a class=\"#{@status}\" href=\"/#{Typus::Configuration.prefix}/#{params[:model]}?#{(@current_request.delete_if { |x| x.include? "#{f[0]}" } + ["#{f[0]}=#{status}"]).join("&")}\">#{status.capitalize}</a></li>\n"
+                @block += "<li><a class=\"#{@status}\" href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}?#{(@current_request.delete_if { |x| x.include? "#{f[0]}" } + ["#{f[0]}=#{status}"]).join("&")}\">#{status.capitalize}</a></li>\n"
               end
               @block += "</ul>\n"
             when "datetime"
@@ -137,14 +137,14 @@ module TypusHelper
               @filters.each do |timeline|
                 @current_request = (request.env['QUERY_STRING']) ? request.env['QUERY_STRING'].split("&") : []
                 @status = (@current_request.include? "#{f[0]}=#{timeline}") ? "on" : "off"
-                @block += "<li><a class=\"#{@status}\" href=\"/#{Typus::Configuration.prefix}/#{params[:model]}?#{(@current_request.delete_if { |x| x.include? "#{f[0]}" } + ["#{f[0]}=#{timeline}"]).join("&")}\">#{timeline.humanize.capitalize}</a></li>\n"
+                @block += "<li><a class=\"#{@status}\" href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}?#{(@current_request.delete_if { |x| x.include? "#{f[0]}" } + ["#{f[0]}=#{timeline}"]).join("&")}\">#{timeline.humanize.capitalize}</a></li>\n"
               end
               @block += "</ul>\n"
             when "collection"
               @block += "<h3>By #{f[0].humanize}</h3>"
               @model = eval f[0].capitalize
               @block += "<ul>\n"
-              @model.find(:all).each { |item| @block += "<li><a href=\"/#{Typus::Configuration.prefix}/#{params[:model]}?#{f[0]}_id=#{item.id}\">#{item.name}</a></li>\n" }
+              @model.find(:all).each { |item| @block += "<li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}?#{f[0]}_id=#{item.id}\">#{item.name}</a></li>\n" }
               @block += "</ul>\n"
             end
           end
