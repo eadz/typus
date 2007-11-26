@@ -121,7 +121,7 @@ class TypusController < ApplicationController
 
   def login
     if request.post?
-      if params[:user][:name] == Typus::Configuration.username && params[:user][:password] == Typus::Configuration.password
+      if params[:user][:name] == Typus::Configuration.options[:username] && params[:user][:password] == Typus::Configuration.options[:password]
         session[:typus] = true
         redirect_to :action => "dashboard"
       else
