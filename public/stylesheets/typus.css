@@ -108,12 +108,6 @@ a:hover {
 	padding: 0px 2px;
 }
 
-#header a:hover {
-	color: #FFF;
-	background: #0099CC;
-	padding: 0px 2px;
-}
-
 #header p {
 	margin: 5px 0px;
 }
@@ -146,12 +140,19 @@ a:hover {
 }
 
 #content a:hover {
+	color: #FFF;
 	text-decoration: underline;
 }
 
 #content h2 {
 	height: 20px;
 	margin: 0px 0px 10px 0px;
+}
+
+#content h2 a:hover {
+	color: #0099CC;
+	background: transparent;
+	text-decoration: none;
 }
 
 #content h3 {
@@ -265,7 +266,7 @@ a:hover {
 
 #sidebar a.on {
 	color: #FFF;
-	background: #0099CC;
+	/* background: #0099CC; */
 	padding: 0px 2px;
 }
 
@@ -292,7 +293,7 @@ a:hover {
 
 #footer a:hover {
 	color: #FFF;
-	background: #0099CC;
+	/* background: #0099CC; */
 }
 
 /* form
@@ -318,10 +319,6 @@ input.big {
 input:focus,
 textarea:focus {
 	background: #FFFCE1;
-}
-
-input:hover {
-	background: #F5F5F5;
 }
 
 textarea {
