@@ -3,26 +3,27 @@ module TypusHelper
   MODELS = YAML.load_file("#{RAILS_ROOT}/config/typus.yml")
 
   def head
-    @block = "<title>#{Typus::Configuration.options[:app_name]} &rsaquo; #{page_title}</title>\n"
-    @block += "<link rel=\"shortcut icon\" href=\"/favicon.ico\" type=\"image/x-icon\" />\n"
-    @block += "<meta http-equiv=\"imagetoolbar\" content=\"no\" />\n"
-    @block += "<meta name=\"description\" content=\"\" />\n"
-    @block += "<meta name=\"keywords\" content=\"\" />\n"
-    @block += "<meta name=\"author\" content=\"\" />\n"
-    @block += "<meta name=\"copyright\" content=\"\" />\n"
-    @block += "<meta name=\"generator\" content=\"\" />\n"
-    @block += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n"
-    @block += stylesheet_link_tag "typus", :media => "screen"
-    @block += "\n"
-    @block += javascript_include_tag :defaults
+    @block = <<-HTML
+    <title>#{Typus::Configuration.options[:app_name]} &rsaquo; #{page_title}</title>
+    <link rel=\"shortcut icon\" href=\"/favicon.ico\" type=\"image/x-icon\" />
+    <meta http-equiv=\"imagetoolbar\" content=\"no\" />
+    <meta name=\"description\" content=\"\" />
+    <meta name=\"keywords\" content=\"\" />
+    <meta name=\"author\" content=\"\" />
+    <meta name=\"copyright\" content=\"\" />
+    <meta name=\"generator\" content=\"\" />
+    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />
+    #{stylesheet_link_tag "typus", :media => "screen"}
+    #{javascript_include_tag :defaults}
+    HTML
     return @block
   end
 
   def header
-    @block += "<h1>#{Typus::Configuration.options[:app_name]}"
-    @block += "<span class=\"feedback\">#{flash[:notice]}</span>" if flash[:notice]
-    @block += "</h1>\n"
-    @block += "<h2>#{Typus::Configuration.options[:app_description]}</h2>\n"
+    @block = <<-HTML
+    <h1>#{Typus::Configuration.options[:app_name]} #{feedback}</span></h1>
+    <h2>#{Typus::Configuration.options[:app_description]}</h2>
+    HTML
     return @block
   end
 
@@ -77,13 +78,17 @@ module TypusHelper
       @block += "<h2>Actions</h2>\n"
       case params[:action]
       when "index"
-        @block += "<ul>\n"
-        @block += "<li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}/new\">Add new #{params[:model].singularize}</a></li>\n"
-        @block += "</ul>\n"
+        @block += <<-HTML
+        <ul>
+        <li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}/new\">Add new #{params[:model].singularize}</a></li>
+        </ul>
+        HTML
       when "new"
-        @block += "<ul>\n"
-        @block += "<li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}\">Back to list</a></li>\n"
-        @block += "</ul>\n"
+        @block += <<-HTML
+        <ul>
+        <li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}\">Back to list</a></li>
+        </ul>
+        HTML
       when "edit"
         @block += "<ul>\n"
         @block += "<li>#{link_to "Next #{params[:model].singularize}", :action => "edit", :id => @next.id}</li>" if @next
@@ -105,10 +110,12 @@ module TypusHelper
       # Search
       if params[:action] == "index"
         if MODELS[@model.to_s]["search"]
-          @block += "<h2>Search</h2>\n"
-          @block += "<form action=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}\" method=\"get\">"
-          @block += "<p><input id=\"query\" name=\"query\" type=\"text\" value=\"#{params[:query]}\"/></p>"
-          @block += "</form>"
+          @block += <<-HTML
+          <h2>Search</h2>
+          <form action=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}\" method=\"get\">
+          <p><input id=\"query\" name=\"query\" type=\"text\" value=\"#{params[:query]}\"/></p>
+          </form>
+          HTML
         end
       end
       
@@ -158,9 +165,7 @@ module TypusHelper
 
   def feedback
     if flash[:notice]
-      "<div id=\"notice\">#{flash[:notice]}</div>"
-    elsif flash[:error]
-      "<div id=\"notice-error\">#{flash[:error]}</div>"
+      "<span class=\"feedback\">#{flash[:notice]}</span>"
     end
   end
 
