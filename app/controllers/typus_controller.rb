@@ -1,12 +1,10 @@
 class TypusController < ApplicationController
 
-  DB = YAML.load_file("#{RAILS_ROOT}/config/database.yml")[RAILS_ENV]
-
   before_filter :authenticate, :except => [ :login, :logout ]
   before_filter :set_model, :except => [ :dashboard, :login, :logout ]
   before_filter :find_model, :only => [ :show, :edit, :update, :destroy, :status ]
   before_filter :fields, :only => [ :index ]
-  before_filter :form_fields, :only => [ :new, :edit, :update ]
+  before_filter :form_fields, :only => [ :new, :edit, :create, :update ]
 
   def dashboard
   end
@@ -24,7 +22,7 @@ class TypusController < ApplicationController
         # If it's a query
         if @the_param == "query"
           @search = Array.new
-          @model.search_fields.each { |search| @search << "LOWER(#{search}) LIKE '%#{@the_query}%'" }
+          @model.search_fields.each { |s| @search << "LOWER(#{s}) LIKE '%#{@the_query}%'" }
           @conditions += "(#{@search.join(" OR ")}) AND "
         end
         
@@ -41,10 +39,14 @@ class TypusController < ApplicationController
             end
           when "datetime"
             case @the_query
-            when "today":         @start_date, @end_date = Time.today, Time.today.tomorrow
-            when "past_7_days":   @start_date, @end_date = Time.today.monday, Time.today.monday.next_week
-            when "this_month":    @start_date, @end_date = Time.today.last_month, Time.today.tomorrow
-            when "this_year":     @start_date, @end_date = Time.today.last_year, Time.today.tomorrow
+            when "today"
+              @start_date, @end_date = Time.today, Time.today.tomorrow
+            when "past_7_days"
+              @start_date, @end_date = Time.today.monday, Time.today.monday.next_week
+            when "this_month"
+              @start_date, @end_date = Time.today.last_month, Time.today.tomorrow
+            when "this_year"
+              @start_date, @end_date = Time.today.last_year, Time.today.tomorrow
             end
             @start_date = @start_date.strftime("%Y-%m-%d %H:%M:%S")
             @end_date = @end_date.strftime("%Y-%m-%d %H:%M:%S")
@@ -69,9 +71,8 @@ class TypusController < ApplicationController
     @item = @model.new(params[:item])
     if @item.save
       flash[:notice] = "#{@model.to_s.capitalize} successfully created."
-      redirect_to :action => 'index' # :action => "edit", :id => @item.id
+      redirect_to typus_index_url(params[:model])
     else
-      @form_fields = @model.form_fields
       render :action => "new"
     end
   end
@@ -94,10 +95,11 @@ class TypusController < ApplicationController
 
   def destroy
     @item.destroy
-    flash[:notice] = "#{@model.to_s.capitalize} has ben successfully removed."
-    redirect_to :action => "index", :model => params[:model], :controller => "typus", :id => nil
+    flash[:notice] = "#{@model.to_s.capitalize} has been successfully removed."
+    redirect_to typus_index_url(params[:model])
   end
 
+  # Toggle the status of an item.
   def status
     @item.toggle!("status")
     flash[:notice] = "#{@model.to_s.capitalize} status changed"
@@ -121,12 +123,14 @@ class TypusController < ApplicationController
 
   def login
     if request.post?
-      if params[:user][:name] == Typus::Configuration.username && params[:user][:password] == Typus::Configuration.password
+      username = Typus::Configuration.options[:username]
+      password = Typus::Configuration.options[:password]
+      if params[:user][:name] == username && params[:user][:password] == password
         session[:typus] = true
-        redirect_to :action => "dashboard"
+        redirect_to typus_dashboard_url
       else
         flash[:error] = "Username/Password Incorrect"
-        redirect_to :action => "login"
+        redirect_to typus_login_url
       end
     else
       render :layout => "typus_login"
@@ -134,8 +138,8 @@ class TypusController < ApplicationController
   end
 
   def logout
-    reset_session
-    redirect_to :action => "login"
+    session[:typus] = nil
+    redirect_to typus_login_url
   end
 
 private
@@ -168,10 +172,6 @@ private
 
   def authenticate
     redirect_to :action => "login" unless session[:typus]
-    # authenticate_or_request_with_http_basic(realm = TYPUS['app_name']) do |user_name, password|
-      # user_name == TYPUS['app_username'] && password == TYPUS['app_password']
-      ## TYPUS['admins'].each { |user| user_name == user[0] && password == user[1] }
-    #end
   end
 
 end
