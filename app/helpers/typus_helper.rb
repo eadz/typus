@@ -188,8 +188,7 @@ module TypusHelper
   end
 
   def typus_form
-    @block = ""
-    @block += error_messages_for :item, :header_tag => "h3"
+    @block = error_messages_for :item, :header_tag => "h3"
     @form_fields.each do |field|
       @block += "<p><label>#{field[0].humanize}</label>"
       case field[1]
@@ -212,7 +211,7 @@ module TypusHelper
         @block += select :item, field[0], @values.collect { |p| [ "#{p[0]} (#{p[1]})", p[1] ] }
       when "collection"
         @collection = eval field[0].singularize.capitalize
-        if @collection.new.methods.include? "name"
+        if (@collection.new.methods.include? "name") || (@collection.new.attributes.include? 'name' )
           @block += collection_select :item, "#{field[0]}_id", @collection.find(:all), :id, :name, :include_blank => true
         else
           @block += select :item, "#{field[0]}_id", @collection.find(:all).collect { |p| ["#{@collection}##{p.id}", p.id] }, :include_blank => true
