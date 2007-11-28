@@ -66,101 +66,107 @@ module TypusHelper
     return @block
   end
 
-  def sidebar
-    @current_request = (request.env['QUERY_STRING']) ? request.env['QUERY_STRING'].split("&") : []
+  def actions
+    # @model = eval params[:model].singularize.capitalize
+    # Default Actions
+    @block = "<h2>Actions</h2>\n"
+    case params[:action]
+    when "index"
+      @block += <<-HTML
+      <ul>
+      <li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}/new\">Add new #{params[:model].singularize}</a></li>
+      </ul>
+      HTML
+    when "new"
+      @block += <<-HTML
+      <ul>
+      <li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}\">Back to list</a></li>
+      </ul>
+      HTML
+    when "edit"
+      @block += "<ul>\n"
+      @block += "<li>#{link_to "Next #{params[:model].singularize}", :action => "edit", :id => @next.id}</li>" if @next
+      @block += "<li>#{link_to "Previous #{params[:model].singularize}", :action => 'edit', :id => @previous.id}</li>" if @previous
+      @block += "</ul>\n"
+      @block += "<ul>\n"
+      @block += "<li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}\">Back to list</a></li>\n"
+      @block += "</ul>\n"
+    end
     
-    @block = ""
+    # More Actions
+    if MODELS[@model.to_s]["actions"]
+      @block += "<h2>More Actions</h2>"
+      @block += "<ul>"
+      @model.actions.each { |a| @block += "<li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}/#{a[0]}\">#{a[0].humanize}</a></li>" if a[1] == params[:action] }
+      @block += "</ul>"
+    end
     
-    if params[:model]
-      @model = eval params[:model].singularize.capitalize
-      
-      # Default Actions
-      @block += "<h2>Actions</h2>\n"
-      case params[:action]
-      when "index"
-        @block += <<-HTML
-        <ul>
-        <li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}/new\">Add new #{params[:model].singularize}</a></li>
-        </ul>
-        HTML
-      when "new"
-        @block += <<-HTML
-        <ul>
-        <li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}\">Back to list</a></li>
-        </ul>
-        HTML
-      when "edit"
-        @block += "<ul>\n"
-        @block += "<li>#{link_to "Next #{params[:model].singularize}", :action => "edit", :id => @next.id}</li>" if @next
-        @block += "<li>#{link_to "Previous #{params[:model].singularize}", :action => 'edit', :id => @previous.id}</li>" if @previous
-        @block += "</ul>\n"
-        @block += "<ul>\n"
-        @block += "<li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}\">Back to list</a></li>\n"
-        @block += "</ul>\n"
-      end
-      
-      # Extra Actions
-      if MODELS[@model.to_s]["actions"]
-        @block += "<h2>More Actions</h2>"
-        @block += "<ul>"
-        @model.actions.each { |a| @block += "<li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}/#{a[0]}\">#{a[0].humanize}</a></li>" if a[1] == params[:action] }
-        @block += "</ul>"
-      end
-      
-      # Search
-      if params[:action] == "index"
-        if MODELS[@model.to_s]["search"]
-          @block += <<-HTML
-          <h2>Search</h2>
-          <form action=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}\" method=\"get\">
-          <p><input id=\"query\" name=\"query\" type=\"text\" value=\"#{params[:query]}\"/></p>
-          </form>
-          HTML
-        end
-      end
-      
-      # Filters (only shown on index page)
-      if params[:action] == "index"
-        if MODELS[@model.to_s]["filters"]
-          @block += "<h2>Filter"
-          @block += " <small><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}\">Remove</a></small>" if request.env['QUERY_STRING']
-          @block += "</h2>"
-          @model.filters.each do |f|
-            case f[1]
-            when "boolean"
-              @filters = %w( true false )
-              @block += "<h3>By #{f[0].humanize}</h3>\n"
-              @block += "<ul>\n"
-              @filters.each do |status|
-                @current_request = (request.env['QUERY_STRING']) ? request.env['QUERY_STRING'].split("&") : []
-                @status = (@current_request.include? "#{f[0]}=#{status}") ? "on" : "off"
-                @block += "<li><a class=\"#{@status}\" href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}?#{(@current_request.delete_if { |x| x.include? "#{f[0]}" } + ["#{f[0]}=#{status}"]).join("&")}\">#{status.capitalize}</a></li>\n"
-              end
-              @block += "</ul>\n"
-            when "datetime"
-              @filters = %w(today past_7_days this_month this_year)
-              @block += "<h3>By #{f[0].humanize}</h3>\n"
-              @block += "<ul>\n"
-              @filters.each do |timeline|
-                @current_request = (request.env['QUERY_STRING']) ? request.env['QUERY_STRING'].split("&") : []
-                @status = (@current_request.include? "#{f[0]}=#{timeline}") ? "on" : "off"
-                @block += "<li><a class=\"#{@status}\" href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}?#{(@current_request.delete_if { |x| x.include? "#{f[0]}" } + ["#{f[0]}=#{timeline}"]).join("&")}\">#{timeline.humanize.capitalize}</a></li>\n"
-              end
-              @block += "</ul>\n"
-            when "collection"
-              @block += "<h3>By #{f[0].humanize}</h3>"
-              @model = eval f[0].capitalize
-              @block += "<ul>\n"
-              @model.find(:all).each { |item| @block += "<li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}?#{f[0]}_id=#{item.id}\">#{item.name}</a></li>\n" }
-              @block += "</ul>\n"
-            end
+    return @block
+  end
+
+  def search
+    if MODELS[@model.to_s]["search"]
+      @search = <<-HTML
+      <h2>Search</h2>
+      <form action=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}\" method=\"get\">
+      <p><input id=\"query\" name=\"query\" type=\"text\" value=\"#{params[:query]}\"/></p>
+      </form>
+      HTML
+    end
+    return @search
+  end
+
+  def filters
+    if MODELS[@model.to_s]["filters"]
+      @filters = "<h2>Filter"
+      @filters += " <small><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}\">Remove</a></small>" if request.env['QUERY_STRING']
+      @filters += "</h2>"
+      @model.filters.each do |f|
+        case f[1]
+        when "boolean"
+          @options = %w( true false )
+          @filters += "<h3>By #{f[0].humanize}</h3>\n"
+          @filters += "<ul>\n"
+          @options.each do |status|
+            @current_request = (request.env['QUERY_STRING']) ? request.env['QUERY_STRING'].split("&") : []
+            @status = (@current_request.include? "#{f[0]}=#{status}") ? "on" : "off"
+            @filters += "<li><a class=\"#{@status}\" href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}?#{(@current_request.delete_if { |x| x.include? "#{f[0]}" } + ["#{f[0]}=#{status}"]).join("&")}\">#{status.capitalize}</a></li>\n"
           end
+          @filters += "</ul>\n"
+        when "datetime"
+          @options = %w(today past_7_days this_month this_year)
+          @filters += "<h3>By #{f[0].humanize}</h3>\n"
+          @filters += "<ul>\n"
+          @options.each do |timeline|
+            @current_request = (request.env['QUERY_STRING']) ? request.env['QUERY_STRING'].split("&") : []
+            @status = (@current_request.include? "#{f[0]}=#{timeline}") ? "on" : "off"
+            @filters += "<li><a class=\"#{@status}\" href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}?#{(@current_request.delete_if { |x| x.include? "#{f[0]}" } + ["#{f[0]}=#{timeline}"]).join("&")}\">#{timeline.humanize.capitalize}</a></li>\n"
+          end
+          @filters += "</ul>\n"
+        when "collection"
+          @filters += "<h3>By #{f[0].humanize}</h3>"
+          @model = eval f[0].capitalize
+          @filters += "<ul>\n"
+          @model.find(:all).each { |item| @filters += "<li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}?#{f[0]}_id=#{item.id}\">#{item.name}</a></li>\n" }
+          @filters += "</ul>\n"
         end
       end
     end
-    return @block
-  rescue
-    return "FixMe: <strong>typus.yml</strong>"
+    return @filters
+  end
+
+  def sidebar
+    # @current_request = (request.env['QUERY_STRING']) ? request.env['QUERY_STRING'].split("&") : []
+    # @block = ""
+    #if params[:model]
+    #  @model = eval params[:model].singularize.capitalize
+      # Filters (only shown on index page)
+      #if params[:action] == "index"
+      #end
+    #end
+    #return @block
+  # rescue
+  # return "FixMe: <strong>typus.yml</strong>"
   end
 
   def feedback
@@ -174,7 +180,7 @@ module TypusHelper
   end
 
   def footer
-    @block = "<p><a href=\"http://intraducibles.net/work/typus\">Typus #{Typus::Configuration.version}</a></p>"
+    "<p><a href=\"http://intraducibles.net/work/typus\">Typus #{Typus::Configuration.version}</a></p>"
   end
 
   def fmt_date(date)

@@ -1,5 +1,7 @@
 class TypusController < ApplicationController
 
+  DB = YAML.load_file("#{RAILS_ROOT}/config/database.yml")[RAILS_ENV]
+
   before_filter :authenticate, :except => [ :login, :logout ]
   before_filter :set_model, :except => [ :dashboard, :login, :logout ]
   before_filter :find_model, :only => [ :show, :edit, :update, :destroy, :status ]

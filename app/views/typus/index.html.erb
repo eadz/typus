@@ -1,7 +1,10 @@
-<h2>
-<div class="left"><%= link_to @model.to_s.pluralize.capitalize, :model => params[:model], :action => "index" %></div>
-<div class="right"></div>
-</h2>
+<% content_for :sidebar do %>
+	<%= actions %>
+	<%= search %>
+	<%= filters %>
+<% end %>
+
+<h2><%= link_to @model.to_s.pluralize.capitalize, :model => params[:model], :action => "index" %></h2>
 
 <div id="list">
 
