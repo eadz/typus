@@ -9,6 +9,8 @@ module Typus
         :prefix => 'admin',
         :username => 'admin',
         :password => 'typus',
+        :version => "Typus 2.0a",
+        :signature => "Built by Francesc Esplugas"
         }
 
     mattr_reader :options
