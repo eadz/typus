@@ -72,7 +72,7 @@ module TypusHelper
     when "index"
       @block += <<-HTML
       <ul>
-      <li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}/new\">Add new #{params[:model].singularize}</a></li>
+      <li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}/new\">Add #{params[:model].singularize.capitalize}</a></li>
       </ul>
       HTML
     when "new"
@@ -155,20 +155,6 @@ module TypusHelper
     return @filters
   end
 
-  def sidebar
-    # @current_request = (request.env['QUERY_STRING']) ? request.env['QUERY_STRING'].split("&") : []
-    # @block = ""
-    #if params[:model]
-    #  @model = eval params[:model].singularize.capitalize
-      # Filters (only shown on index page)
-      #if params[:action] == "index"
-      #end
-    #end
-    #return @block
-  # rescue
-  # return "FixMe: <strong>typus.yml</strong>"
-  end
-
   def feedback
     if flash[:notice]
       "<span class=\"feedback\">#{flash[:notice]}</span>"
@@ -185,6 +171,55 @@ module TypusHelper
 
   def fmt_date(date)
     date.strftime("%d.%m.%Y")
+  end
+
+  def typus_table
+    @block = "<table>"
+    @block += "<tr>"
+    @fields.each do |column|
+      @order_by = "#{column[0]}#{"_id" if column[1] == 'collection'}"
+      @sort_order = (params[:sort_order] == "asc") ? "desc" : "asc"
+      @block += <<-HTML
+        <th><a href="?order_by=#{@order_by}&sort_order=#{@sort_order}"><div class=\"#{@sort_order}\">#{column[0].humanize}</div></a></th>
+      HTML
+    end
+    @block += "<th>&nbsp;</th>"
+    @block += "</tr>"
+    @items.each do |item|
+      @block += "<tr class=\"#{cycle('even', 'odd')}\" id=\"item_#{item.id}\">"
+      @fields.each do |column|
+        case column[1]
+        when 'string'
+          @block += <<-HTML
+            <td>#{link_to item.send(column[0]), :action => 'edit', :id => item.id}</td>
+          HTML
+        when 'boolean'
+          @block += <<-HTML
+            <td width="20px" align="center">
+              #{image_tag(status = item.send(column[0])? "typus_status_true.gif" : "typus_status_false.gif")}
+              </td>
+          HTML
+        when "datetime"
+          @block += <<-HTML
+            <td width="80px">#{fmt_date(item.send(column[0]))}</td>
+          HTML
+        when "collection"
+          this_model = eval column[0].capitalize
+          if (this_model.new.attributes.include? 'name') || (this_model.new.methods.include? 'name')
+            @block += "<td>#{item.send(column[0]).name if item.send(column[0])}</td>"
+          else
+            @block += "<td>#{"#{this_model}##{item.send(column[0]).id}" if item.send(column[0])}</td>"
+          end
+        end
+      end
+      @block += <<-HTML
+        <td width="10px">
+        #{link_to image_tag("typus_trash.gif"), { :action => 'destroy', :id => item.id }, :confirm => "Remove this entry?"}
+        </td>
+        </tr>
+      HTML
+    end
+    @block += "</table>"
   end
 
   def typus_form
