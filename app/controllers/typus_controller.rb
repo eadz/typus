@@ -90,8 +90,8 @@ class TypusController < ApplicationController
   def update
     if @item.update_attributes(params[:item])
       flash[:notice] = "#{@model.to_s.capitalize} successfully updated."
-      redirect_to typus_index_url(params[:model])
-      # redirect_to :action => "edit", :id => @item # .id
+      # redirect_to typus_index_url(params[:model])
+      redirect_to :action => "edit", :id => @item # .id
     else
       render :action => "edit"
     end
