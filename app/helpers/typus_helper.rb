@@ -236,7 +236,7 @@ module TypusHelper
     @block = ""
     @form_fields_externals.each do |field|
       model_to_relate = eval field[0].singularize.capitalize
-      @block += "<h2 style=\"margin: 20px 0px 0px 0px;\">#{field[0].capitalize}</h2>"
+      @block += "<h2 style=\"margin: 20px 0px 0px 0px;\">#{field[0].capitalize} <small><a href=\"/#{Typus::Configuration.options[:prefix]}/#{field[0]}/new\">Add new</a></small></h2>"
       @block += form_tag :action => "relate", :related => "#{field[0]}", :id => params[:id]
       @block += "<p>"
       @block += select "model_id_to_relate", :related_id, (model_to_relate.find(:all) - @item.send(field[0])).map { |f| [f.name, f.id] }
@@ -245,7 +245,7 @@ module TypusHelper
       current_model = eval params[:model].singularize.capitalize
       items = current_model.find(params[:id]).send(field[0])
       @block += "<ul>"
-      items.each { |item| @block += "<li>#{item.name} <small>#{link_to "Remove", :action => "unrelate", :unrelated => field[0], :unrelated_id => item.id, :id => params[:id]}</small></li>" }
+      items.each { |item| @block += "<li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{field[0]}/#{item.id}\">#{item.name}</a> <small>#{link_to "Remove", :action => "unrelate", :unrelated => field[0], :unrelated_id => item.id, :id => params[:id]}</small></li>" }
       @block += "</ul>"
     end
     return @block
