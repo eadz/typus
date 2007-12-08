@@ -181,10 +181,18 @@ module TypusHelper
     date.strftime("%d.%m.%Y")
   end
 
-  def typus_table
+  def typus_table(model = params[:model])
+
+    # Transform the model ...
+    @model = eval model.singularize.capitalize
+    # @model.list_fields
+
     @block = "<table>"
+
+    # Header of the table
+
     @block += "<tr>"
-    @fields.each do |column|
+    @model.list_fields.each do |column|
       @order_by = "#{column[0]}#{"_id" if column[1] == 'collection'}"
       @sort_order = (params[:sort_order] == "asc") ? "desc" : "asc"
       @block += <<-HTML
@@ -193,13 +201,16 @@ module TypusHelper
     end
     @block += "<th>&nbsp;</th>"
     @block += "</tr>"
+
+    # Body of the table
+
     @items.each do |item|
       @block += "<tr class=\"#{cycle('even', 'odd')}\" id=\"item_#{item.id}\">"
-      @fields.each do |column|
+      @model.list_fields.each do |column|
         case column[1]
         when 'string'
           @block += <<-HTML
-            <td>#{link_to item.send(column[0]), :action => 'edit', :id => item.id}</td>
+            <td>#{link_to item.send(column[0]), :model => model, :action => 'edit', :id => item.id}</td>
           HTML
         when 'boolean'
           @block += <<-HTML
@@ -220,10 +231,18 @@ module TypusHelper
           end
         end
       end
+      
+      # This controls the action to perform. If we are on a model list we 
+      # will remove the entry, but if we inside a model we will remove the 
+      # relationship between the models.
+      case params[:model]
+      when model
+        @perform = link_to image_tag("typus_trash.gif"), { :model => model, :action => 'destroy', :id => item.id }, :confirm => "Remove this entry?"
+      else
+        @perform = link_to image_tag("typus_trash.gif"), { :action => "unrelate", :unrelated => model, :unrelated_id => item.id, :id => params[:id] }, :confirm => "Remove relationship?"
+      end
       @block += <<-HTML
-        <td width="10px">
-        #{link_to image_tag("typus_trash.gif"), { :action => 'destroy', :id => item.id }, :confirm => "Remove this entry?"}
-        </td>
+        <td width="10px">#{@perform}</td>
         </tr>
       HTML
     end
@@ -264,9 +283,11 @@ module TypusHelper
         rel_model = "#{field[0].singularize}" + "_id"
         current_model = eval params[:model].singularize.capitalize
         @selected = current_model.find(params[:id]).send(field[0]).collect { |t| t.send(rel_model).to_i } if params[:id]
-        @block += "<select name=\"item[tag_ids][]\" multiple=\"multiple\">"
-        @block += options_from_collection_for_select(multiple.find(:all), :id, :name, @selected)
-        @block += "</select>"
+        @block += <<-HTML
+          <select name="item[tag_ids][]" multiple="multiple">
+            #{options_from_collection_for_select(multiple.find(:all), :id, :name, @selected)}
+          </select>
+        HTML
       else
         @block += "Unexisting"
       end
@@ -275,24 +296,28 @@ module TypusHelper
     return @block
   end
 
+  # TODO: Don't show form if there are not more Items available.
   def typus_form_externals
     @block = ""
     @form_fields_externals.each do |field|
       model_to_relate = eval field[0].singularize.capitalize
       @block += <<-HTML
-        <h2 style="margin: 20px 0px 0px 0px;">#{field[0].capitalize} <small><a href="/#{Typus::Configuration.options[:prefix]}/#{field[0]}/new">Add new</a></small></h2>
-        #{form_tag :action => "relate", :related => "#{field[0]}", :id => params[:id]}
-        <p>
-        #{select "model_id_to_relate", :related_id, (model_to_relate.find(:all) - @item.send(field[0])).map { |f| [f.name, f.id] }}
-        &nbsp; #{submit_tag "Add #{field[0].singularize}"}
-        </p>
-        </form>
+        <h2 style="margin: 20px 0px 10px 0px;">#{field[0].capitalize} <small><a href="/#{Typus::Configuration.options[:prefix]}/#{field[0]}/new?back_to=#{params[:model]}&item_id=#{params[:id]}">Add new</a></small></h2>
       HTML
+      
+      @items_to_relate = (model_to_relate.find(:all) - @item.send(field[0]))
+        
+      if @items_to_relate.size > 0
+        @block += <<-HTML
+          #{form_tag :action => "relate", :related => "#{field[0]}", :id => params[:id]}
+          <p>#{select "model_id_to_relate", :related_id, @items_to_relate.map { |f| [f.name, f.id] }}
+        &nbsp; #{submit_tag "Add"}</p>
+          </form>
+        HTML
+      end
       current_model = eval params[:model].singularize.capitalize
-      items = current_model.find(params[:id]).send(field[0])
-      @block += "<ul>"
-      items.each { |item| @block += "<li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{field[0]}/#{item.id}\">#{item.name}</a> <small>#{link_to "Remove", :action => "unrelate", :unrelated => field[0], :unrelated_id => item.id, :id => params[:id]}</small></li>" }
-      @block += "</ul>"
+      @items = current_model.find(params[:id]).send(field[0])
+      @block += typus_table(field[0]) if @items.size > 0
     end
     return @block
   end
