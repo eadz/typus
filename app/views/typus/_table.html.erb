@@ -3,7 +3,7 @@
 <tr>
 
 <% @fields.each do |column| %>
-<th><a href="?order_by=<%= column[0] %>&sort_order=<% if params[:order_by].include? column[0] %><%= (@status = (params[:sort_order] == "asc") ? "desc" : "asc" ) %><% else %><%= "asc" %><% end %>"><div class="<% if params[:order_by].include? column[0] %><%= (@status = (params[:sort_order] == "asc") ? "order_desc" : "order_asc" ) %><% else %><%= "order" %><% end %>"><%= column[0].humanize %></div></a></th>
+<th><a href="?order_by=<%= column[0] %><%= "_id" if column[1] == "collection" %>&sort_order=<% if params[:order_by].include? column[0] %><%= (@status = (params[:sort_order] == "asc") ? "desc" : "asc" ) %><% else %><%= "asc" %><% end %>"><div class="<% if params[:order_by].include? column[0] %><%= (@status = (params[:sort_order] == "asc") ? "order_desc" : "order_asc" ) %><% else %><%= "order" %><% end %>"><%= column[0].humanize %></div></a></th>
 <% end %>
 <th>&nbsp;</th>
 </tr>
@@ -19,15 +19,12 @@
 		<% when "datetime" -%>
 			<td width="80px"><%= fmt_date(item.send(column[0])) %></td>
 		<% when "collection" -%>
-
 			<% this_model = eval column[0].capitalize %>
-				
-				<% if (this_model.new.attributes.include? 'name') || (this_model.new.methods.include? 'name') %>
-					<td><%= item.send(column[0]).name if item.send(column[0]) %></td>
-				<% else %>
-					<td><%= "#{this_model}##{item.send(column[0]).id}" if item.send(column[0]) %></td>
-				<% end %>
-
+			<% if (this_model.new.attributes.include? 'name') || (this_model.new.methods.include? 'name') %>
+				<td><%= item.send(column[0]).name if item.send(column[0]) %></td>
+			<% else %>
+				<td><%= "#{this_model}##{item.send(column[0]).id}" if item.send(column[0]) %></td>
+			<% end %>
 	<% end -%>
 <% end %>
 		<td width="10px"><%= link_to image_tag("typus_trash.gif"), { :action => 'destroy', :id => item.id }, :confirm => "Remove this entry?" %></td>
