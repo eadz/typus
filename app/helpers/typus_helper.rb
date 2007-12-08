@@ -71,24 +71,26 @@ module TypusHelper
     case params[:action]
     when "index"
       @block += <<-HTML
-      <ul>
-      <li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}/new\">Add #{params[:model].singularize.capitalize}</a></li>
-      </ul>
+        <ul>
+          <li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}/new\">Add #{params[:model].singularize.capitalize}</a></li>
+        </ul>
       HTML
     when "new"
       @block += <<-HTML
-      <ul>
-      <li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}\">Back to list</a></li>
-      </ul>
+        <ul>
+          <li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}\">Back to list</a></li>
+        </ul>
       HTML
     when "edit"
-      @block += "<ul>\n"
-      @block += "<li>#{link_to "Next #{params[:model].singularize}", :action => "edit", :id => @next.id}</li>" if @next
-      @block += "<li>#{link_to "Previous #{params[:model].singularize}", :action => 'edit', :id => @previous.id}</li>" if @previous
-      @block += "</ul>\n"
-      @block += "<ul>\n"
-      @block += "<li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}\">Back to list</a></li>\n"
-      @block += "</ul>\n"
+      @block += <<-HTML
+        <ul>
+          #{'<li>' + (link_to "Next #{params[:model].singularize.capitalize}", :action => "edit", :id => @next.id) + '</li>' if @next} 
+          #{'<li>' + (link_to "Previous #{params[:model].singularize.capitalize}", :action => 'edit', :id => @previous.id) + '<li>' if @previous}
+        </ul>
+        <ul>
+          <li><a href="/#{Typus::Configuration.options[:prefix]}/#{params[:model]}">Back to list</a></li>
+        </ul>
+      HTML
     end
     
     # More Actions
@@ -106,8 +108,8 @@ module TypusHelper
     if MODELS[@model.to_s]["search"]
       @search = <<-HTML
       <h2>Search</h2>
-      <form action=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}\" method=\"get\">
-      <p><input id=\"query\" name=\"query\" type=\"text\" value=\"#{params[:query]}\"/></p>
+      <form action="/#{Typus::Configuration.options[:prefix]}/#{params[:model]}" method="get">
+      <p><input id="query" name="query" type="text" value="#{params[:query]}"/></p>
       </form>
       HTML
     end
@@ -271,12 +273,15 @@ module TypusHelper
     @block = ""
     @form_fields_externals.each do |field|
       model_to_relate = eval field[0].singularize.capitalize
-      @block += "<h2 style=\"margin: 20px 0px 0px 0px;\">#{field[0].capitalize} <small><a href=\"/#{Typus::Configuration.options[:prefix]}/#{field[0]}/new\">Add new</a></small></h2>"
-      @block += form_tag :action => "relate", :related => "#{field[0]}", :id => params[:id]
-      @block += "<p>"
-      @block += select "model_id_to_relate", :related_id, (model_to_relate.find(:all) - @item.send(field[0])).map { |f| [f.name, f.id] }
-      @block += "&nbsp; #{submit_tag "Add #{field[0].singularize}"}</p>"
-      @block += "</form>"
+      @block += <<-HTML
+        <h2 style="margin: 20px 0px 0px 0px;">#{field[0].capitalize} <small><a href="/#{Typus::Configuration.options[:prefix]}/#{field[0]}/new">Add new</a></small></h2>
+        #{form_tag :action => "relate", :related => "#{field[0]}", :id => params[:id]}
+        <p>
+        #{select "model_id_to_relate", :related_id, (model_to_relate.find(:all) - @item.send(field[0])).map { |f| [f.name, f.id] }}
+        &nbsp; #{submit_tag "Add #{field[0].singularize}"}
+        </p>
+        </form>
+      HTML
       current_model = eval params[:model].singularize.capitalize
       items = current_model.find(params[:id]).send(field[0])
       @block += "<ul>"
