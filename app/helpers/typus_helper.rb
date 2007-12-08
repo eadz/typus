@@ -67,8 +67,6 @@ module TypusHelper
   end
 
   def actions
-    # @model = eval params[:model].singularize.capitalize
-    # Default Actions
     @block = "<h2>Actions</h2>\n"
     case params[:action]
     when "index"
@@ -124,20 +122,18 @@ module TypusHelper
       @model.filters.each do |f|
         case f[1]
         when "boolean"
-          @options = %w( true false )
           @filters += "<h3>By #{f[0].humanize}</h3>\n"
           @filters += "<ul>\n"
-          @options.each do |status|
+          %w( true false ).each do |status|
             @current_request = (request.env['QUERY_STRING']) ? request.env['QUERY_STRING'].split("&") : []
             @status = (@current_request.include? "#{f[0]}=#{status}") ? "on" : "off"
             @filters += "<li><a class=\"#{@status}\" href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}?#{(@current_request.delete_if { |x| x.include? "#{f[0]}" } + ["#{f[0]}=#{status}"]).join("&")}\">#{status.capitalize}</a></li>\n"
           end
           @filters += "</ul>\n"
         when "datetime"
-          @options = %w(today past_7_days this_month this_year)
           @filters += "<h3>By #{f[0].humanize}</h3>\n"
           @filters += "<ul>\n"
-          @options.each do |timeline|
+          %w(today past_7_days this_month this_year).each do |timeline|
             @current_request = (request.env['QUERY_STRING']) ? request.env['QUERY_STRING'].split("&") : []
             @status = (@current_request.include? "#{f[0]}=#{timeline}") ? "on" : "off"
             @filters += "<li><a class=\"#{@status}\" href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}?#{(@current_request.delete_if { |x| x.include? "#{f[0]}" } + ["#{f[0]}=#{timeline}"]).join("&")}\">#{timeline.humanize.capitalize}</a></li>\n"
@@ -147,7 +143,11 @@ module TypusHelper
           @filters += "<h3>By #{f[0].humanize}</h3>"
           @model = eval f[0].capitalize
           @filters += "<ul>\n"
-          @model.find(:all).each { |item| @filters += "<li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}?#{f[0]}_id=#{item.id}\">#{item.name}</a></li>\n" }
+          @model.find(:all).each do |item|
+            @current_request = (request.env['QUERY_STRING']) ? request.env['QUERY_STRING'].split("&") : []
+            @status = (@current_request.include? "#{f[0]}_id=#{item.id}") ? "on" : "off"
+            @filters += "<li><a class=\"#{@status}\" href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}?#{f[0]}_id=#{item.id}\">#{item.name}</a></li>\n"
+          end
           @filters += "</ul>\n"
         end
       end
