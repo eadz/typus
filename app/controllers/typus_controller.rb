@@ -63,6 +63,8 @@ class TypusController < ApplicationController
     @order = params[:order_by]
     @sort_order = params[:sort_order]
     @items = @model.paginate :page => params[:page], :per_page => Typus::Configuration.options[:per_page], :order => "#{@order} #{@sort_order}", :conditions => "#{@conditions}"
+  rescue
+    redirect_to :action => 'index'
   end
 
   def new
