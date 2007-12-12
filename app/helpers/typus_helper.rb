@@ -323,10 +323,14 @@ module TypusHelper
   end
 
   def process_query(query)
-    @query = ""
-    query.split("&").each do |q|
-      @query += "<strong>#{q.split("=")[0].humanize.downcase}</strong> is <strong>#{q.split("=")[1].humanize.downcase}</strong>, "
+    # @query = ""
+    if params[:query]
+      @query = "Search results on <strong>#{params[:model]}</strong> for <strong>\"#{params[:query]}\"</strong>"
     end
+    
+    #query.split("&").each do |q|
+    #  @query += "<strong>#{q.split("=")[0].humanize.downcase}</strong> is <strong>#{q.split("=")[1].humanize.downcase}</strong>, "
+    # end
     return @query
   end
 

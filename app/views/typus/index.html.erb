@@ -9,9 +9,9 @@
 <div id="list">
 
 	<!-- Query -->
-	<% if request.env['QUERY_STRING'] %>
+	<% if params[:query] %>
 	<div class="box" id="empty">
-		<p><strong><%= params[:model].capitalize %></strong> where <%= process_query(request.env['QUERY_STRING']) %> <%= link_to "remove filter?" %></p>
+		<p><%= process_query(request.env['QUERY_STRING']) %>. <%= link_to "Remove filter?" %></p>
 	</div>
 	<script type="text/javascript">new Effect.Highlight('empty');</script>
 	<% end %>
