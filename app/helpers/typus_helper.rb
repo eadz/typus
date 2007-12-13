@@ -96,7 +96,15 @@ module TypusHelper
     # More Actions
     if MODELS[@model.to_s]["actions"]
       @more_actions = ""
-      @model.actions.each { |a| @more_actions += "<li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}/#{a[0]}\">#{a[0].humanize}</a></li>" if a[1] == params[:action] }
+      @model.actions.each do |a|
+        if a[1].to_s == params[:action]
+          if params[:action] == "index"
+            @more_actions += "<li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}/run?task=#{a[0]}\">#{a[0].humanize}</a></li>"
+          elsif params[:action] == "edit"
+            @more_actions += "<li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}/#{params[:id]}/run?task=#{a[0]}\">#{a[0].humanize}</a></li>"
+          end
+        end
+      end
       unless @more_actions.empty?
         @block += <<-HTML
           <h2>More Actions</h2>

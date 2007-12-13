@@ -127,6 +127,18 @@ class TypusController < ApplicationController
     redirect_to :action => "edit", :id => params[:id]
   end
 
+  def run
+    @model = eval params[:model].singularize.capitalize
+    flash[:notice] = "#{params[:task].humanize} performed."
+    if params[:id]
+      @model.find(params[:id]).send(params[:task])
+      redirect_to :action => 'edit', :id => params[:id]
+    else
+      @model.send(params[:task])
+      redirect_to :action => 'index'
+    end
+  end
+
   def login
     if request.post?
       username = Typus::Configuration.options[:username]
