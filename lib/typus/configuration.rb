@@ -3,21 +3,21 @@ module Typus
   module Configuration
 
     # Default application options that can be overwritten from
-    # an initializer
+    # an initializer.
     #
     # Example:
     # Typus::Configuration.options[:app_name] = "Your App Name"
     # Typus::Configuration.options[:per_page] = 15
     #
     @@options = { 
-        :app_name => 'Typus Admin Interface',
-        :app_description => 'Web Development for the Masses',
-        :per_page => 20,
+        :app_name => 'Typus',
+        :app_description => '',
+        :per_page => 15,
         :prefix => 'admin',
         :username => 'admin',
         :password => 'typus',
-        :version => "Typus 2.0a",
-        :signature => "Built by Francesc Esplugas"
+        :version => "2.0a",
+        :signature => ""
         }
     mattr_reader :options
 
