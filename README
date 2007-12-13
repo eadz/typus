@@ -1,96 +1,109 @@
+= Typus
+
+Rails Plugin to create a basic and default admin interface.
+
+== Example Usage
+
 To create the first user and copy the stylesheets ...
 
     rake typus:setup
 
-Default user and password
-
-    username. admin
-    password. typus
-
-== Contact
-
-You can contact me at <fesplugas@intraducibles.net>
+Default user and password are +admin+ and +typus+.
 
 == Setting your own username and password
 
-You can set your `username` and `password` overwriting the following settings:
+You can set your _username_ and _password_ overwriting the following settings:
 
     Typus::Configuration.options[:username] = 'username'
     Typus::Configuration.options[:password] = 'password'
 
-You can place this settings in a initializer at `config/initializers/typus.rb`
+You can place this settings in a initializer at <code>config/initializers/typus.rb</code>.
 
 == Configuration file options
 
-If the configuration file is broken you'll see a `typus.yml` text on the admin interface.
+If the configuration file is broken you'll see a +typus.yml+ text on the admin interface.
 
-=== Lists
+Configuration file looks like this:
 
-    attribute
-    attribute::OPTIONS
+    Post:
+      list: title::string created_at::datetime status::boolean
+      form: title::string body::text::15 created_at::datetime status::boolean
+      search: name::asc
+      filters: status::boolean created_at::datetime
 
-For example ...
+=== Typus Lists
 
+    name::string
+    created_at::datetime
+    categories::collection
+    status::boolean
     language::LANGUAGES
 
-where `LANGUAGES` is defined at `config/initializers/typus.rb` as
+where +LANGUAGES+ is defined at <code>config/initializers/defaults.rb</code> as
 
-    LANGUAGES = [["Català", "ca"], ["English", "en"], ["Español", "es"]]
+    LANGUAGES = [["English", "en"], ["Spanish", "es"]]
 
 === Forms
 
     attribute::string
     attribute::text::10
-    attribute::collection <= The attribute is a `belong_to :attribute` relationship.
+    attribute::collection
     status::boolean
     created_at::datetime
     language::selector::LANGUAGES
 
+=== External Forms
+
+    categories::collection
+
 === Filters
 
     status::boolean
-    author
-    category
+    author::collection
+    created_at::datetime
 
 === Order
 
-    attribute::asc
-    attribute::desc
+    order: attribute1::asc attribute2::desc
 
-=== Search
+=== Searches
 
-    attribute1, attribute2
+    search: attribute1::asc attribute2::desc
 
-== Integration with Capistrano
+=== Want more actions?
 
-  deploy.task :restart, :roles => :app do
-  run "cd #{current_path} && rake db:migrate RAILS_ENV=production"
-    run "cd #{current_path} && rake typus:setup"
-  end
+    actions: notify_all::index notify::edit
 
-Example
-=======
+== More Actions?
 
-# This Action is Accessed from the Typus controller. Before using it
-# we should check the model has this actions and then check the user
-# can perform this action.
-def cleanup
-  @model = eval params[:model].singularize.capitalize
-  @model.actions.each do |action|
-    @available = (params[:action].include? action[0]) ? false : true
-  end
-  if @available
-    @model.destroy_all
-    flash[:notice] = "Removed all entries."
-    redirect_to :action => "index"
-  else
-    flunk
-  end
-rescue
-  #else
-  # flash[:notice] = "Action not available for this model."
-  redirect_to :action => "index"
-  # end
-end
+    # This Action is Accessed from the Typus controller. Before using it
+    # we should check the model has this actions and then check the user
+    # can perform this action.
+    def cleanup
+      @model = eval params[:model].singularize.capitalize
+      @model.actions.each do |action|
+        @available = (params[:action].include? action[0]) ? false : true
+      end
+      if @available
+        @model.destroy_all
+        flash[:notice] = "Removed all entries."
+        redirect_to :action => "index"
+      else
+        flunk
+      end
+    rescue
+      #else
+      # flash[:notice] = "Action not available for this model."
+      redirect_to :action => "index"
+      # end
+    end
 
-Copyright (c) 2007 Francesc Esplugas Martí, released under the MIT license
+== Author, contact and bugs
+
+You can contact me at <fesplugas@intraducibles.net>
+
+REPORT BUGS on Trac: http://dev.intraducibles.net/trac/typus
+
+BROWSE SOURCE on SVN: http://dev.intraducibles.net/svn/plugins/typus
+
+Copyright (c) 2007 Francesc Esplugas Marti, released under the MIT license
