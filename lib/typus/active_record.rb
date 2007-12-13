@@ -3,28 +3,45 @@ module Typus
   class ActiveRecord::Base
 
     def self.list_fields
-      @config = Typus::Configuration.config["#{self}"]["list"].split(" ")
-      @fields = Array.new
-      @config.each { |i| (@fields ) << i.split("::") }
-      @fields << [["name", "string"]] if @fields.size == 0
-      return @fields
+      @fields = Typus::Configuration.config["#{self}"]["list"] || Array.new
+      if @fields.size > 0
+        @fields = @fields.split(" ")
+        @fields_with_type = Array.new
+        @fields.each do |field|
+          columns.each do |column|
+            @fields_with_type << [ column.name, column.sql_type ] if field == column.name
+          end
+        end
+      else
+        @fields_with_type = [['name', 'string']]
+      end
+      return @fields_with_type
     end
 
     def self.form_fields
-      @config = Typus::Configuration.config["#{self}"]["form"].split(" ")
-      @fields = Array.new
-      @config.each { |i| @fields << i.split("::") }
-      @fields << [["name", "string"]] if @fields.size == 0
-      return @fields
+      @fields = Typus::Configuration.config["#{self}"]["form"] || Array.new
+      if @fields.size > 0
+        @fields = @fields.split(" ")
+        @fields_with_type = Array.new
+        @fields.each do |field|
+          columns.each do |column|
+            @fields_with_type << [ column.name, column.sql_type ] if field == column.name
+          end
+        end
+      else
+        @fields_with_type = [['name', 'string']]
+      end
+      return @fields_with_type
     end
 
     def self.form_fields_externals
-      @config = Typus::Configuration.config
-      @fields = Array.new
-      if @config["#{self}"]["form_externals"]
-        @config["#{self}"]["form_externals"].split(" ").each { |i| @fields << i.split("::") }
+      @fields = Typus::Configuration.config["#{self}"]["form_externals"] || Array.new
+      # @fields = Array.new
+      if @fields.size > 0
+        @fields = @fields.split(" ")
+        # @config["#{self}"]["form_externals"].split(" ").each { |i| @fields << i.split("::") }
       end
-      return @fields
+      # return @fields
     end
 
     def self.default_order

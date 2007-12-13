@@ -211,7 +211,7 @@ module TypusHelper
       @block += "<tr class=\"#{cycle('even', 'odd')}\" id=\"item_#{item.id}\">"
       @model.list_fields.each do |column|
         case column[1]
-        when 'string'
+        when 'varchar(255)'
           @block += <<-HTML
             <td>#{link_to item.send(column[0]), :model => model, :action => 'edit', :id => item.id}</td>
           HTML
@@ -225,10 +225,10 @@ module TypusHelper
           @block += <<-HTML
             <td width="80px">#{fmt_date(item.send(column[0]))}</td>
           HTML
-        when "collection"
-          this_model = eval column[0].capitalize
+        when "integer"
+          this_model = eval column[0].split("_id")[0].capitalize
           if (this_model.new.attributes.include? 'name') || (this_model.new.methods.include? 'name')
-            @block += "<td>#{item.send(column[0]).name if item.send(column[0])}</td>"
+            @block += "<td>#{item.send(column[0].split("_id")[0]).name if item.send(column[0].split("_id")[0])}</td>"
           else
             @block += "<td>#{"#{this_model}##{item.send(column[0]).id}" if item.send(column[0])}</td>"
           end
@@ -257,10 +257,10 @@ module TypusHelper
     @form_fields.each do |field|
       @block += "<p><label>#{field[0].humanize}</label>"
       case field[1]
-      when "string"
+      when "varchar(255)"
         @block += text_field :item, field[0], :class => "big"
       when "text"
-        @block += text_area :item, field[0], :rows => "#{field[2]}"
+        @block += text_area :item, field[0], :rows => "10" # "#{field[2]}"
       when "datetime"
         @block += datetime_select :item, field[0]
       when "password"
@@ -309,7 +309,7 @@ module TypusHelper
       HTML
       
       @items_to_relate = (model_to_relate.find(:all) - @item.send(field[0]))
-        
+      
       if @items_to_relate.size > 0
         @block += <<-HTML
           #{form_tag :action => "relate", :related => "#{field[0]}", :id => params[:id]}
@@ -323,6 +323,8 @@ module TypusHelper
       @block += typus_table(field[0]) if @items.size > 0
     end
     return @block
+  rescue
+    ""
   end
 
   def process_query(query)
