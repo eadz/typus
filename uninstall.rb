@@ -1,1 +1,3 @@
-# Uninstall hook code here
+# Remove `typus.yml`, stylesheets and images ...
+
+puts "Successfully uninstalled plugin ..."
