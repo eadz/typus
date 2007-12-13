@@ -1,8 +1,3 @@
-Typus
-=====
-
-= Doc
-
 To create the first user and copy the stylesheets ...
 
     rake typus:setup
