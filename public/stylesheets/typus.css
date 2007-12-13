@@ -70,7 +70,7 @@ a:hover {
 	font-weight: normal;
 }
 
-#header h1 span.feedback {
+#header h1 #notice {
 	color: #FFF;
 	background: #09C;
 	font-size: 75%;
