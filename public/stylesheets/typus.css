@@ -492,6 +492,76 @@ img {
 	border: 0px;
 }
 
+/* dialog
+---------------------------------------------------------- */
+
+body#login {
+	background: #000;
+}
+
+#dialog {
+  background: #FFF;
+  margin: 100px auto 10px auto;
+  border: 5px solid #09C;
+  padding: 15px 20px;
+  width: 420px;
+}
+
+#dialog h1 {
+	color: #09C;
+	font-size: 1.6em;
+	margin: 5px 0px 15px -5px;
+	padding: 0px 0px 0px 5px;
+}
+
+#dialog h2 {
+	color: #7A9496;
+	font-size: 120%;
+	margin-top: 1em;
+	margin-bottom: 0.75em;
+}
+
+#dialog p {
+	border: 0px;
+	padding: 0px;
+}
+
+#dialog label {
+	display: block;
+	font-weight: bold;
+	margin: 0px 0px 3px 0px;
+}
+
+#dialog input {
+	margin: 0px 10px 10px 0px;
+}
+
+#dialog input.big {
+	font-size: 20px;
+	font-family: georgia;
+	padding: 3px 2px;
+	width: 97%;
+}
+
+#dialog input:focus {
+	background-color: #FFFCE1;
+}
+
+#dialog #signature {
+	color: #FFF;
+	margin: 0px auto;
+	text-align: right;
+	width: 450px;
+}
+
+#dialog .error {
+	background: #000;
+	border-left: 5px solid #CC0000;
+	color: #FFF;
+	margin-bottom: 1em;
+	padding: 5px 5px 5px 10px;
+}
+
 
 /* pagination
 ---------------------------------------------------------- */
