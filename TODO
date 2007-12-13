@@ -1,5 +1,5 @@
 [ ] Sort by LANGUAGES is not working.
-[ ] Sort by Collection is not working. (sort_by=category&sort_order=asc)
-[ ] Sidebar filters should read current filters.
-[ ] Dashboard listings should show groups.
-[ ] "More Actions" should be only be shown when they exist.
+[X] Sort by Collection is not working. (sort_by=category&sort_order=asc)
+[X] Sidebar filters should read current filters.
+[X] Dashboard listings should show groups.
+[X] "More Actions" should be only be shown when they exist.
