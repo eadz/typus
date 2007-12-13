@@ -165,7 +165,9 @@ module TypusHelper
 
   def feedback
     if flash[:notice]
-      "<span class=\"feedback\">#{flash[:notice]}</span>"
+      "<div id=\"notice\">#{flash[:notice]}</div>"
+    elsif flash[:error]
+      "<div id=\"notice\" class=\"error\">#{flash[:error]}</div>"
     end
   end
 
@@ -177,20 +179,21 @@ module TypusHelper
     "<p><a href=\"http://intraducibles.net/work/typus\">Typus #{Typus::Configuration.version}</a></p>"
   end
 
+  def signature
+    unless Typus::Configuration.options[:signature].blank?
+      "<div id=\"signature\">#{Typus::Configuration.options[:signature]}</div>"
+    end
+  end
+
   def fmt_date(date)
     date.strftime("%d.%m.%Y")
   end
 
   def typus_table(model = params[:model])
-
-    # Transform the model ...
     @model = eval model.singularize.capitalize
-    # @model.list_fields
-
     @block = "<table>"
-
+    
     # Header of the table
-
     @block += "<tr>"
     @model.list_fields.each do |column|
       @order_by = "#{column[0]}#{"_id" if column[1] == 'collection'}"
@@ -239,7 +242,7 @@ module TypusHelper
       when model
         @perform = link_to image_tag("typus_trash.gif"), { :model => model, :action => 'destroy', :id => item.id }, :confirm => "Remove this entry?"
       else
-        @perform = link_to image_tag("typus_trash.gif"), { :action => "unrelate", :unrelated => model, :unrelated_id => item.id, :id => params[:id] }, :confirm => "Remove relationship?"
+        @perform = link_to image_tag("typus_trash.gif"), { :action => "unrelate", :unrelated => model, :unrelated_id => item.id, :id => params[:id] }, :confirm => "Remove #{model.singularize} \"#{item.name}\" from #{params[:model].singularize}?"
       end
       @block += <<-HTML
         <td width="10px">#{@perform}</td>
