@@ -6,30 +6,22 @@
 <head>
 <title><%= Typus::Configuration.options[:app_name] %></title>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-<%= stylesheet_link_tag "typus_login", :media => "screen" %>
+<%= stylesheet_link_tag "typus", :media => "screen" %>
 </head>
 
-<body onload="$('user_email').focus()">
+<body onload="$('user_email').focus()" id="login">
 
 	<div id="dialog">
-
 		<h1><%= link_to Typus::Configuration.options[:app_name], :action => "login" %></h1>
-		
-		<!-- Feedback -->
-		<%= "<div id=\"notice\">" + flash[:notice] + "</div>" if flash[:notice] %>
-		<%= "<div id=\"notice-error\">" + flash[:error] + "</div>" if flash[:error] %>
-		<!-- /Feedback -->
-		
-		<!-- Load the Login -->
+		<%= feedback %>
 		<%= yield %>
-		<!-- /Load the Login -->
-
-	</div>
-
-	<div id="signature">
-		<%= Typus::Configuration.options[:signature] %> &#183; <%= Typus::Configuration.options[:version] %>
+		<%= signature %>
 	</div>
 
 </body>
 
 </html>
+
+<!--
+	Typus Version: <%= Typus::Configuration.options[:version] %>
+-->
