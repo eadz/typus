@@ -165,7 +165,7 @@ module TypusHelper
 
   def feedback
     if flash[:notice]
-      "<div id=\"notice\">#{flash[:notice]}</div>"
+      "<span id=\"notice\">#{flash[:notice]}</span>"
     elsif flash[:error]
       "<div id=\"notice\" class=\"error\">#{flash[:error]}</div>"
     end

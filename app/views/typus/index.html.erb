@@ -13,7 +13,6 @@
 	<div class="box" id="empty">
 		<p><%= process_query(request.env['QUERY_STRING']) %>. <%= link_to "Remove filter?" %></p>
 	</div>
-	<script type="text/javascript">new Effect.Highlight('empty');</script>
 	<% end %>
 	<!-- /Query -->
 
@@ -25,7 +24,6 @@
 		<div class="box" id="empty">
 			<p>No <strong><%= params[:model] %></strong> under this filter.</p>
 		</div>
-		<script type="text/javascript">new Effect.Highlight('empty');</script>
 	<% end %>
 	<!-- /Listing -->
 
@@ -34,3 +32,5 @@
 	<% end %>
 
 </div>
+
+<script type="text/javascript">new Effect.Highlight('empty');</script>
