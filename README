@@ -51,6 +51,7 @@ where +LANGUAGES+ is defined at <code>config/initializers/defaults.rb</code> as
     status::boolean
     created_at::datetime
     language::selector::LANGUAGES
+    tags::multiple
 
 === External Forms
 
@@ -74,29 +75,7 @@ where +LANGUAGES+ is defined at <code>config/initializers/defaults.rb</code> as
 
     actions: notify_all::index notify::edit
 
-== More Actions?
-
-    # This Action is Accessed from the Typus controller. Before using it
-    # we should check the model has this actions and then check the user
-    # can perform this action.
-    def cleanup
-      @model = eval params[:model].singularize.capitalize
-      @model.actions.each do |action|
-        @available = (params[:action].include? action[0]) ? false : true
-      end
-      if @available
-        @model.destroy_all
-        flash[:notice] = "Removed all entries."
-        redirect_to :action => "index"
-      else
-        flunk
-      end
-    rescue
-      #else
-      # flash[:notice] = "Action not available for this model."
-      redirect_to :action => "index"
-      # end
-    end
+These actions will only be available on the context +index+ and +edit+ of Typus.
 
 == Author, contact and bugs
 
@@ -104,6 +83,6 @@ You can contact me at <fesplugas@intraducibles.net>
 
 REPORT BUGS on Trac: http://dev.intraducibles.net/trac/typus
 
-BROWSE SOURCE on SVN: http://dev.intraducibles.net/svn/plugins/typus
+BROWSE SOURCE on SVN: http://dev.intraducibles.net/svn/rails/plugins/typus
 
 Copyright (c) 2007 Francesc Esplugas Marti, released under the MIT license
