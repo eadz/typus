@@ -2,6 +2,10 @@
 
 Rails Plugin to create a basic and default admin interface.
 
+== Requirements
+
+    script/plugin install svn://errtheblog.com/svn/plugins/will_paginate
+
 == Example Usage
 
 To create the first user and copy the stylesheets ...
