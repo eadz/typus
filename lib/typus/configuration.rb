@@ -26,7 +26,9 @@ module Typus
     # Example:
     #
     #
-    @@config = YAML.load_file("#{RAILS_ROOT}/config/typus.yml")
+    if File.exists? ("#{RAILS_ROOT}/config/typus.yml")
+      @@config = YAML.load_file("#{RAILS_ROOT}/config/typus.yml")
+    end
     mattr_reader :config
 
   end
