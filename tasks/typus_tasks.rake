@@ -2,13 +2,18 @@ require File.dirname(__FILE__) + '/../../../../config/environment'
 
 namespace :typus do
 
+  desc "Install plugin dependencies"
+  task :dependencies do
+    system "script/plugin install svn://errtheblog.com/svn/plugins/will_paginate"
+  end
+
   desc "Update Typus"
   task :update do
     system "script/plugin install http://dev.intraducibles.net/svn/plugins/typus --force"
   end
 
   desc "Copy Typus images and stylesheets"
-  task :theme do
+  task :assets do
     puts "Coping admin interface assets ..."
     %w( images stylesheets ).each do |folder|
       puts "=> Added *#{folder}* assets"
@@ -16,7 +21,7 @@ namespace :typus do
     end
   end
 
-  desc "Generate `config/typus.yml`"
+  desc "Generate +config/typus.yml+"
   task :setup do
     begin
       MODEL_DIR = File.join(RAILS_ROOT, "app/models")
