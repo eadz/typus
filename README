@@ -81,6 +81,19 @@ where +LANGUAGES+ is defined at <code>config/initializers/defaults.rb</code> as
 
 These actions will only be available on the context +index+ and +edit+ of Typus.
 
+=== Module
+
+Used to group models on the main screen.
+
+    Post:
+      module: Site
+    Category:
+      module: Site
+    Template:
+      module: System
+    Download:
+      module: System
+
 == Author, contact and bugs
 
 You can contact me at <fesplugas@intraducibles.net>
