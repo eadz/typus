@@ -75,7 +75,6 @@ class TypusController < ApplicationController
     @item = @model.new(params[:item])
     if @item.save
       flash[:notice] = "#{@model.to_s.capitalize} successfully created."
-      # redirect_to :action => 'edit', :id => @item
       redirect_to typus_index_url(params[:model])
     else
       render :action => "new"
@@ -92,8 +91,7 @@ class TypusController < ApplicationController
   def update
     if @item.update_attributes(params[:item])
       flash[:notice] = "#{@model.to_s.capitalize} successfully updated."
-      # redirect_to typus_index_url(params[:model])
-      redirect_to :action => "edit", :id => @item # .id
+      redirect_to :action => "edit", :id => @item
     else
       render :action => "edit"
     end
@@ -112,6 +110,7 @@ class TypusController < ApplicationController
     redirect_to :action => "index"
   end
 
+  # Relate a model object to another.
   def relate
     model_to_relate = eval params[:related].singularize.capitalize
     @model.find(params[:id]).send(params[:related]) << model_to_relate.find(params[:model_id_to_relate][:related_id])
@@ -119,6 +118,7 @@ class TypusController < ApplicationController
     redirect_to :action => "edit", :id => params[:id]
   end
 
+  # Remove relationship between models.
   def unrelate
     model_to_unrelate = eval params[:unrelated].singularize.capitalize
     unrelate = model_to_unrelate.find(params[:unrelated_id])
@@ -127,18 +127,31 @@ class TypusController < ApplicationController
     redirect_to :action => "edit", :id => params[:id]
   end
 
+  # Runs model "extra actions". This is defined in +typus.yml+ as
+  # +actions+.
+  #
+  # Post:
+  #   actions: cleanup:index notify_users:edit
+  #
   def run
-    @model = eval params[:model].singularize.capitalize
-    flash[:notice] = "#{params[:task].humanize} performed."
     if params[:id]
-      @model.find(params[:id]).send(params[:task])
-      redirect_to :action => 'edit', :id => params[:id]
+      if @model.actions.include? [params[:task], "edit"]
+        flash[:notice] = "#{params[:task].humanize} performed."
+        @model.find(params[:id]).send(params[:task])
+        redirect_to :action => 'edit', :id => params[:id]
+      end
     else
-      @model.send(params[:task])
-      redirect_to :action => 'index'
+      if @model.actions.include? [params[:task], "index"]
+        flash[:notice] = "#{params[:task].humanize} performed."
+        @model.send(params[:task])
+        redirect_to :action => 'index'
+      end
     end
+  rescue
+    redirect_to :action => 'index'
   end
 
+  # Basic session creation.
   def login
     if request.post?
       username = Typus::Configuration.options[:username]
@@ -155,6 +168,7 @@ class TypusController < ApplicationController
     end
   end
 
+  # End the session and redirect to login screen.
   def logout
     session[:typus] = nil
     redirect_to typus_login_url
@@ -162,10 +176,12 @@ class TypusController < ApplicationController
 
 private
 
+  # Sets the current model.
   def set_model
     @model = eval params[:model].singularize.capitalize
   end
 
+  # Set the default order of the model listings.
   def set_order
     @model = eval params[:model].singularize.capitalize
     @order = @model.default_order
@@ -173,21 +189,25 @@ private
     params[:sort_order] = params[:sort_order] || @order[0][1] || "asc"
   end
 
+  # Find 
   def find_model
     @item = @model.find(params[:id])
   end
 
+  # Model fields
   def fields
     @fields = @model.list_fields
   end
 
+  # Model form fields and externals
   def form_fields
     @form_fields = @model.form_fields
     @form_fields_externals = @model.form_fields_externals
   end
 
-  private
+private
 
+  # Authenticate user before doing anything.
   def authenticate
     redirect_to :action => "login" unless session[:typus]
   end
