@@ -1,12 +1,19 @@
-# require 'fileutils'
+puts "\n------------------------------------------------------------------------"
+puts "   Installing Typus"
+puts "------------------------------------------------------------------------\n\n"
 
-# Copy the stylesheets and images.
-# css = File.dirname(__FILE__) + '/../../../public/stylesheets/typus.css'
-# FileUtils.cp File.dirname(__FILE__) + '/app/public/stylesheets/typus.css', css unless File.exist?(css)
-# images_folder = File.dirname(__FILE__) + '/../../../public/images/'
-# system "cp #{RAILS_ROOT}/vendor/plugins/typus/public/#{folder}/* #{RAILS_ROOT}/public/#{folder}/"
+%w( stylesheets images ).each do |f|
+  puts " => Copying #{f.capitalize}"
+  system "cp #{File.dirname(__FILE__)}/public/#{f}/* #{File.dirname(__FILE__)}/../../../public/#{f}/"
+end
 
-# Check `will_paginate` plugin is installed, otherwise we install it.
+puts "\n------------------------------------------------------------------------"
+puts "   Available Tasks"
+puts "------------------------------------------------------------------------\n\n"
 
-# And finally print a message with the options
-puts "rake typus:config (Installs the `typus.yml` configuration file.)"
+puts " - rake typus:dependencies"
+puts "   Installs +will_paginate+ plugin"
+puts ""
+puts " - rake typus:config"
+puts "   Generates +config/typus.yml+ config file."
+puts ""
