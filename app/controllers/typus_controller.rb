@@ -213,7 +213,7 @@ private
 
   # Authenticate user before doing anything.
   def authenticate
-    redirect_to login_url unless session[:typus]
+    redirect_to typus_login_url unless session[:typus]
   end
 
 end
