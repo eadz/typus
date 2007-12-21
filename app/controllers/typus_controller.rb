@@ -4,6 +4,7 @@ class TypusController < ApplicationController
 
   before_filter :authenticate, :except => [ :login, :logout ]
   before_filter :set_model, :except => [ :dashboard, :login, :logout ]
+  before_filter :set_order, :only => [ :index ]
   before_filter :find_model, :only => [ :show, :edit, :update, :destroy, :status ]
   before_filter :fields, :only => [ :index ]
   before_filter :form_fields, :only => [ :new, :edit, :create, :update ]
@@ -12,14 +13,13 @@ class TypusController < ApplicationController
   end
 
   def index
-    set_order
     @conditions = ""
     # Get all the params and process them ...
     if request.env['QUERY_STRING']
       @query = request.env['QUERY_STRING']
       @query.split("&").each do |query|
-        @the_param = query.split("=")[0].split("_id")[0]
-        @the_query = query.split("=")[1]
+        @the_param = query.split("=")[0].split("_id").first
+        @the_query = query.split("=").last
         
         # If it's a query
         if @the_param == "query"
@@ -77,23 +77,27 @@ class TypusController < ApplicationController
       flash[:notice] = "#{@model.to_s.capitalize} successfully created."
       redirect_to typus_index_url(params[:model])
     else
-      render :action => "new"
+      render :action => 'new'
     end
   end
 
   def edit
-    @condition = ( @model.new.attributes.include? "created_at" ) ? "created_at" : "id"
-    @current_item = ( @condition == "created_at" ) ? @item.created_at : @item.id
-    @previous = @model.find(:first, :order => "#{@condition} DESC", :conditions => ["#{@condition} < ?", @current_item])
-    @next = @model.find(:first, :order => "#{@condition} ASC", :conditions => ["#{@condition} > ?", @current_item])
+    condition = ( @model.new.attributes.include? 'created_at' ) ? 'created_at' : 'id'
+    current = ( condition == 'created_at' ) ? @item.created_at : @item.id
+    @previous = @model.find(:first, 
+                            :order => "#{condition} DESC", 
+                            :conditions => ["#{condition} < ?", current])
+    @next = @model.find(:first, 
+                        :order => "#{condition} ASC", 
+                        :conditions => ["#{condition} > ?", current])
   end
 
   def update
     if @item.update_attributes(params[:item])
       flash[:notice] = "#{@model.to_s.capitalize} successfully updated."
-      redirect_to :action => "edit", :id => @item
+      redirect_to :action => 'edit', :id => @item
     else
-      render :action => "edit"
+      render :action => 'edit'
     end
   end
 
@@ -105,9 +109,9 @@ class TypusController < ApplicationController
 
   # Toggle the status of an item.
   def status
-    @item.toggle!("status")
+    @item.toggle!('status')
     flash[:notice] = "#{@model.to_s.capitalize} status changed"
-    redirect_to :action => "index"
+    redirect_to :action => 'index'
   end
 
   # Relate a model object to another.
@@ -115,7 +119,7 @@ class TypusController < ApplicationController
     model_to_relate = params[:related].singularize.capitalize.constantize
     @model.find(params[:id]).send(params[:related]) << model_to_relate.find(params[:model_id_to_relate][:related_id])
     flash[:notice] = "#{model_to_relate} added to #{@model}"
-    redirect_to :action => "edit", :id => params[:id]
+    redirect_to :action => 'edit', :id => params[:id]
   end
 
   # Remove relationship between models.
@@ -124,7 +128,7 @@ class TypusController < ApplicationController
     unrelate = model_to_unrelate.find(params[:unrelated_id])
     @model.find(params[:id]).send(params[:unrelated]).delete(unrelate)
     flash[:notice] = "#{model_to_unrelate} removed from #{@model}"
-    redirect_to :action => "edit", :id => params[:id]
+    redirect_to :action => 'edit', :id => params[:id]
   end
 
   # Runs model "extra actions". This is defined in +typus.yml+ as
@@ -135,13 +139,13 @@ class TypusController < ApplicationController
   #
   def run
     if params[:id]
-      if @model.actions.include? [params[:task], "edit"]
+      if @model.actions.include? [params[:task], 'edit']
         flash[:notice] = "#{params[:task].humanize} performed."
         @model.find(params[:id]).send(params[:task])
         redirect_to :action => 'edit', :id => params[:id]
       end
     else
-      if @model.actions.include? [params[:task], "index"]
+      if @model.actions.include? [params[:task], 'index']
         flash[:notice] = "#{params[:task].humanize} performed."
         @model.send(params[:task])
         redirect_to :action => 'index'
@@ -164,7 +168,7 @@ class TypusController < ApplicationController
         redirect_to typus_login_url
       end
     else
-      render :layout => "typus_login"
+      render :layout => 'typus_login'
     end
   end
 
@@ -183,10 +187,9 @@ private
 
   # Set the default order of the model listings.
   def set_order
-    @model = params[:model].singularize.capitalize.constantize
     @order = @model.default_order
-    params[:order_by] = params[:order_by] || @order[0][0] || "id"
-    params[:sort_order] = params[:sort_order] || @order[0][1] || "asc"
+    params[:order_by] = params[:order_by] || @order[0].first || 'id'
+    params[:sort_order] = params[:sort_order] || @order[0].last || 'asc'
   end
 
   # Find 
@@ -209,7 +212,7 @@ private
 
   # Authenticate user before doing anything.
   def authenticate
-    redirect_to :action => "login" unless session[:typus]
+    redirect_to login_url unless session[:typus]
   end
 
 end
