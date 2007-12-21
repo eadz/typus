@@ -337,7 +337,7 @@ module TypusHelper
   end
 
   def process_query(query)
-    if params[:query]
+    if params[:search]
       @query = "Search results on <strong>#{params[:model]}</strong> "
       @query << "for <strong>\"#{params[:search]}\"</strong>"
     end
