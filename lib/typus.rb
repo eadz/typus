@@ -6,6 +6,7 @@ module Typus
       enable_configuration
       enable_activerecord
       enable_routes
+      enable_string
     end
 
     def enable_configuration
@@ -18,6 +19,10 @@ module Typus
 
     def enable_routes
       require 'typus/routes'
+    end
+
+    def enable_string
+      require 'typus/string'
     end
 
   end
