@@ -85,12 +85,8 @@ class TypusController < ApplicationController
   def edit
     condition = ( @model.new.attributes.include? 'created_at' ) ? 'created_at' : 'id'
     current = ( condition == 'created_at' ) ? @item.created_at : @item.id
-    @previous = @model.find(:first, 
-                            :order => "#{condition} DESC", 
-                            :conditions => ["#{condition} < ?", current])
-    @next = @model.find(:first, 
-                        :order => "#{condition} ASC", 
-                        :conditions => ["#{condition} > ?", current])
+    @previous = @model.find_previous(current, condition)
+    @next = @model.find_next(current, condition)
   end
 
   def update
@@ -140,17 +136,13 @@ class TypusController < ApplicationController
   #
   def run
     if params[:id]
-      if @model.actions.include? [params[:task], 'edit']
-        flash[:notice] = "#{params[:task].humanize} performed."
-        @model.find(params[:id]).send(params[:task])
-        redirect_to :action => 'edit', :id => params[:id]
-      end
+      @model.find(params[:id]).send(params[:task]) if @model.actions.include? [params[:task], 'edit']
+      flash[:notice] = "#{params[:task].humanize} performed."
+      redirect_to :action => 'edit', :id => params[:id]
     else
-      if @model.actions.include? [params[:task], 'index']
-        flash[:notice] = "#{params[:task].humanize} performed."
-        @model.send(params[:task])
-        redirect_to :action => 'index'
-      end
+      @model.send(params[:task]) if @model.actions.include? [params[:task], 'index']
+      flash[:notice] = "#{params[:task].humanize} performed."
+      redirect_to :action => 'index'
     end
   rescue
     redirect_to :action => 'index'
