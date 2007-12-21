@@ -123,7 +123,7 @@ module TypusHelper
       @search = <<-HTML
         <h2>Search</h2>
         <form action="/#{Typus::Configuration.options[:prefix]}/#{params[:model]}" method="get">
-        <p><input id="query" name="query" type="text" value="#{params[:query]}"/></p>
+        <p><input id="search" name="search" type="text" value="#{params[:query]}"/></p>
         </form>
       HTML
     end
@@ -294,6 +294,9 @@ module TypusHelper
         rel_model = "#{field[0].singularize}_id"
         current_model = params[:model].singularize.capitalize.constantize
         @selected = current_model.find(params[:id]).send(field[0]).collect { |t| t.send(rel_model).to_i } if params[:id]
+        
+        # FIXME: +tag_ids+ should be dynamic
+        
         @block << <<-HTML
           <select name="item[tag_ids][]" multiple="multiple">
             #{options_from_collection_for_select(multiple.find(:all), :id, :name, @selected)}
@@ -336,7 +339,7 @@ module TypusHelper
   def process_query(query)
     if params[:query]
       @query = "Search results on <strong>#{params[:model]}</strong> "
-      @query << "for <strong>\"#{params[:query]}\"</strong>"
+      @query << "for <strong>\"#{params[:search]}\"</strong>"
     end
     return @query
   end

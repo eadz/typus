@@ -21,11 +21,11 @@ class TypusController < ApplicationController
         @the_param = query.split("=")[0].split("_id").first
         @the_query = query.split("=").last
         
-        # If it's a query
-        if @the_param == "query"
+        # If it's a search
+        if @the_param == "search"
           @search = Array.new
           @model.search_fields.each { |s| @search << "LOWER(#{s}) LIKE '%#{@the_query}%'" }
-          @conditions += "(#{@search.join(" OR ")}) AND "
+          @conditions << "(#{@search.join(" OR ")}) AND "
         end
         
         @model.filters.each do |f|
@@ -34,10 +34,10 @@ class TypusController < ApplicationController
           case filter_type
           when "boolean"
             if %w(sqlite3 sqlite).include? DB['adapter']
-              @conditions += "#{f[0]} = '#{@the_query[0..0]}' AND "
+              @conditions << "#{f[0]} = '#{@the_query[0..0]}' AND "
             else
               @status = (@the_query == 'true') ? 1 : 0
-              @conditions += "#{f[0]} = '#{@status}' AND "
+              @conditions << "#{f[0]} = '#{@status}' AND "
             end
           when "datetime"
             case @the_query
@@ -59,7 +59,7 @@ class TypusController < ApplicationController
         end
       end
     end
-    @conditions += "1 = 1"
+    @conditions << "1 = 1"
     @items = @model.paginate :page => params[:page], 
                              :per_page => Typus::Configuration.options[:per_page], 
                              :order => "#{params[:order_by]} #{params[:sort_order]}", 
