@@ -157,7 +157,7 @@ module TypusHelper
           @filters += "</ul>\n"
         when "collection"
           @filters += "<h3>By #{f[0].humanize}</h3>"
-          @model = eval f[0].capitalize
+          @model = f[0].capitalize.constantize
           @filters += "<ul>\n"
           @model.find(:all).each do |item|
             @current_request = (request.env['QUERY_STRING']) ? request.env['QUERY_STRING'].split("&") : []
@@ -198,7 +198,7 @@ module TypusHelper
   end
 
   def typus_table(model = params[:model])
-    @model = eval model.singularize.capitalize
+    @model = model.singularize.capitalize.constantize
     @block = "<table>"
     
     # Header of the table
@@ -234,7 +234,7 @@ module TypusHelper
             <td width="80px">#{fmt_date(item.send(column[0]))}</td>
           HTML
         when "collection"
-          this_model = eval column[0].capitalize
+          this_model = column[0].capitalize.constantize
           if (this_model.new.attributes.include? 'name') || (this_model.new.methods.include? 'name')
             @block += "<td>#{item.send(column[0]).name if item.send(column[0])}</td>"
           else
@@ -280,19 +280,19 @@ module TypusHelper
       when "tags"
         @block += text_field :item, field[0], :value => @item.tags.join(", "), :class => "big"
       when "selector"
-        @values = eval field[2]
+        @values = field[2].constantize
         @block += select :item, field[0], @values.collect { |p| [ "#{p[0]} (#{p[1]})", p[1] ] }
       when "collection"
-        @collection = eval field[0].singularize.capitalize
+        @collection = field[0].singularize.capitalize.constantize
         if (@collection.new.methods.include? "name") || (@collection.new.attributes.include? 'name' )
           @block += collection_select :item, "#{field[0]}_id", @collection.find(:all), :id, :name, :include_blank => true
         else
           @block += select :item, "#{field[0]}_id", @collection.find(:all).collect { |p| ["#{@collection}##{p.id}", p.id] }, :include_blank => true
         end
       when "multiple"
-        multiple = eval field[0].singularize.capitalize
+        multiple = field[0].singularize.capitalize.constantize
         rel_model = "#{field[0].singularize}" + "_id"
-        current_model = eval params[:model].singularize.capitalize
+        current_model = params[:model].singularize.capitalize.constantize
         @selected = current_model.find(params[:id]).send(field[0]).collect { |t| t.send(rel_model).to_i } if params[:id]
         @block += <<-HTML
           <select name="item[tag_ids][]" multiple="multiple">
@@ -311,7 +311,7 @@ module TypusHelper
   def typus_form_externals
     @block = ""
     @form_fields_externals.each do |field|
-      model_to_relate = eval field[0].singularize.capitalize
+      model_to_relate = field[0].singularize.capitalize.constantize
       @block += <<-HTML
         <h2 style="margin: 20px 0px 10px 0px;">#{field[0].capitalize} <small><a href="/#{Typus::Configuration.options[:prefix]}/#{field[0]}/new?back_to=#{params[:model]}&item_id=#{params[:id]}">Add new</a></small></h2>
       HTML
@@ -326,7 +326,7 @@ module TypusHelper
           </form>
         HTML
       end
-      current_model = eval params[:model].singularize.capitalize
+      current_model = params[:model].singularize.capitalize.constantize
       @items = current_model.find(params[:id]).send(field[0])
       @block += typus_table(field[0]) if @items.size > 0
     end

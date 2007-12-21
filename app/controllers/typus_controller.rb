@@ -112,7 +112,7 @@ class TypusController < ApplicationController
 
   # Relate a model object to another.
   def relate
-    model_to_relate = eval params[:related].singularize.capitalize
+    model_to_relate = params[:related].singularize.capitalize.constantize
     @model.find(params[:id]).send(params[:related]) << model_to_relate.find(params[:model_id_to_relate][:related_id])
     flash[:notice] = "#{model_to_relate} added to #{@model}"
     redirect_to :action => "edit", :id => params[:id]
@@ -120,7 +120,7 @@ class TypusController < ApplicationController
 
   # Remove relationship between models.
   def unrelate
-    model_to_unrelate = eval params[:unrelated].singularize.capitalize
+    model_to_unrelate = params[:unrelated].singularize.capitalize.constantize
     unrelate = model_to_unrelate.find(params[:unrelated_id])
     @model.find(params[:id]).send(params[:unrelated]).delete(unrelate)
     flash[:notice] = "#{model_to_unrelate} removed from #{@model}"
@@ -178,12 +178,12 @@ private
 
   # Sets the current model.
   def set_model
-    @model = eval params[:model].singularize.capitalize
+    @model = params[:model].singularize.capitalize.constantize
   end
 
   # Set the default order of the model listings.
   def set_order
-    @model = eval params[:model].singularize.capitalize
+    @model = params[:model].singularize.capitalize.constantize
     @order = @model.default_order
     params[:order_by] = params[:order_by] || @order[0][0] || "id"
     params[:sort_order] = params[:sort_order] || @order[0][1] || "asc"
