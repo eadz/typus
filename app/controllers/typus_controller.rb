@@ -1,7 +1,5 @@
 class TypusController < ApplicationController
 
-  DB = YAML.load_file("#{RAILS_ROOT}/config/database.yml")[RAILS_ENV]
-
   before_filter :authenticate, :except => [ :login, :logout ]
   before_filter :set_model, :except => [ :dashboard, :login, :logout ]
   before_filter :set_order, :only => [ :index ]
@@ -13,53 +11,8 @@ class TypusController < ApplicationController
   end
 
   def index
-    @conditions = ""
-    # Get all the params and process them ...
-    if request.env['QUERY_STRING']
-      @query = request.env['QUERY_STRING']
-      @query.split("&").each do |query|
-        @the_param = query.split("=")[0].split("_id").first
-        @the_query = query.split("=").last
-        
-        # If it's a search
-        if @the_param == "search"
-          @search = Array.new
-          @model.search_fields.each { |s| @search << "LOWER(#{s}) LIKE '%#{@the_query}%'" }
-          @conditions << "(#{@search.join(" OR ")}) AND "
-        end
-        
-        @model.filters.each do |f|
-          filter_type = f[1] if f[0].to_s == @the_param.to_s
-          # And the common defined types of data
-          case filter_type
-          when "boolean"
-            if %w(sqlite3 sqlite).include? DB['adapter']
-              @conditions << "#{f[0]} = '#{@the_query[0..0]}' AND "
-            else
-              @status = (@the_query == 'true') ? 1 : 0
-              @conditions << "#{f[0]} = '#{@status}' AND "
-            end
-          when "datetime"
-            case @the_query
-            when "today"
-              @start_date, @end_date = Time.today, Time.today.tomorrow
-            when "past_7_days"
-              @start_date, @end_date = Time.today.monday, Time.today.monday.next_week
-            when "this_month"
-              @start_date, @end_date = Time.today.last_month, Time.today.tomorrow
-            when "this_year"
-              @start_date, @end_date = Time.today.last_year, Time.today.tomorrow
-            end
-            @start_date = @start_date.strftime("%Y-%m-%d %H:%M:%S")
-            @end_date = @end_date.strftime("%Y-%m-%d %H:%M:%S")
-            @conditions += "created_at > '#{@start_date}' AND created_at < '#{@end_date}' AND "
-          when "collection"
-            @conditions += "#{f[0]}_id = #{@the_query} AND "
-          end
-        end
-      end
-    end
-    @conditions << "1 = 1"
+    @conditions = "1 = 1 "
+    @conditions << (request.env['QUERY_STRING']).build_conditions(@model) if request.env['QUERY_STRING']
     @items = @model.paginate :page => params[:page], 
                              :per_page => Typus::Configuration.options[:per_page], 
                              :order => "#{params[:order_by]} #{params[:sort_order]}", 
@@ -135,16 +88,16 @@ class TypusController < ApplicationController
   #   actions: cleanup:index notify_users:edit
   #
   def run
+    flash[:notice] = "#{params[:task].humanize} performed."
     if params[:id]
       @model.find(params[:id]).send(params[:task]) if @model.actions.include? [params[:task], 'edit']
-      flash[:notice] = "#{params[:task].humanize} performed."
       redirect_to :action => 'edit', :id => params[:id]
     else
       @model.send(params[:task]) if @model.actions.include? [params[:task], 'index']
-      flash[:notice] = "#{params[:task].humanize} performed."
       redirect_to :action => 'index'
     end
   rescue
+    flash[:notice] = nil
     redirect_to :action => 'index'
   end
 
@@ -165,7 +118,7 @@ class TypusController < ApplicationController
     end
   end
 
-  # End the session and redirect to login screen.
+  # End typus session and redirect to +typus_login+.
   def logout
     session[:typus] = nil
     redirect_to typus_login_url
@@ -173,19 +126,19 @@ class TypusController < ApplicationController
 
 private
 
-  # Sets the current model.
+  # Set the current model.
   def set_model
     @model = params[:model].singularize.capitalize.constantize
   end
 
-  # Set the default order of the model listings.
+  # Set default order on the listings.
   def set_order
     @order = @model.default_order
     params[:order_by] = params[:order_by] || @order[0].first || 'id'
     params[:sort_order] = params[:sort_order] || @order[0].last || 'asc'
   end
 
-  # Find 
+  # Find
   def find_model
     @item = @model.find(params[:id])
   end
@@ -195,7 +148,7 @@ private
     @fields = @model.list_fields
   end
 
-  # Model form fields and externals
+  # Model +form_fields+ & +form_externals+
   def form_fields
     @form_fields = @model.form_fields
     @form_fields_externals = @model.form_fields_externals
@@ -203,7 +156,7 @@ private
 
 private
 
-  # Authenticate user before doing anything.
+  # Authenticate
   def authenticate
     redirect_to typus_login_url unless session[:typus]
   end
