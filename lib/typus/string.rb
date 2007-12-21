@@ -2,7 +2,7 @@ module Typus
 
   class String
 
-    # This method generated the password.
+    # This method generates the password.
     def self.generate_password(length)
       chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
       newpass = ""
