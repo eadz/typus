@@ -2,6 +2,18 @@ module Typus
 
   class ActiveRecord::Base
 
+    def self.find_previous(current, condition)
+      find :first, 
+           :order => "#{condition} DESC", 
+           :conditions => ["#{condition} < ?", current]
+    end
+
+    def self.find_next(current, condition)
+      find :first, 
+           :order => "#{condition} ASC", 
+           :conditions => ["#{condition} > ?", current]
+    end
+
     def self.list_fields
       @config = Typus::Configuration.config["#{self}"]["list"].split(" ")
       @fields = Array.new
