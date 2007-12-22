@@ -2,6 +2,8 @@
 
 Rails Plugin to create a basic and default admin interface.
 
+Once installed and configured you can see login at http://0.0.0.0:3000/admin/
+
 == Requirements
 
     script/plugin install svn://errtheblog.com/svn/plugins/will_paginate
