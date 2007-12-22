@@ -94,11 +94,12 @@ Used to group models on the main screen.
     Download:
       module: System
 
-== Thanks to ...
+== Acknowledgments
 
-Isaac Feliu - http://railslab.net
+- Isaac Feliu - http://railslab.net
+- Jaime Iniesta - http://railes.net
 
-== Author, contact and bugs
+== Author, contact & bugs
 
 You can contact me at <fesplugas@intraducibles.net>
 
