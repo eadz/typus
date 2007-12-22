@@ -88,16 +88,16 @@ class TypusController < ApplicationController
   #   actions: cleanup:index notify_users:edit
   #
   def run
-    flash[:notice] = "#{params[:task].humanize} performed."
     if params[:id]
-      @model.find(params[:id]).send(params[:task]) if @model.actions.include? [params[:task], 'edit']
+      @model.find(params[:id]).send(params[:task]) unless @model.actions.include? ["#{params[:task]}", 'edit']
+      flash[:notice] = "#{params[:task].humanize} performed."
       redirect_to :action => 'edit', :id => params[:id]
     else
-      @model.send(params[:task]) if @model.actions.include? [params[:task], 'index']
+      @model.send(params[:task]) unless @model.actions.include? [params[:task], 'index']
+      flash[:notice] = "#{params[:task].humanize} performed."
       redirect_to :action => 'index'
     end
   rescue
-    flash[:notice] = nil
     redirect_to :action => 'index'
   end
 

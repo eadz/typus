@@ -20,9 +20,28 @@ class TypusControllerTest < ActionController::TestCase
 
   def test_should_render_index
     @request.session[:typus] = true
-    get :index, :model => 'posts'
+    get :index, { :model => 'posts' }
     assert_response :success
     assert_template 'index'
+  end
+
+  def test_should_not_render_index_for_undefined_model
+    assert true
+  end
+
+  def test_should_render_new
+    @request.session[:typus] = true
+    get :new, { :model => 'posts' }
+    assert_response :success
+    assert_template 'new'
+  end
+
+  def test_should_create_item
+    @request.session[:typus] = true
+    items = Post.count
+    post :create, { :model => 'posts', :item => { :title => "This is another title", :body => "This is the body."}}
+    assert_response :redirect
+    assert_equal items, 2
   end
 
   def test_should_render_edit
@@ -31,11 +50,42 @@ class TypusControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  def test_should_run_a_filter
-    assert true
+  def test_should_update_item
+    @request.session[:typus] = true
+    post :update, { :model => 'posts', :id => 1, :title => "Updated" }
+    assert_response :success
+    assert_template 'edit'
   end
 
-  def test_should_return_flash_after_updating_record
+  def test_should_run_defined_action
+    @request.session[:typus] = true
+    get :run, { :model => 'posts', :task => 'cleanup' }
+    assert_response :redirect
+    assert_redirected_to :action => 'index'
+  end
+
+  def test_should_not_run_undefined_action
+    @request.session[:typus] = true
+    get :run, { :model => 'posts', :task => 'undefined_task' }
+    assert_response :redirect
+    assert_redirected_to :action => 'index'
+  end
+
+  def test_should_run_defined_action_on_item
+    @request.session[:typus] = true
+    get :run, { :model => 'posts',  :id => 1, :task => 'send_as_newsletter' }
+    assert_response :redirect
+    assert_redirected_to :action => 'edit'
+  end
+
+  def test_should_not_run_undefined_action_on_item
+    @request.session[:typus] = true
+    get :run, { :model => 'posts',  :id => 1, :task => 'send_as_email' }
+    assert_response :redirect
+    assert_redirected_to :action => 'index'
+  end
+
+  def test_should_run_a_filter
     assert true
   end
 
