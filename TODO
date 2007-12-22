@@ -5,4 +5,4 @@
 [X] "More Actions" should be only be shown when they exist.
 [ ] Write tests.
 [ ] Don't show sidebar filters if doesn't exist. (Categories ...)
-[ ] Refactor TypusController.
+[X] Refactor TypusController.
