@@ -14,6 +14,6 @@ puts "------------------------------------------------------------------------\n
 puts "  - rake typus:dependencies"
 puts "    Installs +will_paginate+ plugin"
 puts ""
-puts "  - rake typus:config"
+puts "  - rake typus:setup"
 puts "    Generates +config/typus.yml+ config file."
 puts ""
