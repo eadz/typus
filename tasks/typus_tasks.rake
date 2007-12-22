@@ -9,7 +9,7 @@ namespace :typus do
 
   desc "Update Typus"
   task :update do
-    system "script/plugin install http://dev.intraducibles.net/svn/plugins/typus --force"
+    system "script/plugin install http://dev.intraducibles.net/svn/rails/plugins/typus --force"
   end
 
   desc "Copy Typus images and stylesheets"
