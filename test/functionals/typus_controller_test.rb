@@ -2,7 +2,9 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class TypusControllerTest < ActionController::TestCase
-  
+
+  fixtures :posts
+
   def test_should_redirect_to_login
     get :index
     assert_response :redirect
@@ -17,11 +19,16 @@ class TypusControllerTest < ActionController::TestCase
   end
 
   def test_should_render_index
-    assert true
+    @request.session[:typus] = true
+    get :index, :model => 'posts'
+    assert_response :success
+    assert_template 'index'
   end
 
   def test_should_render_edit
-    assert true
+    @request.session[:typus] = true
+    get :edit, { :model => 'posts', :id => 1 }
+    assert_response :success
   end
 
   def test_should_run_a_filter
@@ -29,14 +36,6 @@ class TypusControllerTest < ActionController::TestCase
   end
 
   def test_should_return_flash_after_updating_record
-    assert true
-  end
-
-  def test_should_check_user_is_authenticated
-    assert true
-  end
-
-  def test_should_render_dashboard
     assert true
   end
 
