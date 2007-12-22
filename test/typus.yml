@@ -1,0 +1,11 @@
+Post:
+  list: title::string
+  form: title::string
+  # author::collection category::collection created_at::datetime status::boolean
+  # category::collection author::collection status::boolean created_at::datetime tags::multiple
+  # form_externals: tags
+  # order: created_at::asc
+  # filters: status::boolean created_at::datetime category::collection
+  # actions: cleanup::index notify::edit
+  # search: title
+  # module: blog
