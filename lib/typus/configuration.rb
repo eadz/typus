@@ -26,8 +26,12 @@ module Typus
     # Example:
     #
     #
-    if File.exists? ("#{RAILS_ROOT}/config/typus.yml")
-      @@config = YAML.load_file("#{RAILS_ROOT}/config/typus.yml")
+
+    if ENV["RAILS_ENV"] == 'test'
+      @@config = YAML.load_file("#{File.dirname(__FILE__)}/../../test/typus.yml")
+      # load(File.dirname(__FILE__) + "/schema.rb")
+    else
+      @@config = YAML.load_file("#{RAILS_ROOT}/config/typus.yml") if File.exists? ("#{RAILS_ROOT}/config/typus.yml")
     end
     mattr_reader :config
 
