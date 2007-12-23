@@ -3,6 +3,9 @@
 [X] Sidebar filters should read current filters.
 [X] Dashboard listings should show groups.
 [X] "More Actions" should be only be shown when they exist.
-[ ] Write tests.
+[X] Write tests.
 [ ] Don't show sidebar filters if doesn't exist. (Categories ...)
 [X] Refactor TypusController.
+[ ] Add -Multipart- to forms.
+[ ] Add more and more tests ...
+[ ] Update searches ... a "nice" way of set default order.
