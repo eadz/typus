@@ -14,6 +14,6 @@ begin
 
 rescue LoadError
   puts "\n************************************************************************"
-  puts "**      Install the +will_paginate+ plugin to make Typus work         **"
+  puts "**        Install +will_paginate+ plugin to make Typus work           **"
   puts "************************************************************************\n\n"
 end
