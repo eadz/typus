@@ -10,7 +10,14 @@ class TypusControllerTest < ActionController::TestCase
     assert_response :redirect
     assert_redirected_to typus_login_url
   end
-  
+
+  def test_should_login_and_redirect_to_dashboard
+    post :login, { :user => { :name => 'admin', :password => 'typus' }}
+    assert_equal @request.session[:typus], true
+    assert_response :redirect
+    assert_redirected_to typus_dashboard_url
+  end
+
   def test_should_login_and_render_dashboard
     @request.session[:typus] = true
     get :dashboard
@@ -26,7 +33,10 @@ class TypusControllerTest < ActionController::TestCase
   end
 
   def test_should_not_render_index_for_undefined_model
-    assert true
+    @request.session[:typus] = true
+    get :index, { :model => 'unexisting' }
+    assert_response :redirect
+    assert_redirected_to :action => 'dashboard'
   end
 
   def test_should_render_new
@@ -75,7 +85,7 @@ class TypusControllerTest < ActionController::TestCase
     @request.session[:typus] = true
     get :run, { :model => 'posts',  :id => 1, :task => 'send_as_newsletter' }
     assert_response :redirect
-    assert_redirected_to :action => 'edit'
+    assert_redirected_to :action => 'index'
   end
 
   def test_should_not_run_undefined_action_on_item
@@ -85,8 +95,12 @@ class TypusControllerTest < ActionController::TestCase
     assert_redirected_to :action => 'index'
   end
 
-  def test_should_run_a_filter
-    assert true
+  def test_should_logout
+    @request.session[:typus] = true
+    get :logout
+    assert_equal @request.session[:typus], nil
+    assert_response :redirect
+    assert_redirected_to typus_login_url
   end
 
 end

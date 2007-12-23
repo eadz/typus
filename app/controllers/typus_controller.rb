@@ -88,19 +88,12 @@ class TypusController < ApplicationController
   #   actions: cleanup:index notify_users:edit
   #
   def run
-    flash[:notice] = "#{params[:task].humanize} performed."
     if params[:id]
-      if @model.actions.include? [params[:task], 'edit']
-        @model.find(params[:id]).send(params[:task])
-        redirect_to :action => 'edit', :id => params[:id]
-      end
+      @model.find(params[:id]).send(params[:task]) if @model.actions.include? [params[:task], 'edit']
     else
-      if @model.actions.include? [params[:task], 'index']
-        @model.send(params[:task])
-        redirect_to :action => 'index'
-      end
+      @model.send(params[:task]) if @model.actions.include? [params[:task], 'index']
     end
-    flash[:notice] = nil
+    flash[:notice] = "#{params[:task].humanize} performed."
     redirect_to :action => 'index'
   rescue
     flash[:notice] = "Undefined Action"
@@ -135,6 +128,8 @@ private
   # Set the current model.
   def set_model
     @model = params[:model].singularize.capitalize.constantize
+  rescue
+    redirect_to :action => 'dashboard'
   end
 
   # Set default order on the listings.
