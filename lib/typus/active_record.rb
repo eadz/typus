@@ -14,36 +14,33 @@ module Typus
            :conditions => ["#{condition} > ?", current]
     end
 
-    def self.list_fields
-      @config = Typus::Configuration.config["#{self}"]["list"].split(" ")
-      @fields = Array.new
-      @config.each { |i| (@fields ) << i.split("::") }
-      @fields << [["name", "string"]] if @fields.size == 0
-      return @fields
-    end
-
-    def self.form_fields
-      @config = Typus::Configuration.config["#{self}"]["form"].split(" ")
-      @fields = Array.new
-      @config.each { |i| @fields << i.split("::") }
-      @fields << [["name", "string"]] if @fields.size == 0
-      return @fields
-    end
-
-    def self.form_fields_externals
-      @config = Typus::Configuration.config
-      @fields = Array.new
-      if @config["#{self}"]["form_externals"]
-        @config["#{self}"]["form_externals"].split(" ").each { |i| @fields << i.split("::") }
+    def self.fields(filter)
+      available_fields = self.inspect.gsub("#{self}", "").gsub("(", "").gsub(")", "").split(", ")
+      fields = Typus::Configuration.config["#{self}"]['fields'][filter].split(" ")
+      fields_with_type = Array.new
+      fields.each do |f|
+        available_fields.each do |af|
+          af = af.split(": ")
+          @field_type = af[1] if af[0] == f
+          case f
+          when /_id/
+            @field_type = 'selector'
+          when 'uploaded_data'
+            @field_type = 'blob'
+          end
+        end
+        fields_with_type << [ f, @field_type ]
       end
-      return @fields
+      return fields_with_type
+    rescue
+      []
     end
 
     def self.default_order
       @config = Typus::Configuration.config
       @order = Array.new
-      if @config["#{self}"]["order"]
-        @config["#{self}"]["order"].split(" ").each { |i| @order << i.split("::") }
+      if @config["#{self}"]["order_by"]
+        @config["#{self}"]["order_by"].split(" ").each { |i| @order << i.split("::") }
       else
         @order << ['id', 'asc']
       end
@@ -51,33 +48,43 @@ module Typus
     end
 
     def self.search_fields
-      @config = Typus::Configuration.config
-      @search = Array.new
-      if @config["#{self}"]["search"]
-        @config = @config["#{self}"]["search"].split(" ")
-        @config.each { |i| ( @search ) << i }
+      config = Typus::Configuration.config
+      search = Array.new
+      if config["#{self}"]["search"]
+        config = config["#{self}"]["search"].split(" ")
+        config.each { |i| ( search ) << i }
       end
-      return @search
+      return search
     end
 
     def self.filters
-      @config = Typus::Configuration.config
-      @filters = Array.new
-      if @config["#{self}"]["filters"]
-        @config = @config["#{self}"]["filters"].split(" ")
-        @config.each { |i| @filters << i.split("::") }
+      available_fields = self.inspect.gsub("#{self}", "").gsub("(", "").gsub(")", "").split(", ")
+      fields = Typus::Configuration.config["#{self}"]['filters'].split(" ")
+      fields_with_type = Array.new
+      fields.each do |f|
+        available_fields.each do |af|
+          af = af.split(": ")
+          @field_type = af[1] if af[0] == f
+        end
+        fields_with_type << [ f, @field_type ]
       end
-      return @filters
+      return fields_with_type
+    rescue
+      []
     end
 
-    def self.actions
-      @config = Typus::Configuration.config
-      @actions = Array.new
-      if @config["#{self}"]["actions"]
-        @config = @config["#{self}"]["actions"].split(" ")
-        @config.each { |i| ( @actions ) << i.split("::") }
-      end
-      return @actions
+    def self.actions(filter)
+      config = Typus::Configuration.config
+      actions = config["#{self}"]['actions'][filter].split(" ")
+      return actions
+    end
+
+    def self.related
+      config = Typus::Configuration.config
+      related = config["#{self}"]['related'].split(" ")
+      return related
+    rescue
+      []
     end
 
   end

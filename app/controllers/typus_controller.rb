@@ -11,12 +11,12 @@ class TypusController < ApplicationController
   end
 
   def index
-    @conditions = "1 = 1 "
-    @conditions << (request.env['QUERY_STRING']).build_conditions(@model) if request.env['QUERY_STRING']
+    conditions = "1 = 1 "
+    conditions << (request.env['QUERY_STRING']).build_conditions(@model) if request.env['QUERY_STRING']
     @items = @model.paginate :page => params[:page], 
                              :per_page => Typus::Configuration.options[:per_page], 
                              :order => "#{params[:order_by]} #{params[:sort_order]}", 
-                             :conditions => "#{@conditions}"
+                             :conditions => "#{conditions}"
   rescue
     redirect_to :action => 'index'
   end
@@ -45,7 +45,7 @@ class TypusController < ApplicationController
   def update
     if @item.update_attributes(params[:item])
       flash[:notice] = "#{@model.to_s.capitalize} successfully updated."
-      redirect_to :action => 'edit', :id => @item
+      redirect_to typus_index_url(params[:model])
     else
       render :action => 'edit'
     end
@@ -53,7 +53,7 @@ class TypusController < ApplicationController
 
   def destroy
     @item.destroy
-    flash[:notice] = "#{@model.to_s.capitalize} has been successfully removed."
+    flash[:notice] = "#{@model.to_s.capitalize} successfully removed."
     redirect_to typus_index_url(params[:model])
   end
 
@@ -146,13 +146,13 @@ private
 
   # Model fields
   def fields
-    @fields = @model.list_fields
+    @fields = @model.fields("list")
   end
 
   # Model +form_fields+ & +form_externals+
   def form_fields
-    @form_fields = @model.form_fields
-    @form_fields_externals = @model.form_fields_externals
+    @form_fields = @model.fields("form")
+    @form_fields_externals = @model.related
   end
 
 private

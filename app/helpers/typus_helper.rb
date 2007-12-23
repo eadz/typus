@@ -3,7 +3,7 @@ module TypusHelper
   MODELS = YAML.load_file("#{RAILS_ROOT}/config/typus.yml")
 
   def head
-    @block = <<-HTML
+    html = <<-HTML
       <title>#{Typus::Configuration.options[:app_name]} &rsaquo; #{page_title}</title>
       <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
       <meta http-equiv="imagetoolbar" content="no" />
@@ -16,15 +16,15 @@ module TypusHelper
       #{stylesheet_link_tag "typus", :media => "screen"}
       #{javascript_include_tag :defaults}
     HTML
-    return @block
+    return html
   end
 
   def header
-    @block = <<-HTML
-    <h1>#{Typus::Configuration.options[:app_name]} #{feedback}</span></h1>
-    <h2>#{Typus::Configuration.options[:app_description]}</h2>
+    html = <<-HTML
+      <h1>#{Typus::Configuration.options[:app_name]} #{feedback}</span></h1>
+      <h2>#{Typus::Configuration.options[:app_description]}</h2>
     HTML
-    return @block
+    return html
   end
 
   def breadcrumbs
@@ -35,10 +35,10 @@ module TypusHelper
       when "index"
         @block << " &rsaquo; #{params[:model].capitalize}</li>\n"
       when "edit"
-        @block << " &rsaquo; <a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}\">#{params[:model].capitalize}</a></li>\n"
+        @block << " &rsaquo; #{link_to params[:model].capitalize, :action => 'index'}</li>\n"
         @block << " &rsaquo; Edit</li>\n"
       when "new"
-        @block << " &rsaquo; <a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}\">#{params[:model].capitalize}</a></li>\n"
+        @block << " &rsaquo; #{link_to params[:model].capitalize, :action => 'index'}</li>\n"
         @block << " &rsaquo; New</li>\n"
       end
     else
@@ -49,126 +49,113 @@ module TypusHelper
   end
 
   def modules
-    @block = "<div id=\"list\">"
-    @models = MODELS.to_a
+    html = "<div id=\"list\">"
     @modules = []
-    @models.each { |model| @modules += model[1]['module'].to_a }
+    MODELS.to_a.each { |model| @modules += model[1]['module'].to_a }
     @modules.uniq.each do |m|
-      @block << "<table>\n"
-      @block << "<tr><th colspan=\"2\">#{m.capitalize}</th></tr>\n"
+      html << "<table>\n"
+      html << "<tr><th colspan=\"2\">#{m.capitalize}</th></tr>\n"
       MODELS.each do |model|
-        @block << "<tr class=\"#{cycle('even', 'odd')}\"><td><a href=\"/#{Typus::Configuration.options[:prefix]}/#{model[0].downcase.pluralize}\">#{model[0].pluralize}</a><br /><small>#{model[1]['copy']}</small></td><td align=\"right\" valign=\"bottom\"><small><a href=\"/#{Typus::Configuration.options[:prefix]}/#{model[0].downcase.pluralize}/new\">Add</a></small></td></tr>\n" if model[1]['module'] == m
+        html << "<tr class=\"#{cycle('even', 'odd')}\"><td>"
+        html << "#{link_to model[0].pluralize, :action => 'index', :model => model[0].downcase.pluralize}"
+        html << "<br />"
+        html << "<small>#{model[1]['copy']}</small></td>"
+        html << "<td align=\"right\" valign=\"bottom\"><small>"
+        html << "#{link_to 'Add', :action => 'new', :model => model[0].downcase.pluralize}"
+        html << "</small></td></tr>\n"
       end
-      @block << "</table>\n"
-      @block << "<br /><div style=\"clear\"></div>"
+      html << "</table>\n<br /><div style=\"clear\"></div>"
     end
-    @block << "</div>"
-    return @block
+    html << "</div>"
+    return html
   end
 
   def actions
     @block = "<h2>Actions</h2>\n"
     case params[:action]
     when "index"
-      @block << <<-HTML
-        <ul>
-          <li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}/new\">Add #{params[:model].singularize.capitalize}</a></li>
-        </ul>
-      HTML
+      @block << "<ul>"
+      @block << "<li>#{link_to "Add #{params[:model].singularize.capitalize}", :action => 'new'}</li>"
+      @block << "</ul>"
+      @block << more_actions
     when "new"
-      @block << <<-HTML
-        <ul>
-          <li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}\">Back to list</a></li>
-        </ul>
-      HTML
+      @block << "<ul>"
+      @block << "<li>#{link_to "Back to list", :action => 'index'}</li>"
+      @block << "</ul>"
     when "edit"
-      @block << <<-HTML
-        <ul>
-          #{'<li>' + (link_to "Next #{params[:model].singularize.capitalize}", :action => "edit", :id => @next.id) + '</li>' if @next} 
-          #{'<li>' + (link_to "Previous #{params[:model].singularize.capitalize}", :action => 'edit', :id => @previous.id) + '<li>' if @previous}
-        </ul>
-        <ul>
-          <li><a href="/#{Typus::Configuration.options[:prefix]}/#{params[:model]}">Back to list</a></li>
-        </ul>
-      HTML
+      @block << "<ul>"
+      @block << "#{'<li>' + (link_to "Next", :action => "edit", :id => @next.id) + '</li>' if @next}"
+      @block << "#{'<li>' + (link_to "Previous", :action => 'edit', :id => @previous.id) + '<li>' if @previous}"
+      @block << "</ul>"
+      @block << more_actions
+      @block << "<ul>"
+      @block << "<li>#{link_to "Back to list", :action => 'index'}</li>"
+      @block << "</ul>"
     end
-    
-    # More Actions
-    if MODELS[@model.to_s]["actions"]
-      @more_actions = ""
-      @model.actions.each do |a|
-        if a[1].to_s == params[:action]
-          if params[:action] == "index"
-            @more_actions << "<li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}/run?task=#{a[0]}\">#{a[0].humanize}</a></li>"
-          elsif params[:action] == "edit"
-            @more_actions << "<li><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}/#{params[:id]}/run?task=#{a[0]}\">#{a[0].humanize}</a></li>"
-          end
-        end
-      end
-      unless @more_actions.empty?
-        @block << <<-HTML
-          <h2>More Actions</h2>
-          <ul>
-            #{@more_actions}
-          </ul>
-        HTML
-      end
-    end
-    
     return @block
+  end
+
+  def more_actions
+    if MODELS[@model.to_s]["actions"]
+      html = ""
+      case params[:action]
+      when 'index'
+        a = 'list'
+      when 'edit'
+        a = 'form'
+      end
+      @model.actions(a).each { |a| html << "<li>#{link_to a.humanize, :action => 'run', :task => a}</li>" }
+      html = "<ul>#{html}</ul>" unless html.empty?
+    end
   end
 
   def search
     if MODELS[@model.to_s]["search"]
-      @search = <<-HTML
+      search = <<-HTML
         <h2>Search</h2>
-        <form action="/#{Typus::Configuration.options[:prefix]}/#{params[:model]}" method="get">
-        <p><input id="search" name="search" type="text" value="#{params[:query]}"/></p>
+        <form action="" method="get">
+        <p><input id="search" name="search" type="text" value="#{params[:search]}"/></p>
         </form>
       HTML
     end
-    return @search
+    return search
   end
 
   def filters
-    if MODELS[@model.to_s]["filters"]
-      @filters = "<h2>Filter"
-      @filters << " <small><a href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}\">Remove</a></small>" if request.env['QUERY_STRING']
-      @filters << "</h2>"
+    current_request = request.env['QUERY_STRING'] || []
+    if @model.filters
+      html = "<h2>Filter <small>"
+      html << "#{link_to "Remove", :action => 'index'}" if current_request.size > 0
+      html << "</small></h2>"
       @model.filters.each do |f|
         case f[1]
-        when "boolean"
-          @filters << "<h3>By #{f[0].humanize}</h3>\n"
-          @filters << "<ul>\n"
+        when 'boolean'
+          html << "<h3>By #{f[0].humanize}</h3>\n"
+          html << "<ul>\n"
           %w( true false ).each do |status|
-            @current_request = (request.env['QUERY_STRING']) ? request.env['QUERY_STRING'].split("&") : []
-            @status = (@current_request.include? "#{f[0]}=#{status}") ? "on" : "off"
-            @filters << "<li><a class=\"#{@status}\" href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}?#{(@current_request.delete_if { |x| x.include? "#{f[0]}" } + ["#{f[0]}=#{status}"]).join("&")}\">#{status.capitalize}</a></li>\n"
+            switch = (current_request.include? "#{f[0]}=#{status}") ? 'on' : 'off'
+            html << "<li>#{link_to status.capitalize, { :params => params.merge(f[0] => status) }, :class => switch}</li>"
           end
-          @filters << "</ul>\n"
-        when "datetime"
-          @filters << "<h3>By #{f[0].humanize}</h3>\n"
-          @filters << "<ul>\n"
+          html << "</ul>\n"
+        when 'datetime'
+          html << "<h3>By #{f[0].humanize}</h3>\n<ul>\n"
           %w(today past_7_days this_month this_year).each do |timeline|
-            @current_request = (request.env['QUERY_STRING']) ? request.env['QUERY_STRING'].split("&") : []
-            @status = (@current_request.include? "#{f[0]}=#{timeline}") ? "on" : "off"
-            @filters << "<li><a class=\"#{@status}\" href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}?#{(@current_request.delete_if { |x| x.include? "#{f[0]}" } + ["#{f[0]}=#{timeline}"]).join("&")}\">#{timeline.humanize.capitalize}</a></li>\n"
+            switch = (current_request.include? "#{f[0]}=#{timeline}") ? 'on' : 'off'
+            html << "<li>#{link_to timeline.humanize.capitalize, { :params => params.merge(f[0] => timeline) }, :class => switch}</li>"
           end
-          @filters << "</ul>\n"
-        when "collection"
-          @filters << "<h3>By #{f[0].humanize}</h3>"
-          @model = f[0].capitalize.constantize
-          @filters << "<ul>\n"
-          @model.find(:all).each do |item|
-            @current_request = (request.env['QUERY_STRING']) ? request.env['QUERY_STRING'].split("&") : []
-            @status = (@current_request.include? "#{f[0]}_id=#{item.id}") ? "on" : "off"
-            @filters << "<li><a class=\"#{@status}\" href=\"/#{Typus::Configuration.options[:prefix]}/#{params[:model]}?#{f[0]}_id=#{item.id}\">#{item.name}</a></li>\n"
+          html << "</ul>\n"
+        when 'integer'
+          html << "<h3>By #{f[0].humanize}</h3>\n<ul>\n"
+          model = f[0].split("_id").first.capitalize.constantize
+          model.find(:all).each do |item|
+            switch = (current_request.include? "#{f[0]}=#{item.id}") ? 'on' : 'off'
+            html << "<li>#{link_to item.name, { :params => params.merge(f[0] => item) }, :class => switch}</li>"
           end
-          @filters << "</ul>\n"
+          html << "</ul>\n"
         end
       end
     end
-    return @filters
+    return html
   end
 
   def feedback
@@ -180,11 +167,13 @@ module TypusHelper
   end
 
   def page_title
-    "#{params[:model].capitalize if params[:model]} #{"&rsaquo;" if params[:model]} #{params[:action].capitalize if params[:action]}"
+    html = ""
+    html << "#{params[:model].capitalize} &rsaquo; " if params[:model]
+    html << "#{params[:action].capitalize}" if params[:action]
   end
 
   def footer
-    "<p><a href=\"http://intraducibles.net/work/typus\">Typus #{Typus::Configuration.version}</a></p>"
+    "<p>#{link_to "Typus", "http://intraducibles.net/projects/typus"}</p>"
   end
 
   def signature
@@ -203,21 +192,21 @@ module TypusHelper
 
     # Header of the table
     @block << "<tr>"
-    @model.list_fields.each do |column|
-      @order_by = "#{column[0]}#{"_id" if column[1] == 'collection'}"
-      @sort_order = (params[:sort_order] == "asc") ? "desc" : "asc"
+    @model.fields("list").each do |column|
+      order_by = "#{column[0]}#{"_id" if column[1] == 'collection'}"
+      sort_order = (params[:sort_order] == "asc") ? "desc" : "asc"
       @block << <<-HTML
-        <th><a href="?order_by=#{@order_by}&sort_order=#{@sort_order}"><div class=\"#{@sort_order}\">#{column[0].humanize}</div></a></th>
+        <th><a href="?order_by=#{order_by}&sort_order=#{sort_order}"><div class=\"#{sort_order}\">#{column[0].humanize}</div></a></th>
       HTML
     end
     @block << "<th>&nbsp;</th>"
     @block << "</tr>"
-
+    
     # Body of the table
-
+    
     @items.each do |item|
       @block << "<tr class=\"#{cycle('even', 'odd')}\" id=\"item_#{item.id}\">"
-      @model.list_fields.each do |column|
+      @model.fields("list").each do |column|
         case column[1]
         when 'string'
           @block << <<-HTML
@@ -227,16 +216,17 @@ module TypusHelper
           @block << <<-HTML
             <td width="20px" align="center">
               #{image_tag(status = item.send(column[0])? "typus_status_true.gif" : "typus_status_false.gif")}
-              </td>
+            </td>
           HTML
         when "datetime"
           @block << <<-HTML
             <td width="80px">#{fmt_date(item.send(column[0]))}</td>
           HTML
-        when "collection"
-          this_model = column[0].capitalize.constantize
-          if (this_model.new.attributes.include? 'name') || (this_model.new.methods.include? 'name')
-            @block << "<td>#{item.send(column[0]).name if item.send(column[0])}</td>"
+        # FIXME: This should be a regular expression to detect _id
+        else # when /_id/
+          this_model = column[0].split("_id").first.capitalize.constantize
+          if (this_model.new.methods.include? 'name')
+            @block << "<td>#{item.send(column[0].split("_id").first).name if item.send(column[0])}</td>"
           else
             @block << "<td>#{"#{this_model}##{item.send(column[0]).id}" if item.send(column[0])}</td>"
           end
@@ -261,87 +251,68 @@ module TypusHelper
   end
 
   def typus_form
-    @block = error_messages_for :item, :header_tag => "h3"
+    html = error_messages_for :item, :header_tag => "h3"
     @form_fields.each do |field|
-      @block << "<p><label>#{field[0].humanize}</label>"
-      case field[1]
-      when "string"
-        @block << "#{text_field :item, field[0], :class => 'big'}"
-      when "text"
-        @block << "#{text_area :item, field[0], :rows => field[2]}"
-      when "datetime"
-        @block << "#{datetime_select :item, field[0]}"
-      when "password"
-        @block << "#{password_field :item, field[0], :class => 'big'}"
-      when "boolean"
-        @block << "#{check_box :item, field[0]} Checked if active"
-      when "file"
-        @block << "#{file_field :item, field[0], :style => 'border: 0px;'}"
-      when "tags"
-        @block << "#{text_field :item, field[0], :value => @item.tags.join(', '), :class => 'big'}"
-      when "selector"
-        @values = field[2].constantize
-        @block << "#{select :item, field[0], @values.collect { |p| [ "#{p[0]} (#{p[1]})", p[1] ] }}"
-      when "collection"
-        @collection = field[0].singularize.capitalize.constantize
-        if (@collection.new.methods.include? "name") || (@collection.new.attributes.include? 'name' )
-          @block << "#{collection_select :item, "#{field[0]}_id", @collection.find(:all), :id, :name, :include_blank => true}"
-        else
-          @block << "#{select :item, "#{field[0]}_id", @collection.find(:all).collect { |p| ["#{@collection}##{p.id}", p.id] }, :include_blank => true}"
-        end
-      when "multiple"
-        multiple = field[0].singularize.capitalize.constantize
-        rel_model = "#{field[0].singularize}_id"
-        current_model = params[:model].singularize.capitalize.constantize
-        @selected = current_model.find(params[:id]).send(field[0]).collect { |t| t.send(rel_model).to_i } if params[:id]
-        
-        # FIXME: +tag_ids+ should be dynamic
-        
-        @block << <<-HTML
-          <select name="item[tag_ids][]" multiple="multiple">
-            #{options_from_collection_for_select(multiple.find(:all), :id, :name, @selected)}
-          </select>
-        HTML
+      case field[0] # Field Name
+      when 'uploaded_data'
+        html << "<p><label>Upload File</label>"
       else
-        @block << "Unexisting"
+        html << "<p><label>#{field[0].humanize}</label>"
       end
-      @block << "</p>"
+      case field[1] # Field Type
+      when "boolean"
+        html << "#{check_box :item, field[0]} Checked if active"
+      when "blob"
+        html << "#{file_field :item, field[0], :style => 'border: 0px;'}"
+      when "datetime"
+        html << "#{datetime_select :item, field[0]}"
+      when "password"
+        html << "#{password_field :item, field[0], :class => 'big'}"
+      when "string"
+        html << "#{text_field :item, field[0], :class => 'big'}"
+      when "text"
+        html << "#{text_area :item, field[0], :rows => field[2] || '10'}"
+      when "selector"
+        related = field[0].split("_id").first.capitalize.constantize
+        if related.new.methods.include? 'name'
+          html << "#{collection_select :item, "#{field[0]}", related.find(:all), :id, :name, :include_blank => true}"
+        else
+          html << "#{select :item, "#{field[0]}", related.find(:all).collect { |p| ["#{related}##{p.id}", p.id] }, :include_blank => true}"
+        end
+      end
+      html << "</p>"
     end
-    return @block
+    return html
   end
 
   # TODO: Don't show form if there are not more Items available.
   def typus_form_externals
-    @block = ""
+    html = ""
     @form_fields_externals.each do |field|
-      model_to_relate = field[0].singularize.capitalize.constantize
-      @block << <<-HTML
-        <h2 style="margin: 20px 0px 10px 0px;">#{field[0].capitalize} <small><a href="/#{Typus::Configuration.options[:prefix]}/#{field[0]}/new?back_to=#{params[:model]}&item_id=#{params[:id]}">Add new</a></small></h2>
-      HTML
-      
-      @items_to_relate = (model_to_relate.find(:all) - @item.send(field[0]))
-        
-      if @items_to_relate.size > 0
-        @block << <<-HTML
+      model_to_relate = field.singularize.capitalize.constantize
+      html << "<h2 style=\"margin: 20px 0px 10px 0px;\">#{field.capitalize}</h2>"
+      items_to_relate = (model_to_relate.find(:all) - @item.send(field))
+      if items_to_relate.size > 0
+        html << <<-HTML
           #{form_tag :action => "relate", :related => "#{field[0]}", :id => params[:id]}
-          <p>#{select "model_id_to_relate", :related_id, @items_to_relate.map { |f| [f.name, f.id] }}
+          <p>#{select "model_id_to_relate", :related_id, items_to_relate.map { |f| [f.name, f.id] }}
         &nbsp; #{submit_tag "Add"}</p>
           </form>
         HTML
       end
       current_model = params[:model].singularize.capitalize.constantize
-      @items = current_model.find(params[:id]).send(field[0])
-      @block << typus_table(field[0]) if @items.size > 0
+      @items = current_model.find(params[:id]).send(field)
+      html << typus_table(field) if @items.size > 0
     end
-    return @block
+    return html
   end
 
-  def process_query(query)
+  def process_query(q)
     if params[:search]
-      @query = "Search results on <strong>#{params[:model]}</strong> "
-      @query << "for <strong>\"#{params[:search]}\"</strong>"
+      query = "Search results on <strong>#{params[:model]}</strong> "
+      query<< "for <strong>\"#{params[:search]}\"</strong>"
     end
-    return @query
+    return query
   end
 
 end

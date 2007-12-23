@@ -1,35 +1,43 @@
 <% content_for :sidebar do %>
-	<%= actions %>
-	<%= search %>
-	<%= filters %>
+  <%= actions %>
+  <%= search %>
+  <%= filters %>
 <% end %>
 
 <h2><%= params[:model].capitalize %></h2>
 
 <div id="list">
 
-	<!-- Query -->
-	<% if params[:query] %>
-	<div class="box" id="empty">
-		<p><%= process_query(request.env['QUERY_STRING']) %>. <%= link_to "Remove filter?" %></p>
-	</div>
-	<% end %>
-	<!-- /Query -->
+  <!-- Query -->
+  <% if params[:query] %>
+    <div class="box" id="empty">
+      <p><%= process_query(request.env['QUERY_STRING']) %>. <%= link_to "Remove filter?" %></p>
+    </div>
+  <% end %>
+  <!-- /Query -->
 
-	<!-- Listing -->
-	<% if @items.size > 0 -%>
-		<%= typus_table %>
-		<%= will_paginate @items %>
-	<% else %>
-		<div class="box" id="empty">
-			<p>No <strong><%= params[:model] %></strong> under this filter.</p>
-		</div>
-	<% end %>
-	<!-- /Listing -->
+  <!-- Feedback -->
+  <% if params.size > 5 %>
+    <% unless @items.size > 0 -%>
+      <div class="box" id="empty">
+        <p>No <strong><%= params[:model] %></strong> under this filter.</p>
+      </div>
+    <% end %>
+  <% end %>
+  <!-- /Feedback -->
 
-	<% if @model.count == 0 %>
-	<p><%= link_to "Add the first #{params[:model].singularize}", :action => "new" %></p>
-	<% end %>
+  <!-- Listing -->
+  <% if @items.size > 0 -%>
+    <%= typus_table %>
+    <%= will_paginate @items %>
+  <% end %>
+  <!-- /Listing -->
+
+  <!-- Shown when there are no items -->
+  <% if @model.count == 0 %>
+    <p><%= link_to "Add the first #{params[:model].singularize}", :action => "new" %></p>
+  <% end %>
+  <!-- /Shown when there are no items -->
 
 </div>
 
