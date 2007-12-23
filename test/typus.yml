@@ -1,9 +1,11 @@
 Post:
-  list: title::string created_at::datetime status::boolean
-  form: title::string body::text created_at::datetime status::body
-  form_externals: categories
-  order: created_at::asc
-  filters: status::boolean created_at::datetime category::collection
-  actions: cleanup::index send_as_newsletter::edit
+  fields:
+    list: title created_at status
+    form: title body created_at status
+  actions:
+    list: cleanup
+    form: send_as_newsletter
+  related: categories
+  filters: status created_at category
   search: title
   module: blog
