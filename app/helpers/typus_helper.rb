@@ -193,7 +193,6 @@ module TypusHelper
     html << "<th>&nbsp;</th>\n</tr>"
     
     # Body of the table
-    
     @items.each do |item|
       html << "<tr class=\"#{cycle('even', 'odd')}\" id=\"item_#{item.id}\">"
       @model.typus_fields_for('list').each do |column|
@@ -246,16 +245,16 @@ module TypusHelper
         html << "#{datetime_select :item, field[0]}"
       when "password"
         html << "#{password_field :item, field[0], :class => 'big'}"
-      when "string"
+      when "string", "integer"
         html << "#{text_field :item, field[0], :class => 'big'}"
       when "text"
-        html << "#{text_area :item, field[0], :rows => field[2] || '10'}"
+        html << "#{text_area :item, field[0], :rows => '10'}"
       when "selector"
         values = eval field[0].upcase
         html << "#{select :item, field[0], values.collect { |p| [ "#{p[0]} (#{p[1]})", p[1] ] }, :include_blank => true}"
       when "collection"
         related = field[0].split("_id").first.capitalize.constantize
-        if related.new.methods.include? 'name'
+        if (related.new.attributes.keys.include? 'name') || (related.new.methods.include? 'name')
           html << "#{collection_select :item, "#{field[0]}", related.find(:all), :id, :name, :include_blank => true}"
         else
           html << "#{select :item, "#{field[0]}", related.find(:all).collect { |p| ["#{related}##{p.id}", p.id] }, :include_blank => true}"
