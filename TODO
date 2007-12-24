@@ -1,11 +1,14 @@
-[ ] Sort by LANGUAGES is not working.
 [X] Sort by Collection is not working. (sort_by=category&sort_order=asc)
 [X] Sidebar filters should read current filters.
 [X] Dashboard listings should show groups.
 [X] "More Actions" should be only be shown when they exist.
 [X] Write tests.
-[ ] Don't show sidebar filters if doesn't exist. (Categories ...)
+[X] Don't show sidebar filters if doesn't exist. (Categories ...)
 [X] Refactor TypusController.
+[X] Update searches ... a "nice" way of set default order.
+[X] Merge params on table headers.
+[ ] Sort by LANGUAGES is not working.
 [ ] Add -Multipart- to forms.
 [ ] Add more and more tests ...
-[ ] Update searches ... a "nice" way of set default order.
+[ ] eval "languages".upcase
+[ ] Fix problems with the selectors of %w( item1 item2 item3 item4 )
