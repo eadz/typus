@@ -7,6 +7,9 @@ Once installed and configured you can see login at http://0.0.0.0:3000/admin/
 == Requirements
 
     script/plugin install svn://errtheblog.com/svn/plugins/will_paginate
+    script/plugin install attachment_fu
+
+NOTE: <code>attachment_fu</code> is only needed if you need uploads.
 
 == Example Usage
 
@@ -29,72 +32,45 @@ You can place this settings in a initializer at <code>config/initializers/typus.
 
 If the configuration file is broken you'll see a +typus.yml+ text on the admin interface.
 
-Configuration file looks like this:
+=== Typus Fields
 
-    Post:
-      list: title::string created_at::datetime status::boolean
-      form: title::string body::text::15 created_at::datetime status::boolean
-      search: name::asc
-      filters: status::boolean created_at::datetime
+    fields:
+      list: name, created_at, category_id, status
+      form: name, body, created_at, status
 
-=== Typus Lists
+If you want to be able to upload data to your application add `uploaded_data` to form.
 
-    name::string
-    created_at::datetime
-    categories::collection
-    status::boolean
-    language::LANGUAGES
-
-where +LANGUAGES+ is defined at <code>config/initializers/defaults.rb</code> as
-
-    LANGUAGES = [["English", "en"], ["Spanish", "es"]]
-
-=== Forms
-
-    attribute::string
-    attribute::text::10
-    attribute::collection
-    status::boolean
-    created_at::datetime
-    language::selector::LANGUAGES
-    tags::multiple
+(Upload will only work with `attachment_fu`)
 
 === External Forms
 
-    categories::collection
+    externals: category_id
 
 === Filters
 
-    status::boolean
-    author::collection
-    created_at::datetime
+    filters: status author_id created_at
 
 === Order
 
-    order: attribute1::asc attribute2::desc
+    order_by: attribute1 attribute2
 
 === Searches
 
-    search: attribute1::asc attribute2::desc
+    search: attribute1 attribute2
 
 === Want more actions?
 
-    actions: notify_all::index notify::edit
+    actions:
+      list: notify_all
+      form: notify
 
-These actions will only be available on the context +index+ and +edit+ of Typus.
+These actions will only be available on the context +list+ and +form+ of Typus.
 
 === Module
 
 Used to group models on the main screen.
 
-    Post:
-      module: Site
-    Category:
-      module: Site
-    Template:
-      module: System
-    Download:
-      module: System
+    module: Site
 
 == Acknowledgments
 
