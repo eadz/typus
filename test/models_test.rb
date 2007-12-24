@@ -13,7 +13,6 @@ class Post < ActiveRecord::Base
   end
 
   def self.cleanup
-    # destroy_all
   end
 
 end
