@@ -30,11 +30,13 @@ module Typus
           @field_type = af[1] if af[0] == f
           case f
           when /_id/
-            @field_type = 'selector'
+            @field_type = 'collection'
           when 'uploaded_data'
             @field_type = 'blob'
           end
         end
+        @field_type = (eval f.upcase) rescue @field_type
+        @field_type = 'selector' if @field_type.class == Array
         fields_with_type << [ f, @field_type ]
       end
       return fields_with_type
