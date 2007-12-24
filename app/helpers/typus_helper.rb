@@ -197,7 +197,7 @@ module TypusHelper
       html << "<tr class=\"#{cycle('even', 'odd')}\" id=\"item_#{item.id}\">"
       @model.typus_fields_for('list').each do |column|
         case column[1]
-        when 'string', 'integer'
+        when 'string', 'integer', 'selector'
           html << "<td>#{link_to item.send(column[0]), :model => model, :action => 'edit', :id => item.id}</td>"
         when 'boolean'
           html << "<td width=\"20px\" align=\"center\">#{image_tag(status = item.send(column[0])? "typus_status_true.gif" : "typus_status_false.gif")}</td>"
