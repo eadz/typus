@@ -12,3 +12,4 @@
 [ ] Add more and more tests ...
 [ ] eval "languages".upcase
 [ ] Fix problems with the selectors of %w( item1 item2 item3 item4 )
+[X] Related? This relationship should be changed.

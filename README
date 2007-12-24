@@ -52,7 +52,9 @@ If you want to be able to upload data to your application add `uploaded_data` to
 
 === Order
 
-    order_by: attribute1 attribute2
+    order_by: attribute1
+
+NOTE: <code>order_by</code> only accepts one field.
 
 === Searches
 
