@@ -198,13 +198,13 @@ module TypusHelper
       html << "<tr class=\"#{cycle('even', 'odd')}\" id=\"item_#{item.id}\">"
       @model.typus_fields_for('list').each do |column|
         case column[1]
-        when 'string'
+        when 'string', 'integer'
           html << "<td>#{link_to item.send(column[0]), :model => model, :action => 'edit', :id => item.id}</td>"
         when 'boolean'
           html << "<td width=\"20px\" align=\"center\">#{image_tag(status = item.send(column[0])? "typus_status_true.gif" : "typus_status_false.gif")}</td>"
         when "datetime"
           html << "<td width=\"80px\">#{fmt_date(item.send(column[0]))}</td>"
-        else
+        when "selector"
           this_model = column[0].split("_id").first.capitalize.constantize
           if (this_model.new.methods.include? 'name')
             html << "<td>#{item.send(column[0].split("_id").first).name if item.send(column[0])}</td>"
@@ -251,6 +251,9 @@ module TypusHelper
       when "text"
         html << "#{text_area :item, field[0], :rows => field[2] || '10'}"
       when "selector"
+        values = eval field[0].upcase
+        html << "#{select :item, field[0], values.collect { |p| [ "#{p[0]} (#{p[1]})", p[1] ] }, :include_blank => true}"
+      when "collection"
         related = field[0].split("_id").first.capitalize.constantize
         if related.new.methods.include? 'name'
           html << "#{collection_select :item, "#{field[0]}", related.find(:all), :id, :name, :include_blank => true}"
