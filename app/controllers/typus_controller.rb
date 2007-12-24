@@ -17,8 +17,8 @@ class TypusController < ApplicationController
                              :per_page => Typus::Configuration.options[:per_page], 
                              :order => "#{params[:order_by]} #{params[:sort_order]}", 
                              :conditions => "#{conditions}"
-  #rescue
-  #  redirect_to :action => 'index'
+  rescue
+    redirect_to :action => 'index'
   end
 
   def new
@@ -155,7 +155,7 @@ private
   # Model +form_fields+ & +form_externals+
   def form_fields
     @form_fields = @model.typus_fields_for('form')
-    @form_fields_externals = @model.typus_defaults_for('related')
+    @form_fields_externals = @model.typus_defaults_for('relationships')
   end
 
 private
