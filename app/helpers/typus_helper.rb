@@ -16,7 +16,6 @@ module TypusHelper
       #{stylesheet_link_tag "typus", :media => "screen"}
       #{javascript_include_tag :defaults}
     HTML
-    return html
   end
 
   def header
@@ -24,28 +23,26 @@ module TypusHelper
       <h1>#{Typus::Configuration.options[:app_name]} #{feedback}</span></h1>
       <h2>#{Typus::Configuration.options[:app_description]}</h2>
     HTML
-    return html
   end
 
   def breadcrumbs
-    @block = "<p>"
+    html = "<p>"
     if params[:model]
-      @block << "<a href=\"/#{Typus::Configuration.options[:prefix]}/\">Home</a>"
+      html << "<a href=\"/#{Typus::Configuration.options[:prefix]}/\">Home</a>"
       case params[:action]
       when "index"
-        @block << " &rsaquo; #{params[:model].capitalize}</li>\n"
+        html << " &rsaquo; #{params[:model].capitalize}</li>\n"
       when "edit"
-        @block << " &rsaquo; #{link_to params[:model].capitalize, :action => 'index'}</li>\n"
-        @block << " &rsaquo; Edit</li>\n"
+        html << " &rsaquo; #{link_to params[:model].capitalize, :action => 'index'}</li>\n"
+        html << " &rsaquo; Edit</li>\n"
       when "new"
-        @block << " &rsaquo; #{link_to params[:model].capitalize, :action => 'index'}</li>\n"
-        @block << " &rsaquo; New</li>\n"
+        html << " &rsaquo; #{link_to params[:model].capitalize, :action => 'index'}</li>\n"
+        html << " &rsaquo; New</li>\n"
       end
     else
-      @block << "Home"
+      html << "Home"
     end
-    @block << "</p>"
-    return @block
+    html << "</p>"
   end
 
   def modules
@@ -67,46 +64,42 @@ module TypusHelper
       html << "</table>\n<br /><div style=\"clear\"></div>"
     end
     html << "</div>"
-    return html
   end
 
   def actions
-    @block = "<h2>Actions</h2>\n"
+    html = "<h2>Actions</h2>\n"
     case params[:action]
     when "index"
-      @block << "<ul>"
-      @block << "<li>#{link_to "Add #{params[:model].singularize.capitalize}", :action => 'new'}</li>"
-      @block << "</ul>"
-      @block << more_actions
+      html << "<ul>"
+      html << "<li>#{link_to "Add #{params[:model].singularize.capitalize}", :action => 'new'}</li>"
+      html << "</ul>"
+      html << more_actions
     when "new"
-      @block << "<ul>"
-      @block << "<li>#{link_to "Back to list", :action => 'index'}</li>"
-      @block << "</ul>"
+      html << "<ul>"
+      html << "<li>#{link_to "Back to list", :action => 'index'}</li>"
+      html << "</ul>"
     when "edit"
-      @block << "<ul>"
-      @block << "#{'<li>' + (link_to "Next", :action => "edit", :id => @next.id) + '</li>' if @next}"
-      @block << "#{'<li>' + (link_to "Previous", :action => 'edit', :id => @previous.id) + '<li>' if @previous}"
-      @block << "</ul>"
-      @block << more_actions
-      @block << "<ul>"
-      @block << "<li>#{link_to "Back to list", :action => 'index'}</li>"
-      @block << "</ul>"
+      html << "<ul>"
+      html << "#{'<li>' + (link_to "Next", :action => "edit", :id => @next.id) + '</li>' if @next}"
+      html << "#{'<li>' + (link_to "Previous", :action => 'edit', :id => @previous.id) + '<li>' if @previous}"
+      html << "</ul>"
+      html << more_actions
+      html << "<ul>"
+      html << "<li>#{link_to "Back to list", :action => 'index'}</li>"
+      html << "</ul>"
     end
-    return @block
   end
 
   def more_actions
-    if MODELS[@model.to_s]["actions"]
-      html = ""
-      case params[:action]
-      when 'index'
-        a = 'list'
-      when 'edit'
-        a = 'form'
-      end
-      @model.actions(a).each { |a| html << "<li>#{link_to a.humanize, :action => 'run', :task => a}</li>" }
-      html = "<ul>#{html}</ul>" unless html.empty?
+    html = ""
+    case params[:action]
+    when 'index'
+      a = 'list'
+    when 'edit'
+      a = 'form'
     end
+    @model.typus_actions_for(a).each { |a| html << "<li>#{link_to a.humanize, :action => 'run', :task => a}</li>" }
+    html = "<ul>#{html}</ul>" if html
   end
 
   def search
@@ -118,16 +111,15 @@ module TypusHelper
         </form>
       HTML
     end
-    return search
   end
 
   def filters
     current_request = request.env['QUERY_STRING'] || []
-    if @model.filters
+    if @model.typus_filters.size > 0
       html = "<h2>Filter <small>"
       html << "#{link_to "Remove", :action => 'index'}" if current_request.size > 0
       html << "</small></h2>"
-      @model.filters.each do |f|
+      @model.typus_filters.each do |f|
         case f[1]
         when 'boolean'
           html << "<h3>By #{f[0].humanize}</h3>\n"
@@ -145,13 +137,16 @@ module TypusHelper
           end
           html << "</ul>\n"
         when 'integer'
-          html << "<h3>By #{f[0].humanize}</h3>\n<ul>\n"
           model = f[0].split("_id").first.capitalize.constantize
-          model.find(:all).each do |item|
-            switch = (current_request.include? "#{f[0]}=#{item.id}") ? 'on' : 'off'
-            html << "<li>#{link_to item.name, { :params => params.merge(f[0] => item) }, :class => switch}</li>"
+          if model.count > 0
+            html << "<h3>By #{f[0].humanize}</h3>\n<ul>\n"
+            # model = f[0].split("_id").first.capitalize.constantize
+            model.find(:all).each do |item|
+              switch = (current_request.include? "#{f[0]}=#{item.id}") ? 'on' : 'off'
+              html << "<li>#{link_to item.name, { :params => params.merge(f[0] => item) }, :class => switch}</li>"
+            end
+            html << "</ul>\n"
           end
-          html << "</ul>\n"
         end
       end
     end
@@ -188,47 +183,35 @@ module TypusHelper
 
   def typus_table(model = params[:model])
     @model = model.singularize.capitalize.constantize
-    @block = "<table>"
-
+    html = "<table>"
+    
     # Header of the table
-    @block << "<tr>"
-    @model.fields("list").each do |column|
+    html << "<tr>"
+    @model.typus_fields_for('list').each do |column|
       order_by = "#{column[0]}#{"_id" if column[1] == 'collection'}"
       sort_order = (params[:sort_order] == "asc") ? "desc" : "asc"
-      @block << <<-HTML
-        <th><a href="?order_by=#{order_by}&sort_order=#{sort_order}"><div class=\"#{sort_order}\">#{column[0].humanize}</div></a></th>
-      HTML
+      html << "<th>#{link_to "<div class=\"#{sort_order}\">#{column[0].humanize}</div>", { :params => params.merge( :order_by => order_by, :sort_order => sort_order) }}</th>"
     end
-    @block << "<th>&nbsp;</th>"
-    @block << "</tr>"
+    html << "<th>&nbsp;</th>\n</tr>"
     
     # Body of the table
     
     @items.each do |item|
-      @block << "<tr class=\"#{cycle('even', 'odd')}\" id=\"item_#{item.id}\">"
-      @model.fields("list").each do |column|
+      html << "<tr class=\"#{cycle('even', 'odd')}\" id=\"item_#{item.id}\">"
+      @model.typus_fields_for('list').each do |column|
         case column[1]
         when 'string'
-          @block << <<-HTML
-            <td>#{link_to item.send(column[0]), :model => model, :action => 'edit', :id => item.id}</td>
-          HTML
+          html << "<td>#{link_to item.send(column[0]), :model => model, :action => 'edit', :id => item.id}</td>"
         when 'boolean'
-          @block << <<-HTML
-            <td width="20px" align="center">
-              #{image_tag(status = item.send(column[0])? "typus_status_true.gif" : "typus_status_false.gif")}
-            </td>
-          HTML
+          html << "<td width=\"20px\" align=\"center\">#{image_tag(status = item.send(column[0])? "typus_status_true.gif" : "typus_status_false.gif")}</td>"
         when "datetime"
-          @block << <<-HTML
-            <td width="80px">#{fmt_date(item.send(column[0]))}</td>
-          HTML
-        # FIXME: This should be a regular expression to detect _id
-        else # when /_id/
+          html << "<td width=\"80px\">#{fmt_date(item.send(column[0]))}</td>"
+        else
           this_model = column[0].split("_id").first.capitalize.constantize
           if (this_model.new.methods.include? 'name')
-            @block << "<td>#{item.send(column[0].split("_id").first).name if item.send(column[0])}</td>"
+            html << "<td>#{item.send(column[0].split("_id").first).name if item.send(column[0])}</td>"
           else
-            @block << "<td>#{"#{this_model}##{item.send(column[0]).id}" if item.send(column[0])}</td>"
+            html << "<td>#{"#{this_model}##{item.send(column[0]).id}" if item.send(column[0])}</td>"
           end
         end
       end
@@ -242,12 +225,9 @@ module TypusHelper
       else
         @perform = link_to image_tag("typus_trash.gif"), { :action => "unrelate", :unrelated => model, :unrelated_id => item.id, :id => params[:id] }, :confirm => "Remove #{model.singularize} \"#{item.name}\" from #{params[:model].singularize}?"
       end
-      @block << <<-HTML
-        <td width="10px">#{@perform}</td>
-        </tr>
-      HTML
+      html << "<td width=\"10px\">#{@perform}</td>\n</tr>"
     end
-    @block << "</table>"
+    html << "</table>"
   end
 
   def typus_form
@@ -294,7 +274,7 @@ module TypusHelper
       items_to_relate = (model_to_relate.find(:all) - @item.send(field))
       if items_to_relate.size > 0
         html << <<-HTML
-          #{form_tag :action => "relate", :related => "#{field[0]}", :id => params[:id]}
+          #{form_tag :action => "relate", :related => field, :id => params[:id]}
           <p>#{select "model_id_to_relate", :related_id, items_to_relate.map { |f| [f.name, f.id] }}
         &nbsp; #{submit_tag "Add"}</p>
           </form>
@@ -305,6 +285,8 @@ module TypusHelper
       html << typus_table(field) if @items.size > 0
     end
     return html
+  rescue
+    ""
   end
 
   def process_query(q)

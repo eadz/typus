@@ -16,22 +16,16 @@
   <% end %>
   <!-- /Query -->
 
-  <!-- Feedback -->
-  <% if params.size > 5 %>
-    <% unless @items.size > 0 -%>
-      <div class="box" id="empty">
-        <p>No <strong><%= params[:model] %></strong> under this filter.</p>
-      </div>
-    <% end %>
-  <% end %>
-  <!-- /Feedback -->
-
-  <!-- Listing -->
+  <!-- Listing & Feedback -->
   <% if @items.size > 0 -%>
     <%= typus_table %>
     <%= will_paginate @items %>
+  <% else %>
+    <div class="box" id="empty">
+      <p>No <strong><%= params[:model] %></strong> under this filter.</p>
+    </div>
   <% end %>
-  <!-- /Listing -->
+  <!-- /Listing & Feedback -->
 
   <!-- Shown when there are no items -->
   <% if @model.count == 0 %>

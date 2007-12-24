@@ -17,8 +17,8 @@ class TypusController < ApplicationController
                              :per_page => Typus::Configuration.options[:per_page], 
                              :order => "#{params[:order_by]} #{params[:sort_order]}", 
                              :conditions => "#{conditions}"
-  rescue
-    redirect_to :action => 'index'
+  #rescue
+  #  redirect_to :action => 'index'
   end
 
   def new
@@ -38,8 +38,8 @@ class TypusController < ApplicationController
   def edit
     condition = ( @model.new.attributes.include? 'created_at' ) ? 'created_at' : 'id'
     current = ( condition == 'created_at' ) ? @item.created_at : @item.id
-    @previous = @model.find_previous(current, condition)
-    @next = @model.find_next(current, condition)
+    @previous = @model.typus_find_previous(current, condition)
+    @next = @model.typus_find_next(current, condition)
   end
 
   def update
@@ -134,9 +134,12 @@ private
 
   # Set default order on the listings.
   def set_order
-    @order = @model.default_order
-    params[:order_by] = params[:order_by] || @order[0].first || 'id'
-    params[:sort_order] = params[:sort_order] || @order[0].last || 'asc'
+    order = @model.typus_defaults_for('order_by')
+    if order
+      params[:order_by] = params[:order_by] || order[0]
+    else
+      params[:order_by] = params[:order_by] || 'id'
+    end
   end
 
   # Find
@@ -146,13 +149,13 @@ private
 
   # Model fields
   def fields
-    @fields = @model.fields("list")
+    @fields = @model.typus_fields_for("list")
   end
 
   # Model +form_fields+ & +form_externals+
   def form_fields
-    @form_fields = @model.fields("form")
-    @form_fields_externals = @model.related
+    @form_fields = @model.typus_fields_for('form')
+    @form_fields_externals = @model.typus_defaults_for('related')
   end
 
 private

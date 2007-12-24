@@ -2,21 +2,27 @@ module Typus
 
   class ActiveRecord::Base
 
-    def self.find_previous(current, condition)
+    def self.typus_find_previous(current, condition)
       find :first, 
            :order => "#{condition} DESC", 
            :conditions => ["#{condition} < ?", current]
     end
 
-    def self.find_next(current, condition)
+    def self.typus_find_next(current, condition)
       find :first, 
            :order => "#{condition} ASC", 
            :conditions => ["#{condition} > ?", current]
     end
 
-    def self.fields(filter)
+    # Form and list fields
+    #
+    # Someday we could use something like:
+    #   typus_list_fields :name, :created_at, :updated_at, :status
+    #   typus_form_fields :name, :body, :excerpt, :created_at
+    #
+    def self.typus_fields_for(filter)
       available_fields = self.inspect.gsub("#{self}", "").gsub("(", "").gsub(")", "").split(", ")
-      fields = Typus::Configuration.config["#{self}"]['fields'][filter].split(" ")
+      fields = Typus::Configuration.config["#{self}"]['fields'][filter].split(", ")
       fields_with_type = Array.new
       fields.each do |f|
         available_fields.each do |af|
@@ -32,34 +38,16 @@ module Typus
         fields_with_type << [ f, @field_type ]
       end
       return fields_with_type
-    rescue
-      []
     end
 
-    def self.default_order
-      @config = Typus::Configuration.config
-      @order = Array.new
-      if @config["#{self}"]["order_by"]
-        @config["#{self}"]["order_by"].split(" ").each { |i| @order << i.split("::") }
-      else
-        @order << ['id', 'asc']
-      end
-      return @order
-    end
-
-    def self.search_fields
-      config = Typus::Configuration.config
-      search = Array.new
-      if config["#{self}"]["search"]
-        config = config["#{self}"]["search"].split(" ")
-        config.each { |i| ( search ) << i }
-      end
-      return search
-    end
-
-    def self.filters
+    # Typus sidebar filters.
+    #
+    # Someday we could use something like:
+    #   typus_filters :created_at, :status
+    #
+    def self.typus_filters
       available_fields = self.inspect.gsub("#{self}", "").gsub("(", "").gsub(")", "").split(", ")
-      fields = Typus::Configuration.config["#{self}"]['filters'].split(" ")
+      fields = Typus::Configuration.config["#{self}"]['filters'].split(", ")
       fields_with_type = Array.new
       fields.each do |f|
         available_fields.each do |af|
@@ -73,18 +61,30 @@ module Typus
       []
     end
 
-    def self.actions(filter)
+    #  Extended actions for this model on Typus.
+    #
+    # Someday we could use something like:
+    #     typus_list_actions :action_one
+    #     typus_form_actions :action_two, :action_three
+    #
+    def self.typus_actions_for(filter)
       config = Typus::Configuration.config
-      actions = config["#{self}"]['actions'][filter].split(" ")
-      return actions
-    end
-
-    def self.related
-      config = Typus::Configuration.config
-      related = config["#{self}"]['related'].split(" ")
-      return related
+      actions = config["#{self}"]["actions"][filter].split(", ")
     rescue
       []
+    end
+
+    # Used for +order_by+, +related+, +search+ and more ...
+    #
+    # Someday we could use something like:
+    #     typus_search :title, :details
+    #     typus_related :tags, :categories
+    #     typus_order_by :title, :created_at
+    #
+    # Default order is ASC, except for datetime items that is DESC.
+    def self.typus_defaults_for(filter)
+      config = Typus::Configuration.config
+      related = config["#{self}"][filter].split(", ") if config["#{self}"][filter]
     end
 
   end

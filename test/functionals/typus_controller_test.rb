@@ -103,4 +103,11 @@ class TypusControllerTest < ActionController::TestCase
     assert_redirected_to typus_login_url
   end
 
+  def test_should_perform_a_search
+    @request.session[:typus] = true
+    get :index, { :model => 'posts', :search => 'neinonon' }
+    assert_response :success
+    assert_template 'index'
+  end
+
 end

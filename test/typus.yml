@@ -1,11 +1,12 @@
 Post:
   fields:
-    list: title created_at status
-    form: title body created_at status
+    list: title, created_at, status
+    form: title, body, created_at, status
   actions:
     list: cleanup
     form: send_as_newsletter
   related: categories
-  filters: status created_at category
+  filters: status, created_at, category
   search: title
+  order_by: created_at
   module: blog
