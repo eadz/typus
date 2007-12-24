@@ -204,7 +204,7 @@ module TypusHelper
           html << "<td width=\"20px\" align=\"center\">#{image_tag(status = item.send(column[0])? "typus_status_true.gif" : "typus_status_false.gif")}</td>"
         when "datetime"
           html << "<td width=\"80px\">#{fmt_date(item.send(column[0]))}</td>"
-        when "selector"
+        when "collection"
           this_model = column[0].split("_id").first.capitalize.constantize
           if (this_model.new.methods.include? 'name')
             html << "<td>#{item.send(column[0].split("_id").first).name if item.send(column[0])}</td>"
