@@ -205,7 +205,7 @@ module TypusHelper
           html << "<td width=\"80px\">#{fmt_date(item.send(column[0]))}</td>"
         when "collection"
           this_model = column[0].split("_id").first.capitalize.constantize
-          if (this_model.new.methods.include? 'name')
+          if (this_model.new.methods.include? 'name') || (this_model.new.attributes.keys.include? 'name')
             html << "<td>#{item.send(column[0].split("_id").first).name if item.send(column[0])}</td>"
           else
             html << "<td>#{"#{this_model}##{item.send(column[0]).id}" if item.send(column[0])}</td>"
