@@ -31,13 +31,9 @@ module TypusHelper
       html << "<a href=\"/#{Typus::Configuration.options[:prefix]}/\">Home</a>"
       case params[:action]
       when "index"
-        html << " &rsaquo; #{params[:model].capitalize}</li>\n"
-      when "edit"
-        html << " &rsaquo; #{link_to params[:model].capitalize, :action => 'index'}</li>\n"
-        html << " &rsaquo; Edit</li>\n"
-      when "new"
-        html << " &rsaquo; #{link_to params[:model].capitalize, :action => 'index'}</li>\n"
-        html << " &rsaquo; New</li>\n"
+        html << " &rsaquo; #{params[:model].capitalize}\n"
+      when "new", "edit"
+        html << " &rsaquo; #{link_to params[:model].capitalize, :action => 'index'} &rsaquo; #{params[:action].capitalize}"
       end
     else
       html << "Home"
@@ -45,21 +41,24 @@ module TypusHelper
     html << "</p>"
   end
 
+  # Dashboard list of modules
   def modules
     html = "<div id=\"list\">"
-    @modules = []
-    MODELS.to_a.each { |model| @modules += model[1]['module'].to_a }
-    @modules.uniq.each do |m|
+    modules = []
+    MODELS.to_a.each { |model| modules << ((model[1].has_key? 'module') ? model[1]['module'].capitalize : 'Typus') }
+    modules.uniq.each do |m|
       html << "<table>\n"
       html << "<tr><th colspan=\"2\">#{m.capitalize}</th></tr>\n"
       MODELS.each do |model|
-        html << "<tr class=\"#{cycle('even', 'odd')}\"><td>"
-        html << "#{link_to model[0].pluralize, :action => 'index', :model => model[0].downcase.pluralize}"
-        html << "<br />"
-        html << "<small>#{model[1]['copy']}</small></td>"
-        html << "<td align=\"right\" valign=\"bottom\"><small>"
-        html << "#{link_to 'Add', :action => 'new', :model => model[0].downcase.pluralize}"
-        html << "</small></td></tr>\n"
+        current = (model[1]['module']) ? model[1]['module'].capitalize : 'Typus'
+        if current == m
+          html << "<tr class=\"#{cycle('even', 'odd')}\"><td>"
+          html << "#{link_to model[0].pluralize, :action => 'index', :model => model[0].downcase.pluralize}<br />"
+          html << "<small>#{model[1]['description']}</small></td>"
+          html << "<td align=\"right\" valign=\"bottom\"><small>"
+          html << "#{link_to 'Add', :action => 'new', :model => model[0].downcase.pluralize}"
+          html << "</small></td></tr>\n"
+        end
       end
       html << "</table>\n<br /><div style=\"clear\"></div>"
     end
@@ -103,7 +102,7 @@ module TypusHelper
   end
 
   def search
-    if MODELS[@model.to_s]["search"]
+    if MODELS["#{@model}"]["search"]
       search = <<-HTML
         <h2>Search</h2>
         <form action="" method="get">
@@ -140,7 +139,6 @@ module TypusHelper
           model = f[0].split("_id").first.capitalize.constantize
           if model.count > 0
             html << "<h3>By #{f[0].humanize}</h3>\n<ul>\n"
-            # model = f[0].split("_id").first.capitalize.constantize
             model.find(:all).each do |item|
               switch = (current_request.include? "#{f[0]}=#{item.id}") ? 'on' : 'off'
               html << "<li>#{link_to item.name, { :params => params.merge(f[0] => item) }, :class => switch}</li>"
