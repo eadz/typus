@@ -28,7 +28,7 @@ module TypusHelper
   def breadcrumbs
     html = "<p>"
     if params[:model]
-      html << "<a href=\"/#{Typus::Configuration.options[:prefix]}/\">Home</a>"
+      html << "#{link_to "Home", typus_dashboard_url}" 
       case params[:action]
       when "index"
         html << " &rsaquo; #{params[:model].capitalize}\n"
