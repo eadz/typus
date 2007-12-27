@@ -10,7 +10,7 @@ module Typus
     # Typus::Configuration.options[:per_page] = 15
     #
     @@options = {
-        :app_name => 'Typus',
+        :app_name => 'Typus Admin',
         :app_description => '',
         :per_page => 15,
         :prefix => 'typus',
