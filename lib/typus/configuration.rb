@@ -9,15 +9,15 @@ module Typus
     # Typus::Configuration.options[:app_name] = "Your App Name"
     # Typus::Configuration.options[:per_page] = 15
     #
-    @@options = { 
+    @@options = {
         :app_name => 'Typus',
         :app_description => '',
         :per_page => 15,
-        :prefix => 'admin',
+        :prefix => 'typus',
         :username => 'admin',
         :password => 'typus',
-        :version => "2.0a",
-        :signature => ""
+        :version => '',
+        :signature => ''
         }
     mattr_reader :options
 
@@ -26,12 +26,10 @@ module Typus
     # Example:
     #
     #
-
     if ENV["RAILS_ENV"] == 'test'
       @@config = YAML.load_file("#{File.dirname(__FILE__)}/../../test/typus.yml")
-      # load(File.dirname(__FILE__) + "/schema.rb")
     else
-      @@config = YAML.load_file("#{RAILS_ROOT}/config/typus.yml") if File.exists? ("#{RAILS_ROOT}/config/typus.yml")
+      @@config = YAML.load_file("#{RAILS_ROOT}/config/typus.yml") if File.exists?("#{RAILS_ROOT}/config/typus.yml")
     end
     mattr_reader :config
 
