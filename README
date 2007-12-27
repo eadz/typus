@@ -2,7 +2,7 @@
 
 Rails Plugin to create a basic and default admin interface.
 
-Once installed and configured you can see login at http://0.0.0.0:3000/admin/
+Once installed and configured you can see login at http://0.0.0.0:3000/typus/
 
 == Requirements
 
