@@ -31,6 +31,8 @@ module Typus
           case f
           when /_id/
             @field_type = 'collection'
+          when /password/
+            @field_type = 'password'
           when 'uploaded_data'
             @field_type = 'blob'
           end
