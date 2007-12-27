@@ -7,10 +7,10 @@
 [X] Refactor TypusController.
 [X] Update searches ... a "nice" way of set default order.
 [X] Merge params on table headers.
-[ ] Sort by LANGUAGES is not working.
-[ ] Add -Multipart- to forms.
 [X] Add more and more tests ...
 [X] eval "languages".upcase
-[ ] Fix problems with the selectors of %w( item1 item2 item3 item4 )
 [X] Related? This relationship should be changed.
-[ ] Add Actions params ( :params => params.merge(...) )
+[X] Add Actions params ( :params => params.merge(...) )
+[X] Fix problems with the selectors of %w( item1 item2 item3 item4 )
+[ ] Sort by LANGUAGES is not working.
+[ ] Add -Multipart- to forms.
