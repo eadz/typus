@@ -4,7 +4,7 @@ class ActionController::Routing::RouteSet
 
   def draw_with_admin
 
-    prefix = Typus::TypusConfiguration.options[:prefix] rescue 'admin'
+    prefix = Typus::Configuration.options[:prefix]
 
     draw_without_admin do |map|
       map.with_options :controller => 'typus' do |i|
@@ -17,6 +17,7 @@ class ActionController::Routing::RouteSet
       end
       yield map
     end
+
   end
 
   alias draw draw_with_admin
