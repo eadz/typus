@@ -21,20 +21,17 @@ module Typus
     #   typus_form_fields :name, :body, :excerpt, :created_at
     #
     def self.typus_fields_for(filter)
-      available_fields = self.inspect.gsub("#{self}", "").gsub("(", "").gsub(")", "").split(", ")
-      fields = Typus::Configuration.config["#{self}"]['fields'][filter].split(", ")
+      available_fields = self.inspect.gsub(/#{self}\(/, "").gsub(/\)/, "").split(", ")
+      fields = Typus::Configuration.config["#{self}"]["fields"][filter].split(", ")
       fields_with_type = Array.new
       fields.each do |f|
         available_fields.each do |af|
           af = af.split(": ")
           @field_type = af[1] if af[0] == f
           case f
-          when /_id/
-            @field_type = 'collection'
-          when /password/
-            @field_type = 'password'
-          when 'uploaded_data'
-            @field_type = 'blob'
+          when /_id/:             @field_type = 'collection'
+          when /password/:        @field_type = 'password'
+          when 'uploaded_data':   @field_type = 'blob'
           end
         end
         @field_type = (eval f.upcase) rescue @field_type
@@ -50,8 +47,8 @@ module Typus
     #   typus_filters :created_at, :status
     #
     def self.typus_filters
-      available_fields = self.inspect.gsub("#{self}", "").gsub("(", "").gsub(")", "").split(", ")
-      fields = Typus::Configuration.config["#{self}"]['filters'].split(", ")
+      available_fields = self.inspect.gsub(/#{self}\(/, "").gsub(/\)/, "").split(", ")
+      fields = Typus::Configuration.config["#{self}"]["filters"].split(", ")
       fields_with_type = Array.new
       fields.each do |f|
         available_fields.each do |af|

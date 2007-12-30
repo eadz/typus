@@ -23,14 +23,10 @@ class String
           end
         when "datetime"
           case the_value
-          when 'today'
-            start_date, end_date = Time.today, Time.today.tomorrow
-          when 'past_7_days'
-            start_date, end_date = 6.days.ago.midnight, Time.today.tomorrow
-          when 'this_month'
-            start_date, end_date = Time.today.last_month, Time.today.tomorrow
-          when 'this_year'
-            start_date, end_date = Time.today.last_year, Time.today.tomorrow
+          when 'today':         start_date, end_date = Time.today, Time.today.tomorrow
+          when 'past_7_days':   start_date, end_date = 6.days.ago.midnight, Time.today.tomorrow
+          when 'this_month':    start_date, end_date = Time.today.last_month, Time.today.tomorrow
+          when 'this_year':     start_date, end_date = Time.today.last_year, Time.today.tomorrow
           end
           start_date, end_date = start_date.to_s(:db), end_date.to_s(:db)
           conditions << "AND created_at > '#{start_date}' AND created_at < '#{end_date}' "

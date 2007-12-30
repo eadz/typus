@@ -11,11 +11,13 @@ class TypusController < ApplicationController
   end
 
   def index
+    select_fields = Typus::Configuration.config["#{@model}"]["fields"]["list"].split(", ") << "id"
     conditions = "1 = 1 "
     conditions << (request.env['QUERY_STRING']).build_conditions(@model) if request.env['QUERY_STRING']
     @items = @model.paginate :page => params[:page], 
                              :per_page => Typus::Configuration.options[:per_page], 
                              :order => "#{params[:order_by]} #{params[:sort_order]}", 
+                             :select => select_fields.join(", "),
                              :conditions => "#{conditions}"
   rescue
     redirect_to :action => 'index'
@@ -149,7 +151,7 @@ private
 
   # Model fields
   def fields
-    @fields = @model.typus_fields_for("list")
+    @fields = @model.typus_fields_for('list')
   end
 
   # Model +form_fields+ & +form_externals+
