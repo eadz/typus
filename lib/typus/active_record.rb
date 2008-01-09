@@ -22,7 +22,7 @@ module Typus
     #
     def self.typus_fields_for(filter)
       available_fields = self.inspect.gsub(/#{self}\(/, "").gsub(/\)/, "").split(", ")
-      fields = Typus::Configuration.config["#{self}"]["fields"][filter].split(", ")
+      fields = Typus::Configuration.config["#{self.to_s.titleize}"]["fields"][filter].split(", ")
       fields_with_type = Array.new
       fields.each do |f|
         available_fields.each do |af|
@@ -48,7 +48,7 @@ module Typus
     #
     def self.typus_filters
       available_fields = self.inspect.gsub(/#{self}\(/, "").gsub(/\)/, "").split(", ")
-      fields = Typus::Configuration.config["#{self}"]["filters"].split(", ")
+      fields = Typus::Configuration.config["#{self.to_s.titleize}"]["filters"].split(", ")
       fields_with_type = Array.new
       fields.each do |f|
         available_fields.each do |af|
@@ -70,7 +70,7 @@ module Typus
     #
     def self.typus_actions_for(filter)
       config = Typus::Configuration.config
-      actions = config["#{self}"]["actions"][filter].split(", ")
+      actions = config["#{self.to_s.titleize}"]["actions"][filter].split(", ")
     rescue
       []
     end
@@ -85,7 +85,9 @@ module Typus
     # Default order is ASC, except for datetime items that is DESC.
     def self.typus_defaults_for(filter)
       config = Typus::Configuration.config
-      related = config["#{self}"][filter].split(", ") if config["#{self}"][filter]
+      related = config["#{self.to_s.titleize}"][filter].split(", ") if config["#{self.to_s.titleize}"][filter]
+    rescue
+      []
     end
 
   end

@@ -11,7 +11,7 @@ class TypusController < ApplicationController
   end
 
   def index
-    select_fields = Typus::Configuration.config["#{@model}"]["fields"]["list"].split(", ") << "id"
+    select_fields = Typus::Configuration.config["#{@model.to_s.titleize}"]["fields"]["list"].split(", ") << "id"
     conditions = "1 = 1 "
     conditions << (request.env['QUERY_STRING']).build_conditions(@model) if request.env['QUERY_STRING']
     @items = @model.paginate :page => params[:page], 
@@ -20,7 +20,7 @@ class TypusController < ApplicationController
                              :select => select_fields.join(", "),
                              :conditions => "#{conditions}"
   rescue
-    redirect_to :action => 'index'
+    redirect_to
   end
 
   def new
@@ -46,7 +46,7 @@ class TypusController < ApplicationController
 
   def update
     if @item.update_attributes(params[:item])
-      flash[:notice] = "#{@model.to_s.capitalize} successfully updated."
+      flash[:notice] = "#{@model.to_s.titleize} successfully updated."
       redirect_to typus_index_url(params[:model])
     else
       render :action => 'edit'
@@ -55,14 +55,14 @@ class TypusController < ApplicationController
 
   def destroy
     @item.destroy
-    flash[:notice] = "#{@model.to_s.capitalize} successfully removed."
+    flash[:notice] = "#{@model.to_s.titleize} successfully removed."
     redirect_to typus_index_url(params[:model])
   end
 
   # Toggle the status of an item.
   def status
     @item.toggle!('status')
-    flash[:notice] = "#{@model.to_s.capitalize} status changed"
+    flash[:notice] = "#{@model.to_s.titleize.capitalize} status changed"
     redirect_to :action => 'index'
   end
 
@@ -70,7 +70,7 @@ class TypusController < ApplicationController
   def relate
     model_to_relate = params[:related].singularize.capitalize.constantize
     @model.find(params[:id]).send(params[:related]) << model_to_relate.find(params[:model_id_to_relate][:related_id])
-    flash[:notice] = "#{model_to_relate} added to #{@model}"
+    flash[:notice] = "#{model_to_relate} added to #{@model.to_s.titleize}"
     redirect_to :action => 'edit', :id => params[:id]
   end
 
@@ -79,7 +79,7 @@ class TypusController < ApplicationController
     model_to_unrelate = params[:unrelated].singularize.capitalize.constantize
     unrelate = model_to_unrelate.find(params[:unrelated_id])
     @model.find(params[:id]).send(params[:unrelated]).delete(unrelate)
-    flash[:notice] = "#{model_to_unrelate} removed from #{@model}"
+    flash[:notice] = "#{model_to_unrelate} removed from #{@model.to_s.titleize}"
     redirect_to :action => 'edit', :id => params[:id]
   end
 
@@ -129,9 +129,7 @@ private
 
   # Set the current model.
   def set_model
-    @model = params[:model].singularize.capitalize.constantize
-  rescue
-    redirect_to :action => 'dashboard'
+    @model = params[:model].singularize.camelize.constantize
   end
 
   # Set default order on the listings.

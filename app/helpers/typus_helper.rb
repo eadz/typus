@@ -31,9 +31,9 @@ module TypusHelper
       html << "#{link_to "Home", typus_dashboard_url}" 
       case params[:action]
       when "index"
-        html << " &rsaquo; #{params[:model].capitalize}\n"
+        html << " &rsaquo; #{params[:model].titleize}\n"
       when "new", "edit"
-        html << " &rsaquo; #{link_to params[:model].capitalize, :action => 'index'} &rsaquo; #{params[:action].capitalize}"
+        html << " &rsaquo; #{link_to params[:model].titleize, :action => 'index'} &rsaquo; #{params[:action].titleize}"
       end
     else
       html << "Home"
@@ -48,12 +48,12 @@ module TypusHelper
     MODELS.to_a.each { |model| modules << ((model[1].has_key? 'module') ? model[1]['module'].capitalize : 'Typus') }
     modules.uniq.each do |m|
       html << "<table>\n"
-      html << "<tr><th colspan=\"2\">#{m.capitalize}</th></tr>\n"
+      html << "<tr><th colspan=\"2\">#{m.titleize}</th></tr>\n"
       MODELS.each do |model|
         current = (model[1]['module']) ? model[1]['module'].capitalize : 'Typus'
         if current == m
           html << "<tr class=\"#{cycle('even', 'odd')}\"><td>"
-          html << "#{link_to model[0].pluralize, :action => 'index', :model => model[0].downcase.pluralize}<br />"
+          html << "#{link_to model[0].pluralize, :action => 'index', :model => model[0].split(" ").join("_").downcase.pluralize}<br />"
           html << "<small>#{model[1]['description']}</small></td>"
           html << "<td align=\"right\" valign=\"bottom\"><small>"
           html << "#{link_to 'Add', :action => 'new', :model => model[0].downcase.pluralize}"
@@ -70,7 +70,7 @@ module TypusHelper
     case params[:action]
     when "index"
       html << "<ul>"
-      html << "<li>#{link_to "Add #{params[:model].singularize.capitalize}", :action => 'new'}</li>"
+      html << "<li>#{link_to "Add #{params[:model].titleize.singularize}", :action => 'new'}</li>"
       html << "</ul>"
       html << more_actions
     when "new"
@@ -102,7 +102,9 @@ module TypusHelper
   end
 
   def search
-    if MODELS["#{@model}"]["search"]
+    the_model = (@model.to_s.tableize.singularize.split("_").each { |i| i.capitalize! }).join(" ")
+    
+    if MODELS["#{the_model}"]["search"]
       search = <<-HTML
         <h2>Search</h2>
         <form action="" method="get">
@@ -161,7 +163,7 @@ module TypusHelper
 
   def page_title
     html = ""
-    html << "#{params[:model].capitalize} &rsaquo; " if params[:model]
+    html << "#{params[:model].titleize} &rsaquo; " if params[:model]
     html << "#{params[:action].capitalize}" if params[:action]
   end
 
@@ -180,7 +182,7 @@ module TypusHelper
   end
 
   def typus_table(model = params[:model])
-    @model = model.singularize.capitalize.constantize
+    @model = model.camelize.singularize.constantize
     html = "<table>"
     
     # Header of the table

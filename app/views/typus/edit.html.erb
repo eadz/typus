@@ -2,11 +2,11 @@
 	<%= actions %>
 <% end %>
 
-<h2><%= link_to "#{@model.to_s.pluralize}", :action => "index", :model => params[:model], :id => nil %> &rsaquo; Edit</h2>
+<h2><%= link_to "#{params[:model].titleize}", :action => "index", :model => params[:model], :id => nil %> &rsaquo; Edit</h2>
 
 <% form_tag :action => "update", :id => @item.id do %>
 	<%= typus_form %>
-	<p><%= submit_tag "Update #{@model.to_s.capitalize}" %></p>
+	<p><%= submit_tag "Update #{params[:model].titleize.singularize}" %></p>
 <% end %>
 
 <%= typus_form_externals %>

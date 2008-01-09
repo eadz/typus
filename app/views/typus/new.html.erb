@@ -2,9 +2,9 @@
 	<%= actions %>
 <% end %>
 
-<h2><%= link_to "#{@model.to_s.pluralize}", :action => "index", :model => params[:model], :id => nil %> &rsaquo; New</h2>
+<h2><%= link_to "#{params[:model].titleize}", :action => "index", :model => params[:model], :id => nil %> &rsaquo; New</h2>
 
 <% form_tag :action => 'create' do %>
 	<%= typus_form %>
-	<p><%= submit_tag "Create #{@model}" %></p>
+	<p><%= submit_tag "Create #{params[:model].titleize.singularize}" %></p>
 <% end %>
