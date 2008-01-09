@@ -19,7 +19,11 @@ To create the first user and copy the stylesheets ...
 
 Default user and password are +admin+ and +typus+.
 
-== Setting your own username and password
+== Typus::Configuration options
+
+    Typus::Configuration.options[:app_name] = "Your app name"
+    Typus::Configuration.options[:app_description] = "App Details"
+    Typus::Configuration.options[:per_page] = "20"
 
 You can set your _username_ and _password_ overwriting the following settings:
 
