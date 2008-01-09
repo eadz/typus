@@ -13,7 +13,7 @@ module Typus
         :app_name => 'Typus Admin',
         :app_description => '',
         :per_page => 15,
-        :prefix => 'typus',
+        :prefix => 'admin',
         :username => 'admin',
         :password => 'typus',
         :version => '',
