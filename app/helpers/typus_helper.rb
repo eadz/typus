@@ -244,7 +244,7 @@ module TypusHelper
       when "blob"
         html << "#{file_field :item, field[0], :style => 'border: 0px;'}"
       when "datetime"
-        html << "#{datetime_select :item, field[0]}"
+        html << "#{datetime_select :item, field[0], { :minute_step => 5 }}"
       when "password"
         html << "#{password_field :item, field[0], :class => 'big'}"
       when "string", "integer"
