@@ -236,7 +236,7 @@ module TypusHelper
       when 'uploaded_data'
         html << "<p><label>Upload File</label>"
       else
-        html << "<p><label>#{field[0].humanize}</label>"
+        html << "<p><label>#{field[0].titleize}</label>"
       end
       case field[1] # Field Type
       when "boolean"
