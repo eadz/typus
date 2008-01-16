@@ -253,7 +253,13 @@ module TypusHelper
         html << "#{text_area :item, field[0], :rows => '10'}"
       when "selector"
         values = eval field[0].upcase
-        html << "#{select :item, field[0], values.collect { |p| [ "#{p[0]} (#{p[1]})", p[1] ] }, :include_blank => true}"
+        # html << "#{select :item, field[0], values.collect { |p| [ "#{p[0]} (#{p[1]})", p[1] ] }, :include_blank => true}"
+        html << "<select id=\"item_#{field[0]}\" name=\"item[#{field[0]}]\">"
+        html << "<option value=\"\">Select a #{field[0].capitalize}</option>"
+        values.each do |value|
+          html << "<option #{"selected" if @item.send(field[0]).to_s == value.last.to_s} value=\"#{value.last}\">#{value.first}</option>"
+        end
+        html << "</select>"
       when "collection"
         related = field[0].split("_id").first.capitalize.constantize
         if (related.new.attributes.keys.include? 'name') || (related.new.methods.include? 'name')
