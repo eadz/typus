@@ -73,11 +73,11 @@ module TypusHelper
       html << "<li>#{link_to "Add #{params[:model].titleize.singularize}", :action => 'new'}</li>"
       html << "</ul>"
       html << more_actions
-    when "new"
+    when "new", "create"
       html << "<ul>"
       html << "<li>#{link_to "Back to list", :action => 'index'}</li>"
       html << "</ul>"
-    when "edit"
+    when "edit", "update"
       html << "<ul>"
       html << "#{'<li>' + (link_to "Next", :action => "edit", :id => @next.id) + '</li>' if @next}"
       html << "#{'<li>' + (link_to "Previous", :action => 'edit', :id => @previous.id) + '<li>' if @previous}"
@@ -190,7 +190,7 @@ module TypusHelper
     @model.typus_fields_for('list').each do |column|
       order_by = "#{column[0]}#{"_id" if column[1] == 'collection'}"
       sort_order = (params[:sort_order] == "asc") ? "desc" : "asc"
-      html << "<th>#{link_to "<div class=\"#{sort_order}\">#{column[0].humanize}</div>", { :params => params.merge( :order_by => order_by, :sort_order => sort_order) }}</th>"
+      html << "<th>#{link_to "<div class=\"#{sort_order}\">#{column[0].titleize}</div>", { :params => params.merge( :order_by => order_by, :sort_order => sort_order) }}</th>"
     end
     html << "<th>&nbsp;</th>\n</tr>"
     
@@ -208,7 +208,7 @@ module TypusHelper
           if (this_model.new.methods.include? 'name') || (this_model.new.attributes.keys.include? 'name')
             html << "<td>#{item.send(column[0].split("_id").first).name if item.send(column[0])}</td>"
           else
-            html << "<td>#{"#{this_model}##{item.send(column[0]).id}" if item.send(column[0])}</td>"
+            html << "<td>#{"#{this_model}##{item.send(column[0])}" if item.send(column[0])}</td>"
           end
         else # 'string', 'integer', 'selector'
           html << "<td>#{link_to item.send(column[0]), :model => model, :action => 'edit', :id => item.id}</td>"
