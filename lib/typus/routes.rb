@@ -6,15 +6,26 @@ class ActionController::Routing::RouteSet
 
     prefix = Typus::Configuration.options[:prefix]
 
+    # This are the default actions
     draw_without_admin do |map|
       map.with_options :controller => 'typus' do |i|
         i.typus_dashboard "#{prefix}", :action => 'dashboard'
         i.typus_login "#{prefix}/login", :action => 'login'
         i.typus_logout "#{prefix}/logout", :action => 'logout'
         i.typus_index "#{prefix}/:model", :action => 'index'
-        i.connect "#{prefix}/:model/:action", :requirements => { :action => /[^0-9].*/, :id => nil }
-        i.connect "#{prefix}/:model/:id/:action", :action => 'edit', :requirements => { :id => /\d+/ }
+        i.connect "#{prefix}/:model/"
+        i.connect "#{prefix}/:model/new", :action => 'new'
+        i.connect "#{prefix}/:model/create", :action => 'create'
+        i.connect "#{prefix}/:model/:id/run", :action => 'run', :requirements => { :id => /\d+/ }
+        i.connect "#{prefix}/:model/run", :action => 'run'
+        i.connect "#{prefix}/:model/:id/edit", :action => 'edit', :requirements => { :id => /\d+/ }
+        i.connect "#{prefix}/:model/:id/update", :action => 'update', :requirements => { :id => /\d+/ }
+        i.connect "#{prefix}/:model/:id/destroy", :action => 'destroy', :requirements => { :id => /\d+/ }
       end
+
+      # Extra actions
+      map.connect "#{prefix}/:model/:id/:action", :controller => 'typus_extras'
+
       yield map
     end
 
