@@ -14,3 +14,6 @@
 [X] Fix problems with the selectors of %w( item1 item2 item3 item4 )
 [ ] Sort by LANGUAGES is not working.
 [ ] Add -Multipart- to forms.
+[ ] Actions/Tasks ... now Typus can handle external controllers ...
+[ ] After installing Typus generate TypusExtrasController (inherits from TypusController)
+[ ] 
