@@ -41,6 +41,14 @@ module TypusHelper
     html << "</p>"
   end
 
+  def login_info
+    html = ""
+    if session[:typus].class == TypusUser
+      html << "#{session[:typus].email} (#{session[:typus].role}) "
+    end
+    html << "#{link_to "Logout", typus_logout_url}"
+  end
+
   # Dashboard list of modules
   def modules
     html = "<div id=\"list\">"
@@ -49,7 +57,17 @@ module TypusHelper
     modules.uniq.each do |m|
       html << "<table>\n"
       html << "<tr><th colspan=\"2\">#{m.titleize}</th></tr>\n"
-      MODELS.each do |model|
+      
+      if TypusUser.count.size > 0
+        @user = TypusUser.find(session[:typus].id)
+        @models = Hash.new
+        @user.models.each { |mo| @models["#{mo}"] = Typus::Configuration.config["#{mo}"] }
+      else
+        @models = MODELS
+      end
+      
+      @models.each do |model|
+        puts model
         current = (model[1]['module']) ? model[1]['module'].capitalize : 'Typus'
         if current == m
           html << "<tr class=\"#{cycle('even', 'odd')}\"><td>"
@@ -63,6 +81,8 @@ module TypusHelper
       html << "</table>\n<br /><div style=\"clear\"></div>"
     end
     html << "</div>"
+  rescue
+    "There was an error when loading <code>config/typus.yml</code>."
   end
 
   def actions
@@ -227,6 +247,8 @@ module TypusHelper
       html << "<td width=\"10px\">#{@perform}</td>\n</tr>"
     end
     html << "</table>"
+  rescue
+    "There was an error when loading <code>config/typus.yml</code>."
   end
 
   def typus_form
@@ -271,6 +293,10 @@ module TypusHelper
       html << "</p>"
     end
     return html
+  rescue Exception => error
+    "<p>There was an error when loading <code>config/typus.yml</code>.</p>
+    <h3>Error</h3>
+    <pre>#{error}</pre>"
   end
 
   # TODO: Don't show form if there are not more Items available.
