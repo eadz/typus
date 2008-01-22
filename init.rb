@@ -10,6 +10,9 @@ begin
 
   require "#{RAILS_ROOT}/vendor/plugins/will_paginate/lib/will_paginate"
   require 'typus'
+
+  TYPUS_ROLES = %w( admin editor writer moderator visitor )
+
   Typus.enable
 
 rescue LoadError
