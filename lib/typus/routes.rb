@@ -26,7 +26,7 @@ class ActionController::Routing::RouteSet
       end
 
       # Extra actions
-      map.connect "#{prefix}/:model/:id/:action", :controller => 'typus_extras'
+      # map.connect "#{prefix}/:model/:id/:action", :controller => 'typus_extras'
 
       yield map
     end
