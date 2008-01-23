@@ -58,12 +58,14 @@ module TypusHelper
       html << "<table>\n"
       html << "<tr><th colspan=\"2\">#{m.titleize}</th></tr>\n"
       
-      if TypusUser.count.size > 0
+      if Typus::Configuration.options[:username] && Typus::Configuration.options[:password]
+        @models = MODELS
+      else
+      # if TypusUser.count.size > 0
         @user = TypusUser.find(session[:typus].id)
         @models = Hash.new
         @user.models.each { |mo| @models["#{mo}"] = Typus::Configuration.config["#{mo}"] }
-      else
-        @models = MODELS
+      # else
       end
       
       @models.each do |model|
@@ -304,14 +306,14 @@ module TypusHelper
     html = ""
     @form_fields_externals.each do |field|
       model_to_relate = field.singularize.capitalize.constantize
-      html << "<h2 style=\"margin: 20px 0px 10px 0px;\">#{field.capitalize}</h2>"
+      html << "<h2 style=\"margin: 20px 0px 10px 0px;\">#{field.capitalize} <small>#{link_to "Add new", :model => field, :action => 'new', :btm => params[:model], :bti => params[:id], :bta => params[:action]}</small></h2>"
       items_to_relate = (model_to_relate.find(:all) - @item.send(field))
       if items_to_relate.size > 0
         html << <<-HTML
           #{form_tag :action => "relate", :related => field, :id => params[:id]}
           <p>#{select "model_id_to_relate", :related_id, items_to_relate.map { |f| [f.name, f.id] }}
-        &nbsp; #{submit_tag "Add"}</p>
-          </form>
+        &nbsp; #{submit_tag "Add"}
+          </form></p>
         HTML
       end
       current_model = params[:model].singularize.capitalize.constantize
