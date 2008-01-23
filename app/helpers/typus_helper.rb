@@ -273,7 +273,7 @@ module TypusHelper
         html << "#{datetime_select :item, field[0], { :minute_step => 5 }}"
       when "password"
         html << "#{password_field :item, field[0], :class => 'big'}"
-      when "string", "integer"
+      when "string", "integer", "float"
         html << "#{text_field :item, field[0], :class => 'big'}"
       when "text"
         html << "#{text_area :item, field[0], :rows => '10'}"
