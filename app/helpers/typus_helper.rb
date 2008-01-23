@@ -249,8 +249,10 @@ module TypusHelper
       html << "<td width=\"10px\">#{@perform}</td>\n</tr>"
     end
     html << "</table>"
-  rescue
-    "There was an error when loading <code>config/typus.yml</code>."
+  rescue Exception => error
+    "<p>There was an error when loading <code>config/typus.yml</code>.</p>
+    <h3>Error</h3>
+    <pre>#{error}</pre>"
   end
 
   def typus_form
@@ -321,8 +323,10 @@ module TypusHelper
       html << typus_table(field) if @items.size > 0
     end
     return html
-  rescue
-    ""
+  rescue Exception => error
+    "<p>There was an error when loading <code>config/typus.yml</code>.</p>
+    <h3>Error</h3>
+    <pre>#{error}</pre>"
   end
 
   def process_query(q)
