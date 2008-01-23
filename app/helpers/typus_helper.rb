@@ -306,21 +306,23 @@ module TypusHelper
   # TODO: Don't show form if there are not more Items available.
   def typus_form_externals
     html = ""
-    @form_fields_externals.each do |field|
-      model_to_relate = field.singularize.capitalize.constantize
-      html << "<h2 style=\"margin: 20px 0px 10px 0px;\">#{field.capitalize} <small>#{link_to "Add new", :model => field, :action => 'new', :btm => params[:model], :bti => params[:id], :bta => params[:action]}</small></h2>"
-      items_to_relate = (model_to_relate.find(:all) - @item.send(field))
-      if items_to_relate.size > 0
-        html << <<-HTML
-          #{form_tag :action => "relate", :related => field, :id => params[:id]}
-          <p>#{select "model_id_to_relate", :related_id, items_to_relate.map { |f| [f.name, f.id] }}
-        &nbsp; #{submit_tag "Add"}
-          </form></p>
-        HTML
+    if @form_fields_externals
+      @form_fields_externals.each do |field|
+        model_to_relate = field.singularize.capitalize.constantize
+        html << "<h2 style=\"margin: 20px 0px 10px 0px;\">#{field.capitalize} <small>#{link_to "Add new", :model => field, :action => 'new', :btm => params[:model], :bti => params[:id], :bta => params[:action]}</small></h2>"
+        items_to_relate = (model_to_relate.find(:all) - @item.send(field))
+        if items_to_relate.size > 0
+          html << <<-HTML
+            #{form_tag :action => "relate", :related => field, :id => params[:id]}
+            <p>#{select "model_id_to_relate", :related_id, items_to_relate.map { |f| [f.name, f.id] }}
+          &nbsp; #{submit_tag "Add"}
+            </form></p>
+          HTML
+        end
+        current_model = params[:model].singularize.capitalize.constantize
+        @items = current_model.find(params[:id]).send(field)
+        html << typus_table(field) if @items.size > 0
       end
-      current_model = params[:model].singularize.capitalize.constantize
-      @items = current_model.find(params[:id]).send(field)
-      html << typus_table(field) if @items.size > 0
     end
     return html
   rescue Exception => error
