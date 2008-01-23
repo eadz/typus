@@ -12,6 +12,7 @@
 [X] Related? This relationship should be changed.
 [X] Add Actions params ( :params => params.merge(...) )
 [X] Fix problems with the selectors of %w( item1 item2 item3 item4 )
+[X] Items can add external items.
 [ ] Sort by LANGUAGES is not working.
 [ ] Add -Multipart- to forms.
 [ ] Actions/Tasks ... now Typus can handle external controllers ...
