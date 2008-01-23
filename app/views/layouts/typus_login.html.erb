@@ -11,17 +11,15 @@
 
 <body onload="$('user_email').focus()" id="login">
 
-	<div id="dialog">
-		<h1><%= link_to Typus::Configuration.options[:app_name], :action => "login" %></h1>
-		<%= feedback %>
-		<%= yield %>
-		<%= signature %>
-	</div>
+  <div id="dialog">
+    <h1><%= link_to Typus::Configuration.options[:app_name], :action => "login" %></h1>
+    <%= feedback %>
+    <%= yield %>
+    <%= signature %>
+  </div>
 
 </body>
 
 </html>
 
-<!--
-	Typus Version: <%= Typus::Configuration.options[:version] %>
--->
+<!-- Typus Version: <%= Typus::Configuration.options[:version] %> -->
