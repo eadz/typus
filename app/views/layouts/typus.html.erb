@@ -4,35 +4,45 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
 <head>
-	<%= head %>
+  <%= head %>
 </head>
 
 <body>
 
+<!-- header -->
 <div id="header">
-	<div class="left">
-		<%= header %>
-		<%= breadcrumbs %>
-	</div>
-	<div class="right">
-    <%= login_info %>
-	</div>
-</div>
 
+  <div class="left">
+    <%= header %>
+    <%= breadcrumbs %>
+  </div>
+
+  <div class="right">
+    <%= login_info %>
+  </div>
+
+</div>
+<!-- /header -->
+
+<!-- wrapper -->
 <div id="wrapper">
 
-	<div id="sidebar">
-		<%= yield :sidebar %>
-	</div>
+  <div id="sidebar">
+    <%= yield :sidebar %>
+  </div>
 
-	<div id="content">
-		<%= yield %>
-	</div>
+  <div id="content">
+    <%= yield %>
+  </div>
 
 </div>
+<!-- /wrapper -->
 
+<!-- footer -->
 <div id="footer">
+  <%= footer %>
 </div>
+<!-- /footer -->
 
 </body>
 
