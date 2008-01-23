@@ -27,13 +27,28 @@ class TypusController < ApplicationController
 
   def new
     @item = @model.new
+    # TODO: Cleanup this ...
+    session[:btm] = params[:btm]
+    session[:bta] = params[:bta]
+    session[:bti] = params[:bti]
   end
 
   def create
     @item = @model.new(params[:item])
     if @item.save
-      flash[:notice] = "#{@model.to_s.capitalize} successfully created."
-      redirect_to typus_index_url(params[:model])
+      if session[:btm] && session[:bta] && session[:bti]
+        btm, bta, bti = session[:btm], session[:bta], session[:bti]
+        session[:btm], session[:bta], session[:bti] = nil, nil, nil
+        # Model to relate
+        model_to_relate = btm.singularize.camelize.constantize
+        @item.send(btm) << model_to_relate.find(bti)
+        # And finally redirect to the previous action
+        flash[:notice] = "Assigned #{@item.class} to #{btm} successfully."
+        redirect_to :action => bta, :model => btm, :id => bti
+      else
+        flash[:notice] = "#{@model.to_s.capitalize} successfully created."
+        redirect_to typus_index_url(params[:model])
+      end
     else
       render :action => 'new'
     end
@@ -107,23 +122,23 @@ class TypusController < ApplicationController
   # Basic session creation.
   def login
     if request.post?
-      if TypusUser.count.size > 0
-        # Login using TypusUser
-        @user = TypusUser.authenticate(params[:user])
-        if @user
-          session[:typus] = @user
+      # Login using Typus::Configuration.options
+      if Typus::Configuration.options[:username] && Typus::Configuration.options[:password]
+        username = Typus::Configuration.options[:username]
+        password = Typus::Configuration.options[:password]
+        if params[:user][:name] == username && params[:user][:password] == password
+          session[:typus] = true
           redirect_to typus_dashboard_url
         else
           flash[:error] = "Username/Password Incorrect"
           redirect_to typus_login_url
         end
-        # @tTypusUser.authenticate(params[:user][:name], params[:user][:password])
+      # Login using TypusUser
       else
-        # Login using Typus::Configuration.options
-        username = Typus::Configuration.options[:username]
-        password = Typus::Configuration.options[:password]
-        if params[:user][:name] == username && params[:user][:password] == password
-          session[:typus] = true
+        # TypusUser.count.size > 0
+        @user = TypusUser.authenticate(params[:user])
+        if @user
+          session[:typus] = @user
           redirect_to typus_dashboard_url
         else
           flash[:error] = "Username/Password Incorrect"
@@ -188,7 +203,8 @@ private
   end
 
   def check_role
-    if TypusUser.count.size > 0
+    unless Typus::Configuration.options[:username] && Typus::Configuration.options[:password]
+    # if TypusUser.count.size > 0
       if !@typus_user.models.include? @model
         flash[:notice] = "Don't have access to #{params[:model].capitalize}"
         redirect_to :action => "dashboard"
