@@ -1,6 +1,7 @@
 class TypusController < ApplicationController
 
   before_filter :authenticate, :except => [ :login, :logout ]
+  before_filter :set_previous_action, :except => [ :dashboard, :login, :logout, :create ]
   before_filter :set_model, :except => [ :dashboard, :login, :logout ]
   before_filter :check_role, :except => [ :dashboard, :login, :logout ]
   before_filter :set_order, :only => [ :index ]
@@ -27,18 +28,15 @@ class TypusController < ApplicationController
 
   def new
     @item = @model.new
-    # TODO: Cleanup this ...
-    session[:btm] = params[:btm]
-    session[:bta] = params[:bta]
-    session[:bti] = params[:bti]
   end
 
   def create
     @item = @model.new(params[:item])
     if @item.save
-      if session[:btm] && session[:bta] && session[:bti]
-        btm, bta, bti = session[:btm], session[:bta], session[:bti]
-        session[:btm], session[:bta], session[:bti] = nil, nil, nil
+      if session[:typus_previous]
+        previous = session[:typus_previous]
+        btm, bta, bti = previous[:btm], previous[:bta], previous[:bti]
+        session[:typus_previous] = nil
         # Model to relate
         model_to_relate = btm.singularize.camelize.constantize
         @item.send(btm) << model_to_relate.find(bti)
@@ -170,6 +168,18 @@ private
       params[:order_by] = params[:order_by] || order[0]
     else
       params[:order_by] = params[:order_by] || 'id'
+    end
+  end
+
+  # btm: Before this model
+  # bta: Before this action
+  # bti: Before this id
+  def set_previous_action
+    session[:typus_previous] = nil
+    if params[:bta] && params[:btm]
+      previous = Hash.new
+      previous[:btm], previous[:bta], previous[:bti] = params[:btm], params[:bta], params[:bti]
+      session[:typus_previous] = previous
     end
   end
 
