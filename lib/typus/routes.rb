@@ -3,10 +3,7 @@ class ActionController::Routing::RouteSet
   alias draw_without_admin draw
 
   def draw_with_admin
-
     prefix = Typus::Configuration.options[:prefix]
-
-    # This are the default actions
     draw_without_admin do |map|
       map.with_options :controller => 'typus' do |i|
         i.typus_dashboard "#{prefix}", :action => 'dashboard'
@@ -25,13 +22,8 @@ class ActionController::Routing::RouteSet
         i.connect "#{prefix}/:model/:id/unrelate", :action => 'unrelate', :requirements => { :id => /\d+/ }
         i.connect "#{prefix}/:model/:id/status", :action => 'status', :requirements => { :id => /\d+/ }
       end
-
-      # Extra actions
-      # map.connect "#{prefix}/:model/:id/:action", :controller => 'typus_extras'
-
       yield map
     end
-
   end
 
   alias draw draw_with_admin
