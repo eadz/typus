@@ -61,15 +61,12 @@ module TypusHelper
       if Typus::Configuration.options[:username] && Typus::Configuration.options[:password]
         @models = MODELS
       else
-      # if TypusUser.count.size > 0
         @user = TypusUser.find(session[:typus].id)
         @models = Hash.new
         @user.models.each { |mo| @models["#{mo}"] = Typus::Configuration.config["#{mo}"] }
-      # else
       end
       
       @models.each do |model|
-        puts model
         current = (model[1]['module']) ? model[1]['module'].capitalize : 'Typus'
         if current == m
           html << "<tr class=\"#{cycle('even', 'odd')}\"><td>"
