@@ -115,11 +115,10 @@ module TypusHelper
     html = ""
     case params[:action]
     when 'index'
-      a = 'list'
+      @model.typus_actions_for('list').each { |a| html << "<li>#{link_to a.humanize, :controller => 'typus_extras', :model => params[:model], :action => a }</li>" }
     when 'edit'
-      a = 'form'
+      @model.typus_actions_for('form').each { |a| html << "<li>#{link_to a.humanize, :controller => 'typus_extras', :model => params[:model], :action => a, :id => params[:id] }</li>" }
     end
-    @model.typus_actions_for(a).each { |a| html << "<li>#{link_to a.humanize, :action => 'run', :task => a}</li>" }
     html = "<ul>#{html}</ul>" if html
   end
 
@@ -339,7 +338,7 @@ module TypusHelper
   def process_query(q)
     if params[:search]
       query = "Search results on <strong>#{params[:model]}</strong> "
-      query<< "for <strong>\"#{params[:search]}\"</strong>"
+      query << "for <strong>\"#{params[:search]}\"</strong>"
     end
     return query
   end

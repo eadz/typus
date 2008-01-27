@@ -72,6 +72,22 @@ NOTE: <code>order_by</code> only accepts one field.
 
 These actions will only be available on the context +list+ and +form+ of Typus.
 
+You have to add these routes to your <code>routes.rb</code>.
+
+    map.connect '/admin/:model/:action', :controller => 'typus_extras'
+    map.connect '/admin/:model/:id/:action', :controller => 'typus_extras', 
+                                             :requirements => { :id => /\d+/ }
+
+And add a controller called <code>TypusExtrasController</code>
+
+    class TypusExtrasController << TypusController
+
+      # Notify all ...
+      def notify_all
+      end
+
+    end
+
 === Module
 
 Used to group models on the main screen.
