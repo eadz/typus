@@ -22,14 +22,14 @@
     <%= will_paginate @items %>
   <% else %>
     <div class="box" id="empty">
-      <p>No <strong><%= params[:model] %></strong> under this filter.</p>
+      <p>No <strong><%= params[:model].titleize %></strong> under this filter.</p>
     </div>
   <% end %>
   <!-- /Listing & Feedback -->
 
   <!-- Shown when there are no items -->
   <% if @model.count == 0 %>
-    <p><%= link_to "Add the first #{params[:model].singularize}", :action => "new" %></p>
+    <p><%= link_to "Add the first item", :action => "new" %></p>
   <% end %>
   <!-- /Shown when there are no items -->
 
