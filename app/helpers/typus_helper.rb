@@ -145,7 +145,7 @@ module TypusHelper
       @model.typus_filters.each do |f|
         case f[1]
         when 'boolean'
-          html << "<h3>By #{f[0].humanize}</h3>\n"
+          html << "<h3>By #{f[0].titleize}</h3>\n"
           html << "<ul>\n"
           %w( true false ).each do |status|
             switch = (current_request.include? "#{f[0]}=#{status}") ? 'on' : 'off'
@@ -153,10 +153,10 @@ module TypusHelper
           end
           html << "</ul>\n"
         when 'datetime'
-          html << "<h3>By #{f[0].humanize}</h3>\n<ul>\n"
+          html << "<h3>By #{f[0].titleize}</h3>\n<ul>\n"
           %w(today past_7_days this_month this_year).each do |timeline|
             switch = (current_request.include? "#{f[0]}=#{timeline}") ? 'on' : 'off'
-            html << "<li>#{link_to timeline.humanize.capitalize, { :params => params.merge(f[0] => timeline) }, :class => switch}</li>"
+            html << "<li>#{link_to timeline.titleize, { :params => params.merge(f[0] => timeline) }, :class => switch}</li>"
           end
           html << "</ul>\n"
         when 'integer'
@@ -222,7 +222,12 @@ module TypusHelper
       @model.typus_fields_for('list').each do |column|
         case column[1]
         when 'boolean'
-          html << "<td width=\"20px\" align=\"center\">#{image_tag(status = item.send(column[0])? "typus_status_true.gif" : "typus_status_false.gif")}</td>"
+          image = "#{image_tag(status = item.send(column[0])? "typus_status_true.gif" : "typus_status_false.gif")}"
+          if column[0] == 'status'
+            html << "<td width=\"20px\" align=\"center\">#{link_to image, :controller => 'typus', :model => params[:model], :action => 'status', :id => item}</td>"
+          else
+            html << "<td width=\"20px\" align=\"center\">#{image}</td>"
+          end
         when "datetime"
           html << "<td width=\"80px\">#{fmt_date(item.send(column[0]))}</td>"
         when "collection"
