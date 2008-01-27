@@ -17,4 +17,5 @@
 [ ] Add -Multipart- to forms.
 [ ] Actions/Tasks ... now Typus can handle external controllers ...
 [ ] After installing Typus generate TypusExtrasController (inherits from TypusController)
-[ ] 
+[ ] External actions (typus_extras_controller.rb)
+[X] Toggle status ...
