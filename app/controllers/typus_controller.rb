@@ -193,9 +193,9 @@ private
     end
   end
 
+  # if TypusUser.count.size > 0
   def check_role
     unless Typus::Configuration.options[:username] && Typus::Configuration.options[:password]
-    # if TypusUser.count.size > 0
       if !@typus_user.models.include? @model
         flash[:notice] = "Don't have access to #{params[:model].capitalize}"
         redirect_to :action => "dashboard"
