@@ -23,6 +23,7 @@ class ActionController::Routing::RouteSet
         i.connect "#{prefix}/:model/:id/destroy", :action => 'destroy', :requirements => { :id => /\d+/ }
         i.connect "#{prefix}/:model/:id/relate", :action => 'relate', :requirements => { :id => /\d+/ }
         i.connect "#{prefix}/:model/:id/unrelate", :action => 'unrelate', :requirements => { :id => /\d+/ }
+        i.connect "#{prefix}/:model/:id/status", :action => 'status', :requirements => { :id => /\d+/ }
       end
 
       # Extra actions
