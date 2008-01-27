@@ -98,25 +98,6 @@ class TypusController < ApplicationController
     redirect_to :action => 'edit', :id => params[:id]
   end
 
-  # Runs model "extra actions". This is defined in +typus.yml+ as
-  # +actions+.
-  #
-  # Post:
-  #   actions: cleanup:index notify_users:edit
-  #
-  def run
-    if params[:id]
-      @model.find(params[:id]).send(params[:task]) if @model.actions.include? [params[:task], 'edit']
-    else
-      @model.send(params[:task]) if @model.actions.include? [params[:task], 'index']
-    end
-    flash[:notice] = "#{params[:task].humanize} performed."
-    redirect_to :action => 'index'
-  rescue
-    flash[:notice] = "Undefined Action"
-    redirect_to :action => 'index'
-  end
-
   # Basic session creation.
   def login
     if request.post?
