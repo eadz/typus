@@ -2,15 +2,15 @@
 Title:     Typus
 Details:   Master styles for Typus
 Author:    fesplugas@intraducibles.net
-Updated:   September 26 2007
+Updated:   January 2007
 ---------------------------------------------------------- */
 
 /* reset all styles
 ---------------------------------------------------------- */
 
 * {
-	margin: 0px;
-	padding: 0px;
+  margin: 0px;
+  padding: 0px;
 }
 
 /* html
@@ -37,21 +37,21 @@ body {
 a, 
 a:visited,
 a:link {
-	color: #333;
-	font-weight: bold;
-	text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  text-decoration: none;
 }
 
 a:active {
-	color: #333;
-	text-decoration: none;
+  color: #333;
+  text-decoration: none;
 }
 
 a:hover {
-	background: #0099CC;
-	color: #FFF;
-	display: inline;
-	text-decoration: none;
+  background: #0099CC;
+  color: #FFF;
+  display: inline;
+  text-decoration: none;
 }
 
 /* header
@@ -153,29 +153,28 @@ a:hover {
 }
 
 #content h2 a:hover {
-	color: #0099CC;
-	background: transparent;
-	text-decoration: none;
+  color: #0099CC;
+  background: transparent;
+  text-decoration: none;
 }
 
 #content h3 {
-	font-size: 1.2em;
-	margin: 15px 0px 0px 0px;
+  font-size: 1.2em;
+  margin: 15px 0px 0px 0px;
 }
 
 #content h4 {
-	margin: 5px 0px -3px 0px;
-	padding: 0px;
-	font-weight: normal;
-	color: #555;
-	font-size: 11px;
-	margin-bottom: 1em;
+  color: #555;
+  font-size: 11px;
+  font-weight: normal;
+  margin: 5px 0px -3px 0px;
+  padding: 0px;
 }
 
 #content p {
-	margin: 10px 0px;
-	padding: 0px;
-	line-height: 140%;
+  line-height: 140%;
+  margin: 10px 0px;
+  padding: 0px;
 }
 
 /*
@@ -200,14 +199,14 @@ a:hover {
 */
 
 #content ul {
-	margin: 5px 0px;
-	padding: 0px;
+  margin: 5px 0px;
+  padding: 0px;
 }
 
 #content li {
-	line-height: 150%;
-	list-style: none;
-	margin: 5px 0px;
+  line-height: 150%;
+  list-style: none;
+  margin: 5px 0px;
 }
 
 /* sidebar
@@ -221,26 +220,20 @@ a:hover {
 }
 
 #sidebar label {
-	font-size: 15px;
+  font-size: 15px;
 }
 
 #sidebar h2 {
-	padding: 0px;
-	margin: 0px 0px 10px 0px;
+  margin: 0px 0px 10px 0px;
+  padding: 0px;
 }
 
 #sidebar p {
-	margin: 0px 0px 15px 0px;
+  margin: 0px 0px 15px 0px;
 }
 
 #sidebar form {
   margin: 0px 0px 10px 0px;
-}
-
-#sidebar h3 {
-  border: none;
-  padding: 0px;
-  margin: 10px 0px 5px 0px;
 }
 
 #sidebar ul {
@@ -252,13 +245,6 @@ a:hover {
 #sidebar li {
   list-style: none;
   line-height: 150%;
-  padding: 0px;
-  margin: 0px;
-}
-
-#sidebar ul ul {
-	margin: 0px;
-	padding: 0px;
 }
 
 #sidebar a.on {
@@ -279,8 +265,8 @@ a:hover {
 ---------------------------------------------------------- */
 
 #footer {
-  color: white;
   background: #000;
+  color: white;
   font-size: 10px;
   padding: 20px;
 }
@@ -290,309 +276,298 @@ a:hover {
 }
 
 #footer a:hover {
-  color: #09C;
   background: transparent;
+  color: #09C;
 }
 
 /* form
 ---------------------------------------------------------- */
 
 form {
-	padding: 0px;
-	margin: 0px;
 }
 
 input {
-	padding: 2px;
-	font-size: 12px;
+  font-size: 12px;
+  padding: 2px;
 }
 
 input.big {
-	font-weight: normal;
-	font-size: 20px;
-	font-family: Georgia, monaco;
-	width: 100%;
+  font-family: Georgia, monaco;
+  font-size: 20px;
+  font-weight: normal;
+  width: 100%;
 }
 
 input:focus,
 textarea:focus {
-	background: #FFFCE1;
+  background: #FFFCE1;
 }
 
 textarea {
-	font-family: Monaco, "Courier New", Courier, monospace;
-	font-size: 13px;
-	padding: 2px;
-	width: 100%;
+  font-family: Monaco, "Courier New", Courier, monospace;
+  font-size: 13px;
+  padding: 2px;
+  width: 100%;
 }
 
 select {
-	border: 1px solid #999;
+  border: 1px solid #999;
 }
 
 /* label
 ---------------------------------------------------------- */
 
 label {
-	font-weight: bold;
-	display: block;
-	margin: 5px 0px 3px 0px;
+  display: block;
+  font-weight: bold;
+  margin: 5px 0px 3px 0px;
 }
 
 /* notice & dialogs
 ---------------------------------------------------------- */
 
 .dialog {
-	padding: 0px;
-	margin: 10px 0px 20px 0px;
+  margin: 10px 0px 20px 0px;
 }
 
 /* tables
 ---------------------------------------------------------- */
 
 table {
-	background: black;
-	border-collapse: collapse;
-	border-spacing: 0px;
-	color: black;
-	font-weight: normal!important;
-	margin: 0px;
-	padding: 0px;
-	width: 100%;
+  background: black;
+  border-collapse: collapse;
+  border-spacing: 0px;
+  color: black;
+  font-weight: normal!important;
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
 }
 
 table th {
-	color: white;
-	padding: 3px 4px;
-	text-align: left;
+  color: white;
+  padding: 3px 4px;
+  text-align: left;
 }
 
 table th a {
-	color: white!important;
+  color: white!important;
 }
 
 table th a:hover {
-	text-decoration: none!important;
+  text-decoration: none!important;
 }
 
 table tr.even {
-    background: white!important;
+  background: white!important;
 }
 
 table tr.even:hover,
 table tr.odd:hover {
-	color: white;
-	background: #0099CC!important;
+  color: white;
+  background: #0099CC!important;
 }
 
 table tr.even:hover a,
 table tr.odd:hover a {
-	color: white!important;
+  color: white!important;
 }
 
 table tr.even:hover a:hover,
 table tr.odd:hover a:hover {
-	background: transparent!important;
+  background: transparent!important;
 }
 
 table tr.odd {
-    background: #F5F5F5!important;
+  background: #F5F5F5!important;
 }
 
 table td {
-	border: none;
-	font-weight: normal;
-	padding: 3px 4px;
-	vertical-align: top;
+  border: none;
+  font-weight: normal;
+  padding: 3px 4px;
+  vertical-align: top;
 }
 
 table a,
 table a:link,
 table a:visited,
 table a:active {
-	font-weight: normal;
+  font-weight: normal;
 }
 
 table a:hover {
-	color: black;
+  color: black;
 }
 
 /* fieldsets
 ---------------------------------------------------------- */
 
 fieldset {
-	border: 1px dotted #999;
-	padding: 10px;
-	margin: 0px 0px 20px 0px;
+  border: 1px dotted #999;
+  padding: 10px;
+  margin: 0px 0px 20px 0px;
 }
 
 fieldset.on {
-	border: 1px solid #0099CC;
+  border: 1px solid #0099CC;
 }
 
 fieldset.on legend {
-	color: #0099CC;
-	text-transform: uppercase;
+  color: #0099CC;
+  text-transform: uppercase;
 }
 
 legend {
-	font-size: 15px;
-	padding: 0px 5px;
+  font-size: 15px;
+  padding: 0px 5px;
 }
 
 fieldset input {
-	width: 100%;
+  width: 100%;
 }
 
 /* headings
 ---------------------------------------------------------- */
 
 h2 {
-	margin: 0px 0px 20px 0px;
+  margin: 0px 0px 20px 0px;
 }
 
 /* rails errors
 ---------------------------------------------------------- */
 
 .formError {
-	display: inline;
-	color: green;
+  color: green;
+  display: inline;
 }
 
 .fieldWithErrors {
-	margin: -7px 0px 0px 0px;
+  margin: -7px 0px 0px 0px;
 }
 
 .errorExplanation {
-	border: 2px solid #3366CC;
-	padding: 0px 10px 5px 10px;
+  border: 2px solid #3366CC;
+  padding: 0px 10px 5px 10px;
 }
 
 /* searchbox
 ---------------------------------------------------------- */
 
 .box {
-	border: 1px solid #D3D3D3;
-	margin: 0px 0px 10px 0px;
-	padding: 5px 10px;
+  border: 1px solid #D3D3D3;
+  margin: 0px 0px 10px 0px;
+  padding: 5px 10px;
 }
 
 .box p {
-	margin: 5px 0px;
+  margin: 5px 0px;
 }
 
 .separator {
-	border-top: 1px dotted #999;
-	margin: 20px 0px;
+  border-top: 1px dotted #999;
+  margin: 20px 0px;
 }
 
 img {
-	border: 0px;
+  border: 0px;
 }
 
 /* dialog
 ---------------------------------------------------------- */
 
 body#login {
-	background: #000;
+  background: #000;
 }
 
 #dialog {
   background: #FFF;
-  margin: 100px auto 10px auto;
   border: 5px solid #09C;
+  margin: 100px auto 10px auto;
   padding: 15px 20px;
   width: 420px;
 }
 
 #dialog h1 {
-	color: #09C;
-	font-size: 1.6em;
-	margin: 5px 0px 15px -5px;
-	padding: 0px 0px 0px 5px;
+  color: #09C;
+  font-size: 1.6em;
+  margin: 5px 0px 15px -5px;
+  padding: 0px 0px 0px 5px;
 }
 
 #dialog h2 {
-	color: #7A9496;
-	font-size: 120%;
-	margin-top: 1em;
-	margin-bottom: 0.75em;
-}
-
-#dialog p {
-	border: 0px;
-	padding: 0px;
+  color: #7A9496;
+  font-size: 120%;
+  margin: 1em 0px 0.75em 0px;
 }
 
 #dialog label {
-	display: block;
-	font-weight: bold;
-	margin: 0px 0px 3px 0px;
+  display: block;
+  font-weight: bold;
+  margin: 0px 0px 3px 0px;
 }
 
 #dialog input {
-	margin: 0px 10px 10px 0px;
+  margin: 0px 10px 10px 0px;
 }
 
 #dialog input.big {
-	font-size: 20px;
-	font-family: georgia;
-	padding: 3px 2px;
-	width: 97%;
+  font-size: 20px;
+  font-family: georgia;
+  padding: 3px 2px;
+  width: 97%;
 }
 
 #dialog input:focus {
-	background-color: #FFFCE1;
+  background-color: #FFFCE1;
 }
 
 #dialog #signature {
-	color: #FFF;
-	margin: 0px auto;
-	text-align: right;
-	width: 450px;
+  color: #FFF;
+  margin: 0px auto;
+  text-align: right;
+  width: 450px;
 }
 
 #dialog .error {
-	background: #000;
-	border-left: 5px solid #CC0000;
-	color: #FFF;
-	margin-bottom: 1em;
-	padding: 5px 5px 5px 10px;
+  background: #000;
+  border-left: 5px solid #CC0000;
+  color: #FFF;
+  margin-bottom: 1em;
+  padding: 5px 5px 5px 10px;
 }
-
 
 /* pagination
 ---------------------------------------------------------- */
 
 .pagination {
-	border-top: 1px solid #F5F5F5;
-	border-bottom: 1px solid #F5F5F5;
-	margin: 3px;
-	padding: 10px 0px;
-	margin: 25px auto;
-	text-align: center;
+  border-top: 1px solid #F5F5F5;
+  border-bottom: 1px solid #F5F5F5;
+  margin: 25px auto; /* margin: 3px; */
+  padding: 10px 0px;
+  text-align: center;
 }
 
 .pagination a {
-	color: #0099CC;
-	margin: 2px;
-	padding: 2px 3px;
-	text-decoration: none;
+  color: #0099CC;
+  margin: 2px;
+  padding: 2px 3px;
+  text-decoration: none;
 }
 .pagination a:hover,
 .pagination a:active {
-	color: #000;
+  color: #000;
 }
 .pagination span.current {
-	background-color: #0099CC;
-	color: #FFF;
-	font-weight: bold;
-	margin: 2px;
-	padding: 2px 3px;
+  background-color: #0099CC;
+  color: #FFF;
+  font-weight: bold;
+  margin: 2px;
+  padding: 2px 3px;
 }
 
 .pagination span.disabled {
-	color: #DDD;
-	margin: 2px;
-	padding: 2px 3px;
+  color: #DDD;
+  margin: 2px;
+  padding: 2px 3px;
 }
