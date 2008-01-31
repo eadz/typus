@@ -13,6 +13,7 @@ class ActionController::Routing::RouteSet
         i.connect "#{prefix}/:model/"
         i.connect "#{prefix}/:model/new", :action => 'new'
         i.connect "#{prefix}/:model/create", :action => 'create'
+        i.connect "#{prefix}/:model/:id/position", :action => 'position'
         i.connect "#{prefix}/:model/:id/edit", :action => 'edit', :requirements => { :id => /\d+/ }
         i.connect "#{prefix}/:model/:id/update", :action => 'update', :requirements => { :id => /\d+/ }
         i.connect "#{prefix}/:model/:id/destroy", :action => 'destroy', :requirements => { :id => /\d+/ }
