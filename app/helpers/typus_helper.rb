@@ -233,6 +233,8 @@ module TypusHelper
           else
             html << "<td>#{"#{this_model}##{item.send(column[0])}" if item.send(column[0])}</td>"
           end
+        when "position"
+          html << "<td>#{link_to "Up", :action => 'position', :id => item, :go => 'up'} / #{link_to "Down", :action => 'position', :id => item, :go => 'down'} (#{item.send(column[0])})</td>"
         else # 'string', 'integer', 'selector'
           html << "<td>#{link_to item.send(column[0]), :model => model, :action => 'edit', :id => item.id}</td>"
         end

@@ -5,7 +5,7 @@ class TypusController < ApplicationController
   before_filter :set_model, :except => [ :dashboard, :login, :logout ]
   before_filter :check_role, :except => [ :dashboard, :login, :logout ]
   before_filter :set_order, :only => [ :index ]
-  before_filter :find_model, :only => [ :show, :edit, :update, :destroy, :status ]
+  before_filter :find_model, :only => [ :show, :edit, :update, :destroy, :status, :position ]
   before_filter :fields, :only => [ :index ]
   before_filter :form_fields, :only => [ :new, :edit, :create, :update ]
 
@@ -78,6 +78,16 @@ class TypusController < ApplicationController
   def status
     @item.toggle!('status')
     flash[:notice] = "#{@model.to_s.titleize.capitalize} status changed"
+    redirect_to :action => 'index'
+  end
+
+  # Change item position
+  def position
+    case params[:go]
+      when 'up':   @item.move_higher
+      when 'down': @item.move_lower
+    end
+    flash[:notice] = "Position changed ..."
     redirect_to :action => 'index'
   end
 
