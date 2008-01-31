@@ -4,7 +4,10 @@ namespace :typus do
 
   desc "Install plugin dependencies"
   task :dependencies do
-    system "script/plugin install svn://errtheblog.com/svn/plugins/will_paginate"
+    puts "=> Installing +will_paginate+ plugin"
+    system "script/plugin install svn://errtheblog.com/svn/plugins/will_paginate -q"
+    puts "=> Installing +acts_as_list+ plugin"
+    system "script/plugin install acts_as_list -q"
   end
 
   desc "Update Typus"

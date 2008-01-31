@@ -8,6 +8,7 @@ Once installed and configured you can login at http://0.0.0.0:3000/typus/
 
     script/plugin install svn://errtheblog.com/svn/plugins/will_paginate
     script/plugin install attachment_fu
+    script/plugin install acts_as_list
 
 NOTE: <code>attachment_fu</code> is only needed if you need uploads.
 
