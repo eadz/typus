@@ -220,7 +220,7 @@ module TypusHelper
         when 'boolean'
           image = "#{image_tag(status = item.send(column[0])? "typus_status_true.gif" : "typus_status_false.gif")}"
           if column[0] == 'status'
-            html << "<td width=\"20px\" align=\"center\">#{link_to image, :controller => 'typus', :model => params[:model], :action => 'status', :id => item}</td>"
+            html << "<td width=\"20px\" align=\"center\">#{link_to image, :controller => 'typus', :model => params[:model], :action => 'status', :id => item.id}</td>"
           else
             html << "<td width=\"20px\" align=\"center\">#{image}</td>"
           end
