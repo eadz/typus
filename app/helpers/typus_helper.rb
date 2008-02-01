@@ -105,6 +105,15 @@ module TypusHelper
       html << "<ul>"
       html << "<li>#{link_to "Back to list", :action => 'index'}</li>"
       html << "</ul>"
+    else
+      html << more_actions
+      html << "<ul>"
+      if params[:id]
+        html << "<li>#{link_to "Back to list", :controller => 'typus', :action => 'edit', :id => params[:id]}</li>"
+      else
+        html << "<li>#{link_to "Back to list", :controller => 'typus', :action => 'index'}</li>"
+      end
+      html << "</ul>"
     end
   end
 
