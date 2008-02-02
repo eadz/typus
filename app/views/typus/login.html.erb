@@ -1,3 +1,5 @@
+<%= typus_block("login_top") %>
+
 <% form_tag :action => 'login' do %>
 <p><label for="email">Username</label>
 <%= text_field :user, :name, :size => "20", :class => "big" %></p>
@@ -5,3 +7,5 @@
 <%= password_field :user, :password, :size => "20", :class => "big" %></p>
 <p><%= submit_tag "Login" %></p>
 <% end %>
+
+<%= typus_block("login_bottom") %>

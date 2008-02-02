@@ -4,7 +4,11 @@
 
 <h2><%= link_to "#{params[:model].titleize}", :action => "index", :model => params[:model], :id => nil %> &rsaquo; New</h2>
 
+<%= typus_block("new_top") %>
+
 <% form_tag :action => 'create' do %>
   <%= typus_form %>
   <p><%= submit_tag "Create #{params[:model].titleize.singularize}" %></p>
 <% end %>
+
+<%= typus_block("new_bottom") %>

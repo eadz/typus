@@ -6,6 +6,8 @@
 
 <h2><%= params[:model].titleize %></h2>
 
+<%= typus_block("index_top") %>
+
 <div id="list">
 
   <!-- Query -->
@@ -16,23 +18,27 @@
   <% end %>
   <!-- /Query -->
 
-  <!-- Listing & Feedback -->
   <% if @items.size > 0 -%>
+    <!-- Listing & Feedback -->
     <%= typus_table %>
     <%= will_paginate @items %>
+    <!-- /Listing & Feedback -->
+  <% elsif @model.count == 0 %>
+    <!-- Shown when there are no items -->
+    <div class="box" id="empty">
+      <p>There are no <strong><%= params[:model].titleize %></strong>.</p>
+    </div>
+    <!-- /Shown when there are no items -->
   <% else %>
+    <!-- No items under this filter -->
     <div class="box" id="empty">
       <p>No <strong><%= params[:model].titleize %></strong> under this filter.</p>
     </div>
+    <!-- /No items under this filter -->
   <% end %>
-  <!-- /Listing & Feedback -->
-
-  <!-- Shown when there are no items -->
-  <% if @model.count == 0 %>
-    <p><%= link_to "Add the first item", :action => "new" %></p>
-  <% end %>
-  <!-- /Shown when there are no items -->
 
 </div>
+
+<%= typus_block("index_bottom") %>
 
 <script type="text/javascript">new Effect.Highlight('empty');</script>
