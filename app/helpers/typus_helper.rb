@@ -98,6 +98,9 @@ module TypusHelper
       html << "</ul>"
     when "edit", "update"
       html << "<ul>"
+      html << "<li>#{link_to "Add #{params[:model].titleize.singularize}", :action => 'new'}</li>"
+      html << "</ul>"
+      html << "<ul>"
       html << "#{'<li>' + (link_to "Next", :action => "edit", :id => @next.id) + '</li>' if @next}"
       html << "#{'<li>' + (link_to "Previous", :action => 'edit', :id => @previous.id) + '<li>' if @previous}"
       html << "</ul>"
@@ -130,7 +133,6 @@ module TypusHelper
 
   def search
     the_model = (@model.to_s.tableize.singularize.split("_").each { |i| i.capitalize! }).join(" ")
-    
     if MODELS["#{the_model}"]["search"]
       search = <<-HTML
         <h2>Search</h2>
@@ -349,6 +351,12 @@ module TypusHelper
       query << "for <strong>\"#{params[:search]}\"</strong>"
     end
     return query
+  end
+
+  # Block of code
+  def typus_block(name)
+    render :partial => "typus/#{params[:model]}/#{name}.html.erb"
+  rescue
   end
 
 end
