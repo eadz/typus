@@ -19,3 +19,12 @@
 [ ] After installing Typus generate TypusExtrasController (inherits from TypusController)
 [ ] External actions (typus_extras_controller.rb)
 [X] Toggle status ...
+[ ] Translations with the Translation plugin.
+[ ] Check if `will_paginate` exists, otherwise, install it.
+[ ] Don't show `will_paginate` message.
+[ ] Add on README instructions on how to add messages to views (index_top, edit_top, new_top)
+[ ] Add on README instructions on how to add messages to login and dashboard.
+[ ] Add `preview` to images (javascript)
+[ ] Add custom lists for externals.
+[ ] When generation `typus.yml` file, add also the form fields.
+[ ] ...
