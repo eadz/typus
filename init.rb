@@ -15,5 +15,5 @@ begin
   Typus.enable
 
 rescue LoadError
-  puts "Run `rake typus:dependencies` to install required plugins."
+  puts "To install required plugins run => rake typus:dependencies"
 end
