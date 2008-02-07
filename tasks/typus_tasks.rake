@@ -1,5 +1,24 @@
 namespace :typus do
 
+  desc "Add controller to have new actions available"
+  task :extra_actions do
+    if !File.exists? ("#{RAILS_ROOT}/app/controllers/typus_extras_controller.rb")
+      typus_extra = File.open("#{RAILS_ROOT}/app/controllers/typus_extras_controller.rb", "w+")
+      typus_extra.puts "class TypusExtrasController < TypusController"
+      typus_extra.puts "end"
+      typus_extra.close
+      puts "\nTypus"
+      puts "====="
+      puts "=> Added controller +typus_extras+"
+      puts ""
+    else
+      puts "\nTypus"
+      puts "====="
+      puts "=> Controller +typus_extras+ already exists."
+      puts ""
+    end
+  end
+
   desc "Install plugin dependencies"
   task :dependencies do
     puts "Installing required plugins ..."
