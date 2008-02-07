@@ -1,13 +1,15 @@
-require File.dirname(__FILE__) + '/../../../../config/environment'
-
 namespace :typus do
 
   desc "Install plugin dependencies"
   task :dependencies do
-    puts "=> Installing +will_paginate+ plugin"
-    system "script/plugin install svn://errtheblog.com/svn/plugins/will_paginate -q"
-    puts "=> Installing +acts_as_list+ plugin"
-    system "script/plugin install acts_as_list -q"
+    puts "Installing required plugins ..."
+    plugins = [ "svn://errtheblog.com/svn/plugins/will_paginate",
+                "acts_as_list",
+                "http://svn.techno-weenie.net/projects/plugins/attachment_fu/"]
+    plugins.each do |plugin|
+      puts "=> Installing +#{plugin.split("/")[-1]}+ plugin"
+      system "script/plugin install #{plugin} -q"
+    end
   end
 
   desc "Update Typus"
@@ -26,6 +28,7 @@ namespace :typus do
 
   desc "Generate +config/typus.yml+"
   task :setup do
+    require File.dirname(__FILE__) + '/../../../../config/environment'
     begin
       MODEL_DIR = File.join(RAILS_ROOT, "app/models")
       Dir.chdir(MODEL_DIR)
@@ -63,7 +66,7 @@ namespace :typus do
           list.delete("body")
           typus.puts "  fields:"
           typus.puts "    list: #{list.join(", ")}"
-          typus.puts "    form:"
+          typus.puts "    form: #{list.join(", ")}"
           typus.puts "  actions:"
           typus.puts "    list:"
           typus.puts "    form:"
