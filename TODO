@@ -1,3 +1,18 @@
+
+TODO
+====
+
+[ ] Sort by LANGUAGES is not working.
+[ ] Translations with the Translation plugin.
+[ ] Add on README instructions on how to add messages to views (index_top, edit_top, new_top)
+[ ] Add on README instructions on how to add messages to login and dashboard.
+[ ] Add `preview` to images (javascript)
+[ ] Add custom lists for externals.
+[ ] ...
+
+DONE
+====
+
 [X] Sort by Collection is not working. (sort_by=category&sort_order=asc)
 [X] Sidebar filters should read current filters.
 [X] Dashboard listings should show groups.
@@ -13,18 +28,11 @@
 [X] Add Actions params ( :params => params.merge(...) )
 [X] Fix problems with the selectors of %w( item1 item2 item3 item4 )
 [X] Items can add external items.
-[ ] Sort by LANGUAGES is not working.
-[ ] Add -Multipart- to forms.
-[ ] Actions/Tasks ... now Typus can handle external controllers ...
-[ ] After installing Typus generate TypusExtrasController (inherits from TypusController)
-[ ] External actions (typus_extras_controller.rb)
+[X] Add -Multipart- to forms.
+[X] Actions/Tasks ... now Typus can handle external controllers ...
+[X] After installing Typus generate TypusExtrasController (inherits from TypusController)
+[X] External actions (typus_extras_controller.rb)
 [X] Toggle status ...
-[ ] Translations with the Translation plugin.
-[ ] Check if `will_paginate` exists, otherwise, install it.
-[ ] Don't show `will_paginate` message.
-[ ] Add on README instructions on how to add messages to views (index_top, edit_top, new_top)
-[ ] Add on README instructions on how to add messages to login and dashboard.
-[ ] Add `preview` to images (javascript)
-[ ] Add custom lists for externals.
-[ ] When generation `typus.yml` file, add also the form fields.
-[ ] ...
+[X] Check if `will_paginate` exists, otherwise, install it.
+[X] Don't show `will_paginate` message.
+[X] When generation `typus.yml` file, add also the form fields.
