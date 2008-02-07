@@ -1,5 +1,7 @@
 class TypusController < ApplicationController
 
+  skip_before_filter :set_workspace
+
   before_filter :authenticate, :except => [ :login, :logout ]
   before_filter :set_previous_action, :except => [ :dashboard, :login, :logout, :create ]
   before_filter :set_model, :except => [ :dashboard, :login, :logout ]
@@ -71,7 +73,9 @@ class TypusController < ApplicationController
   def destroy
     @item.destroy
     flash[:notice] = "#{@model.to_s.titleize} successfully removed."
-    redirect_to typus_index_url(params[:model])
+    params.delete('id')
+    params.delete('action')
+    redirect_to typus_index_url(:model => params[:model], :params => params)
   end
 
   # Toggle the status of an item.

@@ -256,7 +256,9 @@ module TypusHelper
       # relationship between the models.
       case params[:model]
       when model
-        @perform = link_to image_tag("typus_trash.gif"), { :model => model, :action => 'destroy', :id => item.id }, :confirm => "Remove this entry?"
+        # Remove the current action, to be able to set the new one
+        params.delete('action')
+        @perform = link_to image_tag("typus_trash.gif"), { :model => model, :action => 'destroy', :id => item.id, :params => params }, :confirm => "Remove this entry?"
       else
         @perform = link_to image_tag("typus_trash.gif"), { :action => "unrelate", :unrelated => model, :unrelated_id => item.id, :id => params[:id] }, :confirm => "Remove #{model.singularize} \"#{item.name}\" from #{params[:model].singularize}?"
       end
