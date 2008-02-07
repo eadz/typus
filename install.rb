@@ -1,19 +1,12 @@
-puts "\n------------------------------------------------------------------------"
-puts "  Installing Typus"
-puts "------------------------------------------------------------------------\n\n"
+puts "\nInstalling Typus"
+puts "================="
 
 %w( stylesheets images ).each do |f|
-  puts "  => Copying #{f.capitalize}"
+  puts "#{f.capitalize} successfully copied."
   system "cp #{File.dirname(__FILE__)}/public/#{f}/* #{File.dirname(__FILE__)}/../../../public/#{f}/"
 end
 
-puts "\n------------------------------------------------------------------------"
-puts "  Available Tasks"
-puts "------------------------------------------------------------------------\n\n"
-
-puts "  - rake typus:dependencies"
-puts "    Installs +will_paginate+ plugin"
-puts ""
-puts "  - rake typus:setup"
-puts "    Generates +config/typus.yml+ config file."
-puts ""
+puts "\nAvailable Tasks"
+puts "================"
+system "rake -T typus --silent"
+puts "\n"
