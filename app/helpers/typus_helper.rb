@@ -70,10 +70,10 @@ module TypusHelper
         current = (model[1]['module']) ? model[1]['module'].capitalize : 'Typus'
         if current == m
           html << "<tr class=\"#{cycle('even', 'odd')}\"><td>"
-          html << "#{link_to model[0].pluralize, :action => 'index', :model => model[0].split(" ").join("_").downcase.pluralize}<br />"
+          html << "#{link_to model[0].pluralize, :action => 'index', :model => model[0].to_s.delete(" ").tableize}<br />"
           html << "<small>#{model[1]['description']}</small></td>"
           html << "<td align=\"right\" valign=\"bottom\"><small>"
-          html << "#{link_to 'Add', :action => 'new', :model => model[0].downcase.pluralize}"
+          html << "#{link_to 'Add', :action => 'new', :model => model[0].to_s.delete(" ").tableize}"
           html << "</small></td></tr>\n"
         end
       end
