@@ -1,5 +1,4 @@
 begin
-
   ActionController::Base.view_paths << File.join(File.dirname(__FILE__), 'app', 'views')
 
   %w( controllers models helpers ).each do |m|
@@ -16,7 +15,5 @@ begin
   Typus.enable
 
 rescue LoadError
-  puts "\n************************************************************************"
-  puts "**        Install +will_paginate+ plugin to make Typus work           **"
-  puts "************************************************************************\n\n"
+  puts "Run `rake typus:dependencies` to install required plugins."
 end
