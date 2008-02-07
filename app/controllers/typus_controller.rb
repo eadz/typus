@@ -1,7 +1,5 @@
 class TypusController < ApplicationController
 
-  skip_before_filter :set_workspace
-
   before_filter :authenticate, :except => [ :login, :logout ]
   before_filter :set_previous_action, :except => [ :dashboard, :login, :logout, :create ]
   before_filter :set_model, :except => [ :dashboard, :login, :logout ]
