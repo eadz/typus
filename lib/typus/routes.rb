@@ -21,6 +21,10 @@ class ActionController::Routing::RouteSet
         i.connect "#{prefix}/:model/:id/unrelate", :action => 'unrelate', :requirements => { :id => /\d+/ }
         i.connect "#{prefix}/:model/:id/status", :action => 'status', :requirements => { :id => /\d+/ }
       end
+
+      map.connect "#{prefix}/:model/:action", :controller => 'typus_extras'
+      map.connect "#{prefix}/:model/:id/:action", :controller => 'typus_extras'
+
       yield map
     end
   end
