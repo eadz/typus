@@ -1,13 +1,34 @@
-require File.dirname(__FILE__) + '/../../../../config/environment'
-
 namespace :typus do
+
+  desc "Add controller to have new actions available"
+  task :extra_actions do
+    if !File.exists? ("#{RAILS_ROOT}/app/controllers/typus_extras_controller.rb")
+      typus_extra = File.open("#{RAILS_ROOT}/app/controllers/typus_extras_controller.rb", "w+")
+      typus_extra.puts "class TypusExtrasController < TypusController"
+      typus_extra.puts "end"
+      typus_extra.close
+      puts "\nTypus"
+      puts "====="
+      puts "=> Added controller +typus_extras+"
+      puts ""
+    else
+      puts "\nTypus"
+      puts "====="
+      puts "=> Controller +typus_extras+ already exists."
+      puts ""
+    end
+  end
 
   desc "Install plugin dependencies"
   task :dependencies do
-    puts "=> Installing +will_paginate+ plugin"
-    system "script/plugin install svn://errtheblog.com/svn/plugins/will_paginate -q"
-    puts "=> Installing +acts_as_list+ plugin"
-    system "script/plugin install acts_as_list -q"
+    puts "Installing required plugins ..."
+    plugins = [ "svn://errtheblog.com/svn/plugins/will_paginate",
+                "acts_as_list",
+                "http://svn.techno-weenie.net/projects/plugins/attachment_fu/"]
+    plugins.each do |plugin|
+      puts "=> Installing +#{plugin.split("/")[-1]}+ plugin"
+      system "script/plugin install #{plugin} -q"
+    end
   end
 
   desc "Update Typus"
@@ -26,6 +47,7 @@ namespace :typus do
 
   desc "Generate +config/typus.yml+"
   task :setup do
+    require File.dirname(__FILE__) + '/../../../../config/environment'
     begin
       MODEL_DIR = File.join(RAILS_ROOT, "app/models")
       Dir.chdir(MODEL_DIR)
@@ -63,7 +85,7 @@ namespace :typus do
           list.delete("body")
           typus.puts "  fields:"
           typus.puts "    list: #{list.join(", ")}"
-          typus.puts "    form:"
+          typus.puts "    form: #{list.join(", ")}"
           typus.puts "  actions:"
           typus.puts "    list:"
           typus.puts "    form:"
