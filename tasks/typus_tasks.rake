@@ -23,8 +23,9 @@ namespace :typus do
   task :dependencies do
     puts "Installing required plugins ..."
     plugins = [ "svn://errtheblog.com/svn/plugins/will_paginate",
-                "acts_as_list",
-                "http://svn.techno-weenie.net/projects/plugins/attachment_fu/"]
+                "http://svn.techno-weenie.net/projects/plugins/attachment_fu/",
+                "http://dev.rubyonrails.org/svn/rails/plugins/acts_as_list/",
+                "http://dev.rubyonrails.org/svn/rails/plugins/acts_as_tree/"]
     plugins.each do |plugin|
       puts "=> Installing +#{plugin.split("/")[-1]}+ plugin"
       system "script/plugin install #{plugin} -q"
