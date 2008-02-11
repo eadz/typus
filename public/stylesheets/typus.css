@@ -121,6 +121,16 @@ a:hover {
   float: right;
 }
 
+#header .right ul {
+  margin: 25px 0px 0px 0px;
+}
+
+#header .right li {
+  list-style: none;
+  display: inline;
+  padding: 0px 0px 0px 10px;
+}
+
 /* wrapper
 ---------------------------------------------------------- */
 
@@ -134,7 +144,7 @@ a:hover {
 ---------------------------------------------------------- */
 
 #content {
-  margin: 20px 300px 20px 20px;
+  margin: 20px 300px 20px 15px;
 }
 
 #content a {

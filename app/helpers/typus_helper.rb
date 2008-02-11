@@ -42,11 +42,14 @@ module TypusHelper
   end
 
   def login_info
-    html = ""
+    html = "<ul>"
     if session[:typus].class == TypusUser
-      html << "#{session[:typus].email} (#{session[:typus].role}) "
+      html << "<li>#{session[:typus].email} (#{session[:typus].role}) </li>"
     end
-    html << "#{link_to "Logout", typus_logout_url}"
+    html << "<li>#{link_to "View Site", '/', :target => 'blank'}</li>"
+    html << "<li>#{link_to "Logout", typus_logout_url}</li>"
+    html << "</ul>"
+    return html
   end
 
   # Dashboard list of modules
