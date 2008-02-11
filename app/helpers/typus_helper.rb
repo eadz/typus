@@ -201,7 +201,7 @@ module TypusHelper
   end
 
   def footer
-    "<p>#{link_to "Typus", "http://intraducibles.net/projects/typus"}</p>"
+    %{<p>#{link_to "Typus #{Typus::Configuration.options[:version]}", "http://intraducibles.net/projects/typus"}</p>}
   end
 
   def signature
