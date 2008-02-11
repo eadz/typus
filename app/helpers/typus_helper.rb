@@ -4,7 +4,7 @@ module TypusHelper
 
   def head
     html = <<-HTML
-      <title>#{Typus::Configuration.options[:app_name]} &rsaquo; #{page_title}</title>
+      <title>#{Typus::Configuration.options[:app_name]} #{page_title}</title>
       <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
       <meta http-equiv="imagetoolbar" content="no" />
       <meta name="description" content="" />
@@ -192,8 +192,9 @@ module TypusHelper
 
   def page_title
     html = ""
-    html << "#{params[:model].titleize} &rsaquo; " if params[:model]
-    html << "#{params[:action].capitalize}" if params[:action]
+    html << " &rsaquo; #{params[:model].titleize}" if params[:model]
+    html << " &rsaquo; #{params[:action].capitalize}" if params[:action]
+    return html
   end
 
   def footer
