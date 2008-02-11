@@ -232,7 +232,7 @@ module TypusHelper
         when 'boolean'
           image = "#{image_tag(status = item.send(column[0])? "typus_status_true.gif" : "typus_status_false.gif")}"
           if column[0] == 'status'
-            html << "<td width=\"20px\" align=\"center\">#{link_to image, :controller => 'typus', :model => params[:model], :action => 'status', :id => item.id}</td>"
+            html << "<td width=\"20px\" align=\"center\">#{link_to image, :controller => 'typus', :model => model, :action => 'status', :id => item.id}</td>"
           else
             html << "<td width=\"20px\" align=\"center\">#{image}</td>"
           end
@@ -246,7 +246,7 @@ module TypusHelper
             html << "<td>#{"#{this_model}##{item.send(column[0])}" if item.send(column[0])}</td>"
           end
         when "position"
-          html << "<td>#{link_to "Up", :action => 'position', :id => item, :go => 'up'} / #{link_to "Down", :action => 'position', :id => item, :go => 'down'} (#{item.send(column[0])})</td>"
+          html << "<td>#{link_to "Up", :model => model, :action => 'position', :id => item, :go => 'up'} / #{link_to "Down", :model => model, :action => 'position', :id => item, :go => 'down'} (#{item.send(column[0])})</td>"
         else # 'string', 'integer', 'selector'
           html << "<td>#{link_to item.send(column[0]), :model => model, :action => 'edit', :id => item.id}</td>"
         end

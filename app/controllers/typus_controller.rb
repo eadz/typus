@@ -80,7 +80,9 @@ class TypusController < ApplicationController
   def status
     @item.toggle!('status')
     flash[:notice] = "#{@model.to_s.titleize.capitalize} status changed"
-    redirect_to :action => 'index'
+    # FIXME: This only works on Safari and Firefox
+    redirect_to :back
+    # redirect_to :action => 'index'
   end
 
   # Change item position
@@ -90,12 +92,14 @@ class TypusController < ApplicationController
       when 'down': @item.move_lower
     end
     flash[:notice] = "Position changed ..."
-    redirect_to :action => 'index'
+    # FIXME: This only works on Safari and Firefox
+    redirect_to :back
+    # redirect_to :action => 'index'
   end
 
   # Relate a model object to another.
   def relate
-    model_to_relate = params[:related].singularize.capitalize.constantize
+    model_to_relate = params[:related].singularize.camelize.constantize
     @model.find(params[:id]).send(params[:related]) << model_to_relate.find(params[:model_id_to_relate][:related_id])
     flash[:notice] = "#{model_to_relate} added to #{@model.to_s.titleize}"
     redirect_to :action => 'edit', :id => params[:id]
@@ -103,7 +107,7 @@ class TypusController < ApplicationController
 
   # Remove relationship between models.
   def unrelate
-    model_to_unrelate = params[:unrelated].singularize.capitalize.constantize
+    model_to_unrelate = params[:unrelated].singularize.camelize.constantize
     unrelate = model_to_unrelate.find(params[:unrelated_id])
     @model.find(params[:id]).send(params[:unrelated]).delete(unrelate)
     flash[:notice] = "#{model_to_unrelate} removed from #{@model.to_s.titleize}"
