@@ -248,6 +248,8 @@ module TypusHelper
           else
             html << "<td>#{"#{this_model}##{item.send(column[0])}" if item.send(column[0])}</td>"
           end
+        when 'tree'
+          html << "<td>#{item.parent.name if item.parent}</td>"
         when "position"
           html << "<td>#{link_to "Up", :model => model, :action => 'position', :id => item, :go => 'up'} / #{link_to "Down", :model => model, :action => 'position', :id => item, :go => 'down'} (#{item.send(column[0])})</td>"
         else # 'string', 'integer', 'selector'
@@ -297,6 +299,10 @@ module TypusHelper
         html << "#{text_field :item, field[0], :class => 'big'}"
       when "text"
         html << "#{text_area :item, field[0], :rows => '10'}"
+      when "tree"
+        html << "<select id=\"item_#{field[0]}\" name=\"item[#{field[0]}]\">\n"
+        html << "#{expand_tree_into_select_field(Category.top)}"
+        html << "</select>\n"
       when "selector"
         values = eval field[0].upcase
         # html << "#{select :item, field[0], values.collect { |p| [ "#{p[0]} (#{p[1]})", p[1] ] }, :include_blank => true}"
@@ -363,6 +369,15 @@ module TypusHelper
   def typus_block(name)
     render :partial => "typus/#{params[:model]}/#{name}.html.erb"
   rescue
+  end
+
+  def expand_tree_into_select_field(categories)
+    returning(String.new) do |html|
+      categories.each do |category|
+        html << %{<option #{"selected" if @item.parent_id == category.id} value="#{ category.id }">#{ "-" * category.ancestors.size } #{category.name}</option>}
+        html << expand_tree_into_select_field(category.children) if category.has_children?
+      end
+    end
   end
 
 end
