@@ -29,6 +29,7 @@ module Typus
           af = af.split(": ")
           @field_type = af[1] if af[0] == f
           case f
+          when 'parent_id':       @field_type = 'tree'
           when /_id/:             @field_type = 'collection'
           when /password/:        @field_type = 'password'
           when 'uploaded_data':   @field_type = 'blob'
@@ -89,6 +90,16 @@ module Typus
       related = config["#{self.to_s.titleize}"][filter].split(", ") if config["#{self.to_s.titleize}"][filter]
     rescue
       []
+    end
+
+    # This is used by acts_as_tree
+    def self.top
+      find :all, :conditions => [ 'parent_id IS ?', nil ]
+    end
+
+    # This is used by acts_as_tree
+    def has_children?
+      children.size > 0
     end
 
   end
