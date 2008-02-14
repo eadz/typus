@@ -14,7 +14,7 @@ begin
 
   Typus.enable
 
-  Typus::Configuration.options[:version] = '330'
+  Typus::Configuration.options[:version] = '337'
 
 rescue LoadError
   puts "To install required plugins run => rake typus:dependencies"
