@@ -221,7 +221,7 @@ module TypusHelper
     # Header of the table
     html << "<tr>"
     @model.typus_fields_for('list').each do |column|
-      order_by = "#{column[0]}#{"_id" if column[1] == 'collection'}"
+      order_by = column[0]
       sort_order = (params[:sort_order] == "asc") ? "desc" : "asc"
       html << "<th>#{link_to "<div class=\"#{sort_order}\">#{column[0].titleize}</div>", { :params => params.merge( :order_by => order_by, :sort_order => sort_order) }}</th>"
     end
