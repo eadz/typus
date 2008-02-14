@@ -127,9 +127,9 @@ module TypusHelper
     html = ""
     case params[:action]
     when 'index'
-      @model.typus_actions_for('list').each { |a| html << "<li>#{link_to a.humanize, :controller => 'typus_extras', :model => params[:model], :action => a }</li>" }
+      @model.typus_actions_for('list').each { |a| html << "<li>#{link_to a.titleize, :controller => 'typus_extras', :model => params[:model], :action => a }</li>" }
     when 'edit'
-      @model.typus_actions_for('form').each { |a| html << "<li>#{link_to a.humanize, :controller => 'typus_extras', :model => params[:model], :action => a, :id => params[:id] }</li>" }
+      @model.typus_actions_for('form').each { |a| html << "<li>#{link_to a.titleize, :controller => 'typus_extras', :model => params[:model], :action => a, :id => params[:id] }</li>" }
     end
     html = "<ul>#{html}</ul>" if html
   end
@@ -196,7 +196,7 @@ module TypusHelper
   def page_title
     html = ""
     html << " &rsaquo; #{params[:model].titleize}" if params[:model]
-    html << " &rsaquo; #{params[:action].capitalize}" if params[:action]
+    html << " &rsaquo; #{params[:action].titleize}" if params[:action]
     return html
   end
 
