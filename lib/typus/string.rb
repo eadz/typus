@@ -11,7 +11,7 @@ class String
         model.typus_defaults_for('search').each { |s| search << "LOWER(#{s}) LIKE '%#{the_value}%'" }
         conditions << "AND (#{search.join(" OR ")}) "
       end
-      model.typus_fields_for('list').each do |f|
+      model.model_fields.each do |f|
         filter_type = f[1] if f[0] == the_key
         case filter_type
         when "boolean"
