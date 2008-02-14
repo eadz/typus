@@ -14,6 +14,12 @@ module Typus
            :conditions => ["#{condition} > ?", current]
     end
 
+    def self.model_fields
+      fields = []
+      self.columns.each { |column| fields << [column.name, column.type.to_s] }
+      return fields
+    end
+
     # Form and list fields
     #
     # Someday we could use something like:
@@ -21,19 +27,18 @@ module Typus
     #   typus_form_fields :name, :body, :excerpt, :created_at
     #
     def self.typus_fields_for(filter)
-      available_fields = self.inspect.gsub(/#{self}\(/, "").gsub(/\)/, "").split(", ")
-      fields = Typus::Configuration.config["#{self.to_s.titleize}"]["fields"][filter].split(", ")
-      fields_with_type = Array.new
+      available_fields = self.model_fields
+      fields = Typus::Configuration.config["#{self}"]["fields"][filter].split(", ")
+      fields_with_type = []
       fields.each do |f|
         available_fields.each do |af|
-          af = af.split(": ")
           @field_type = af[1] if af[0] == f
           case f
-          when 'parent_id':       @field_type = 'tree'
-          when /_id/:             @field_type = 'collection'
-          when /password/:        @field_type = 'password'
-          when 'uploaded_data':   @field_type = 'blob'
-          when 'position':        @field_type = 'position'
+            when 'parent_id':       @field_type = 'tree'
+            when /_id/:             @field_type = 'collection'
+            when /password/:        @field_type = 'password'
+            when 'uploaded_data':   @field_type = 'blob'
+            when 'position':        @field_type = 'position'
           end
         end
         @field_type = (eval f.upcase) rescue @field_type
@@ -49,12 +54,11 @@ module Typus
     #   typus_filters :created_at, :status
     #
     def self.typus_filters
-      available_fields = self.inspect.gsub(/#{self}\(/, "").gsub(/\)/, "").split(", ")
-      fields = Typus::Configuration.config["#{self.to_s.titleize}"]["filters"].split(", ")
+      available_fields = self.model_fields
+      fields = Typus::Configuration.config["#{self}"]["filters"].split(", ")
       fields_with_type = Array.new
       fields.each do |f|
         available_fields.each do |af|
-          af = af.split(": ")
           @field_type = af[1] if af[0] == f
         end
         fields_with_type << [ f, @field_type ]
@@ -71,8 +75,7 @@ module Typus
     #     typus_form_actions :action_two, :action_three
     #
     def self.typus_actions_for(filter)
-      config = Typus::Configuration.config
-      actions = config["#{self.to_s.titleize}"]["actions"][filter].split(", ")
+      Typus::Configuration.config["#{self}"]["actions"][filter].split(", ")
     rescue
       []
     end
@@ -86,15 +89,14 @@ module Typus
     #
     # Default order is ASC, except for datetime items that is DESC.
     def self.typus_defaults_for(filter)
-      config = Typus::Configuration.config
-      related = config["#{self.to_s.titleize}"][filter].split(", ") if config["#{self.to_s.titleize}"][filter]
+      Typus::Configuration.config["#{self}"][filter].split(", ")
     rescue
       []
     end
 
     # This is used by acts_as_tree
     def self.top
-      find :all, :conditions => [ 'parent_id IS ?', nil ]
+      find :all, :conditions => [ "parent_id IS ?", nil ]
     end
 
     # This is used by acts_as_tree
