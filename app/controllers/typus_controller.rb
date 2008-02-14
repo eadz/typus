@@ -161,7 +161,7 @@ private
   # Set default order on the listings.
   def set_order
     order = @model.typus_defaults_for('order_by')
-    if order
+    if order.size > 0
       params[:order_by] = params[:order_by] || order[0]
     else
       params[:order_by] = params[:order_by] || 'id'
