@@ -13,13 +13,13 @@ class TypusController < ApplicationController
   end
 
   def index
-    # select_fields = Typus::Configuration.config["#{@model.to_s.titleize}"]["fields"]["list"].split(", ") << "id"
+    select_fields = "id, " + Typus::Configuration.config["#{@model}"]["fields"]["list"]
     conditions = "1 = 1 "
     conditions << (request.env['QUERY_STRING']).build_conditions(@model) if request.env['QUERY_STRING']
     @items = @model.paginate :page => params[:page], 
                              :per_page => Typus::Configuration.options[:per_page], 
                              :order => "#{params[:order_by]} #{params[:sort_order]}", 
-                             # :select => select_fields.join(", "),
+                             :select => select_fields,
                              :conditions => "#{conditions}"
   rescue
     flash[:notice] = "There was an error on the model."
