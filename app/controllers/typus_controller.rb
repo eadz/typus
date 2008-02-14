@@ -14,13 +14,16 @@ class TypusController < ApplicationController
 
   def index
     select_fields = "id, " + Typus::Configuration.config["#{@model}"]["fields"]["list"]
-    conditions = "1 = 1 "
-    conditions << (request.env['QUERY_STRING']).build_conditions(@model) if request.env['QUERY_STRING']
+    eager_include = []
+    select_fields.split(", ").each { |field| eager_include << field.split("_id").first if field.include? '_id' }
+    conditions = "1 = 1"
+    conditions << " " + (request.env['QUERY_STRING']).build_conditions(@model) if request.env['QUERY_STRING']
     @items = @model.paginate :page => params[:page], 
                              :per_page => Typus::Configuration.options[:per_page], 
                              :order => "#{params[:order_by]} #{params[:sort_order]}", 
                              :select => select_fields,
-                             :conditions => "#{conditions}"
+                             :conditions => "#{conditions}",
+                             :include => eager_include
   rescue
     flash[:notice] = "There was an error on the model."
     redirect_to :action => 'dashboard'
@@ -162,7 +165,8 @@ private
   def set_order
     order = @model.typus_defaults_for('order_by')
     if order.size > 0
-      params[:order_by] = params[:order_by] || order[0]
+      params[:order_by] = params[:order_by] || order.first
+      params[:sort_order] = "desc" if order.first == 'created_at'
     else
       params[:order_by] = params[:order_by] || 'id'
     end
