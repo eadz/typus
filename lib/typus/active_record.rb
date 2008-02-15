@@ -28,7 +28,7 @@ module Typus
     #
     def self.typus_fields_for(filter)
       available_fields = self.model_fields
-      fields = Typus::Configuration.config["#{self}"]["fields"][filter].split(", ")
+      fields = Typus::Configuration.config["#{self.to_s.titleize}"]["fields"][filter].split(", ")
       fields_with_type = []
       fields.each do |f|
         available_fields.each do |af|
@@ -55,7 +55,7 @@ module Typus
     #
     def self.typus_filters
       available_fields = self.model_fields
-      fields = Typus::Configuration.config["#{self}"]["filters"].split(", ")
+      fields = Typus::Configuration.config["#{self.to_s.titleize}"]["filters"].split(", ")
       fields_with_type = Array.new
       fields.each do |f|
         available_fields.each do |af|
@@ -75,7 +75,7 @@ module Typus
     #     typus_form_actions :action_two, :action_three
     #
     def self.typus_actions_for(filter)
-      Typus::Configuration.config["#{self}"]["actions"][filter].split(", ")
+      Typus::Configuration.config["#{self.to_s.titleize}"]["actions"][filter].split(", ")
     rescue
       []
     end
@@ -89,7 +89,7 @@ module Typus
     #
     # Default order is ASC, except for datetime items that is DESC.
     def self.typus_defaults_for(filter)
-      Typus::Configuration.config["#{self}"][filter].split(", ")
+      Typus::Configuration.config["#{self.to_s.titleize}"][filter].split(", ")
     rescue
       []
     end
