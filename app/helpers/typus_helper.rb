@@ -175,7 +175,7 @@ module TypusHelper
             html << "<h3>By #{f[0].humanize}</h3>\n<ul>\n"
             model.find(:all).each do |item|
               switch = (current_request.include? "#{f[0]}=#{item.id}") ? 'on' : 'off'
-              html << "<li>#{link_to item.name, { :params => params.merge(f[0] => item) }, :class => switch}</li>"
+              html << "<li>#{link_to item.name, { :params => params.merge(f[0] => item.id) }, :class => switch}</li>"
             end
             html << "</ul>\n"
           end
@@ -369,6 +369,7 @@ module TypusHelper
   def typus_block(name)
     render :partial => "typus/#{params[:model]}/#{name}.html.erb"
   rescue
+    nil
   end
 
   def expand_tree_into_select_field(categories)

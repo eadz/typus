@@ -30,8 +30,8 @@ class String
           end
           start_date, end_date = start_date.to_s(:db), end_date.to_s(:db)
           conditions << "AND created_at > '#{start_date}' AND created_at < '#{end_date}' "
-        when "collection"
-          conditions << "AND #{f[0]} = #{the_value} "
+        when "integer"
+          conditions << "AND #{f[0]} = #{the_value} " if f[0].include? "_id"
         end
       end
     end

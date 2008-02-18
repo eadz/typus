@@ -21,7 +21,7 @@ class TypusController < ApplicationController
     @items = @model.paginate :page => params[:page], 
                              :per_page => Typus::Configuration.options[:per_page], 
                              :order => "#{params[:order_by]} #{params[:sort_order]}", 
-                             :select => select_fields,
+                             # :select => select_fields,
                              # FIXME
                              # :include => eager_include,
                              :conditions => "#{conditions}"
