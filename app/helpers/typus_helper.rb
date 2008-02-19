@@ -386,7 +386,7 @@ module TypusHelper
 
   # Block of code
   def typus_block(name)
-    render :partial => "typus/#{params[:model]}/#{name}.html.erb"
+    render :partial => "typus/#{params[:model]}/#{name}"
   rescue
     nil
   end
