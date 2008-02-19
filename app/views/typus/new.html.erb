@@ -1,5 +1,5 @@
 <% content_for :sidebar do %>
-  <%= actions %>
+  <%= typus_block("new_sidebar") || actions %>
 <% end %>
 
 <h2><%= link_to "#{params[:model].titleize}", :action => "index", :model => params[:model], :id => nil %> &rsaquo; New</h2>
