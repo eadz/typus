@@ -39,6 +39,7 @@ module Typus
             when /password/:        @field_type = 'password'
             when 'uploaded_data':   @field_type = 'blob'
             when 'position':        @field_type = 'position'
+            when 'preview':         @field_type = 'preview'
           end
         end
         @field_type = (eval f.upcase) rescue @field_type
