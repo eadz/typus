@@ -322,6 +322,15 @@ module TypusHelper
           html << "<option #{"selected" if @item.send(field[0]).to_s == value.last.to_s} value=\"#{value.last}\">#{value.first}</option>"
         end
         html << "</select>"
+      when "preview"
+        if @item.content_type == nil
+          html << "No Preview Available"
+        elsif @item.content_type.include? "image"
+          # html << "<td>#{lightview_image_tag item.public_filename, :title => item.filename}</td>"
+          html << "<a href=\"#{@item.public_filename}\" title=\"::\" rel=\"lightview\">#{image_tag (@item.public_filename(), {:style => "border: 1px solid #000;", :width => "250px" })}</a>"
+        else
+          html << "No Preview Available for <strong>#{@item.content_type}</strong>"
+        end
       when "collection"
         related = field[0].split("_id").first.capitalize.constantize
         if (related.new.attributes.keys.include? 'name') || (related.new.methods.include? 'name')
