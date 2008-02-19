@@ -14,7 +14,11 @@ module TypusHelper
       <meta name="generator" content="" />
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
       #{stylesheet_link_tag "typus", :media => "screen"}
+      #{stylesheet_link_tag "lightview", :media => "screen"}
       #{javascript_include_tag :defaults}
+      <script type=\"text/javascript\" src=\"/javascripts/prototype.js\"></script>
+      <script type=\"text/javascript\" src=\"/javascripts/scriptaculous.js?load=effects\"></script>
+      <script type=\"text/javascript\" src=\"/javascripts/lightview.js\"></script>
     HTML
   end
 
@@ -251,6 +255,12 @@ module TypusHelper
           end
         when 'tree'
           html << "<td>#{item.parent.name if item.parent}</td>"
+        when 'preview'
+          if item.content_type.include? "image"
+            html << "<td>#{lightview_image_tag item.public_filename, :title => item.filename}</td>"
+          else
+            html << "<td>#{link_to "Download", item.public_filename}</td>"
+          end
         when "position"
           html << "<td>#{link_to "Up", :model => model, :action => 'position', :id => item, :go => 'up'} / #{link_to "Down", :model => model, :action => 'position', :id => item, :go => 'down'} (#{item.send(column[0])})</td>"
         else # 'string', 'integer', 'selector'
@@ -313,6 +323,15 @@ module TypusHelper
           html << "<option #{"selected" if @item.send(field[0]).to_s == value.last.to_s} value=\"#{value.last}\">#{value.first}</option>"
         end
         html << "</select>"
+      when "preview"
+        if @item.content_type == nil
+          html << "No Preview Available"
+        elsif @item.content_type.include? "image"
+          # html << "<td>#{lightview_image_tag item.public_filename, :title => item.filename}</td>"
+          html << "<a href=\"#{@item.public_filename}\" title=\"::\" rel=\"lightview\">#{image_tag (@item.public_filename(), {:style => "border: 1px solid #000;", :width => "250px" })}</a>"
+        else
+          html << "No Preview Available for <strong>#{@item.content_type}</strong>"
+        end
       when "collection"
         related = field[0].split("_id").first.capitalize.constantize
         if (related.new.attributes.keys.include? 'name') || (related.new.methods.include? 'name')
