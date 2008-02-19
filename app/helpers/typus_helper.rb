@@ -214,13 +214,14 @@ module TypusHelper
     date.strftime("%d.%m.%Y")
   end
 
-  def typus_table(model = params[:model])
+  def typus_table(model = params[:model], fields = 'list')
+
     @model = model.camelize.singularize.constantize
     html = "<table>"
-    
+
     # Header of the table
     html << "<tr>"
-    @model.typus_fields_for('list').each do |column|
+    @model.typus_fields_for(fields).each do |column|
       order_by = column[0]
       sort_order = (params[:sort_order] == "asc") ? "desc" : "asc"
       html << "<th>#{link_to "<div class=\"#{sort_order}\">#{column[0].titleize}</div>", { :params => params.merge( :order_by => order_by, :sort_order => sort_order) }}</th>"
@@ -277,9 +278,9 @@ module TypusHelper
     <pre>#{error}</pre>"
   end
 
-  def typus_form
+  def typus_form(fields = @form_fields)
     html = error_messages_for :item, :header_tag => "h3"
-    @form_fields.each do |field|
+    fields.each do |field|
       case field[0] # Field Name
       when 'uploaded_data'
         html << "<p><label>Upload File</label>"
