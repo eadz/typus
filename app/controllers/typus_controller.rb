@@ -13,15 +13,15 @@ class TypusController < ApplicationController
   end
 
   def index
-    select_fields = "id, " + Typus::Configuration.config["#{@model.to_s.titleize}"]["fields"]["list"]
-    eager_include = []
-    select_fields.split(", ").each { |field| eager_include << field.split("_id").first if field.include? '_id' }
+#    select_fields = "id, " + Typus::Configuration.config["#{@model.to_s.titleize}"]["fields"]["list"]
+#    eager_include = []
+#    select_fields.split(", ").each { |field| eager_include << field.split("_id").first if field.include? '_id' }
     conditions = "1 = 1"
     conditions << " " + (request.env['QUERY_STRING']).build_conditions(@model) if request.env['QUERY_STRING']
     @items = @model.paginate :page => params[:page], 
                              :per_page => Typus::Configuration.options[:per_page], 
                              :order => "#{params[:order_by]} #{params[:sort_order]}", 
-                             # :select => select_fields,
+ #                            :select => select_fields,
                              # FIXME
                              # :include => eager_include,
                              :conditions => "#{conditions}"
