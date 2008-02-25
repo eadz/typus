@@ -14,8 +14,14 @@ module Typus
            :conditions => ["#{condition} > ?", current]
     end
 
+    def self.model_fields_hash
+      fields = Hash.new
+      self.columns.each { |column| fields[column.name.to_s] = column.type.to_s }
+      return fields
+    end
+
     def self.model_fields
-      fields = []
+      fields = Array.new
       self.columns.each { |column| fields << [column.name, column.type.to_s] }
       return fields
     end
@@ -76,9 +82,7 @@ module Typus
     #     typus_form_actions :action_two, :action_three
     #
     def self.typus_actions_for(filter)
-      Typus::Configuration.config["#{self.to_s.titleize}"]["actions"][filter].split(", ")
-    rescue
-      []
+      Typus::Configuration.config["#{self.to_s.titleize}"]["actions"][filter].split(", ") rescue []
     end
 
     # Used for +order_by+, +related+, +search+ and more ...
@@ -90,9 +94,7 @@ module Typus
     #
     # Default order is ASC, except for datetime items that is DESC.
     def self.typus_defaults_for(filter)
-      Typus::Configuration.config["#{self.to_s.titleize}"][filter].split(", ")
-    rescue
-      []
+      Typus::Configuration.config["#{self.to_s.titleize}"][filter].split(", ") rescue []
     end
 
     # This is used by acts_as_tree

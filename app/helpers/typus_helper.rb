@@ -1,7 +1,5 @@
 module TypusHelper
 
-  MODELS = YAML.load_file("#{RAILS_ROOT}/config/typus.yml")
-
   def head
     html = <<-HTML
       <title>#{Typus::Configuration.options[:app_name]} #{page_title}</title>
@@ -60,13 +58,13 @@ module TypusHelper
   def modules
     html = "<div id=\"list\">"
     modules = []
-    MODELS.to_a.each { |model| modules << ((model[1].has_key? 'module') ? model[1]['module'].capitalize : 'Typus') }
+    Typus::Configuration.config.to_a.each { |model| modules << ((model[1].has_key? 'module') ? model[1]['module'].capitalize : 'Typus') }
     modules.uniq.each do |m|
       html << "<table>\n"
       html << "<tr><th colspan=\"2\">#{m.titleize}</th></tr>\n"
       
       if Typus::Configuration.options[:username] && Typus::Configuration.options[:password]
-        @models = MODELS
+        @models = Typus::Configuration.config
       else
         @user = TypusUser.find(session[:typus].id)
         @models = Hash.new
@@ -140,7 +138,7 @@ module TypusHelper
 
   def search
     the_model = (@model.to_s.tableize.singularize.split("_").each { |i| i.capitalize! }).join(" ")
-    if MODELS["#{the_model}"]["search"]
+    if Typus::Configuration.config["#{the_model}"]["search"]
       search = <<-HTML
         <h2>Search</h2>
         <form action="" method="get">
