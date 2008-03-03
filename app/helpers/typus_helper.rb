@@ -254,10 +254,12 @@ module TypusHelper
         when 'tree'
           html << "<td>#{item.parent.name if item.parent}</td>"
         when 'preview'
-          if item.content_type.include? "image"
-            html << "<td>#{lightview_image_tag item.public_filename, :title => item.filename}</td>"
+          if item.content_type
+            # FIXME
+            # html << "<td>#{lightview_image_tag item.public_filename, :title => item.filename}</td>"
+            html << "<td>#{lightview_image_tag "http://0.0.0.0:3000#{item.public_filename}", :title => item.filename}</td>"
           else
-            html << "<td>#{link_to "Download", item.public_filename}</td>"
+            html << "<td></td>"
           end
         when "position"
           html << "<td>#{link_to "Up", :model => model, :action => 'position', :id => item, :go => 'up'} / #{link_to "Down", :model => model, :action => 'position', :id => item, :go => 'down'} (#{item.send(column[0])})</td>"
