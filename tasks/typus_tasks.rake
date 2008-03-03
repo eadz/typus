@@ -4,12 +4,12 @@ end
 
 namespace :typus do
 
-  desc "Setup Plugin"
+  desc "Configures, installs dependencies and creates needed files."
   task :setup do
     Rake::Task['typus:configure'].invoke
+    Rake::Task['typus:dependencies'].invoke
     Rake::Task['typus:extra_actions'].invoke
     Rake::Task['typus:assets'].invoke
-    Rake::Task['typus:dependencies'].invoke
   end
 
   desc "Add controller to have new actions available"
