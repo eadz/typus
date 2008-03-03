@@ -13,10 +13,8 @@ class ActionController::Routing::RouteSet
         i.connect "#{prefix}/:model/:action", :requirements => { :action => /index|new|create/ }, :action => 'index'
         i.connect "#{prefix}/:model/:id/:action", :requirements => { :action => /edit|update|destroy|position|status|relate|unrelate/, :id => /\d+/ }, :action => 'edit'
       end
-
       map.connect "#{prefix}/:model/:action", :controller => 'typus_extras'
       map.connect "#{prefix}/:model/:id/:action", :controller => 'typus_extras'
-
       yield map
     end
   end
