@@ -355,7 +355,8 @@ module TypusHelper
     if @form_fields_externals
       @form_fields_externals.each do |field|
         model_to_relate = field.singularize.camelize.constantize
-        html << "<h2 style=\"margin: 20px 0px 10px 0px;\">#{field.titleize} <small>#{link_to "Add new", :model => field, :action => 'new', :btm => params[:model], :bti => params[:id], :bta => params[:action]}</small></h2>"
+        # FIXME: The admin shouldn't be hardcoded.
+        html << "<h2 style=\"margin: 20px 0px 10px 0px;\"><a href=\"/admin/#{field}\">#{field.titleize}</a> <small>#{link_to "Add new", :model => field, :action => 'new', :btm => params[:model], :bti => params[:id], :bta => params[:action]}</small></h2>"
         items_to_relate = (model_to_relate.find(:all) - @item.send(field))
         if items_to_relate.size > 0
           html << <<-HTML
