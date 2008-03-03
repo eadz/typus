@@ -235,7 +235,7 @@ module TypusHelper
     # Body of the table
     @items.each do |item|
       html << "<tr class=\"#{cycle('even', 'odd')}\" id=\"item_#{item.id}\">"
-      @model.typus_fields_for('list').each do |column|
+      @model.typus_fields_for(fields).each do |column|
         case column[1]
         when 'boolean'
           image = "#{image_tag(status = item.send(column[0])? "typus_status_true.gif" : "typus_status_false.gif")}"
@@ -256,10 +256,10 @@ module TypusHelper
         when 'tree'
           html << "<td>#{item.parent.name if item.parent}</td>"
         when 'preview'
-          if item.content_type.include? "image"
-            html << "<td>#{lightview_image_tag item.public_filename, :title => item.filename}</td>"
+          if item.content_type # .include? "image"
+            html << "<td>#{lightview_image_tag "http://0.0.0.0:3000#{item.public_filename}", :title => item.filename}</td>"
           else
-            html << "<td>#{link_to "Download", item.public_filename}</td>"
+            html << "<td></td>"
           end
         when "position"
           html << "<td>#{link_to "Up", :model => model, :action => 'position', :id => item, :go => 'up'} / #{link_to "Down", :model => model, :action => 'position', :id => item, :go => 'down'} (#{item.send(column[0])})</td>"
@@ -367,7 +367,7 @@ module TypusHelper
         end
         current_model = params[:model].singularize.camelize.constantize
         @items = current_model.find(params[:id]).send(field)
-        html << typus_table(field) if @items.size > 0
+        html << typus_table(field, 'relationship') if @items.size > 0
       end
     end
     return html
