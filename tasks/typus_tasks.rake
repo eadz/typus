@@ -1,21 +1,24 @@
+task :typus do
+  system "rake -T typus --silent"
+end
+
 namespace :typus do
+
+  desc "Setup Plugin"
+  task :setup do
+    Rake::Task['typus:configure'].invoke
+    Rake::Task['typus:extra_actions'].invoke
+    Rake::Task['typus:assets'].invoke
+    Rake::Task['typus:dependencies'].invoke
+  end
 
   desc "Add controller to have new actions available"
   task :extra_actions do
     if !File.exists? ("#{RAILS_ROOT}/app/controllers/typus_extras_controller.rb")
-      typus_extra = File.open("#{RAILS_ROOT}/app/controllers/typus_extras_controller.rb", "w+")
-      typus_extra.puts "class TypusExtrasController < TypusController"
-      typus_extra.puts "end"
-      typus_extra.close
-      puts "\nTypus"
-      puts "====="
-      puts "=> Added controller +typus_extras+"
-      puts ""
+      system "script/generate controller typus_extras -q"
+      puts "=> [Typus] Added controller +typus_extras+"
     else
-      puts "\nTypus"
-      puts "====="
-      puts "=> Controller +typus_extras+ already exists."
-      puts ""
+      puts "=> [Typus] Controller +typus_extras+ already exists."
     end
   end
 
@@ -27,33 +30,33 @@ namespace :typus do
                 "http://dev.rubyonrails.org/svn/rails/plugins/acts_as_list/",
                 "http://dev.rubyonrails.org/svn/rails/plugins/acts_as_tree/"]
     plugins.each do |plugin|
-      puts "=> Installing +#{plugin.split("/")[-1]}+ plugin"
+      puts "=> [Typus] Installing `#{plugin.split("/")[-1]}` plugin"
       system "script/plugin install #{plugin} -q"
     end
   end
 
-  desc "Update Typus"
+  desc "Update Typus Plugin"
   task :update do
     system "script/plugin install http://dev.intraducibles.net/svn/rails/plugins/typus --force"
+    puts "=> [Typus] Updating Typus Plugin"
   end
 
   desc "Copy Typus images and stylesheets"
   task :assets do
-    puts "Coping admin interface assets ..."
     %w( images stylesheets ).each do |folder|
-      puts "=> Added *#{folder}* assets"
+      puts "=> [Typus] Added `#{folder}` assets"
       system "cp #{RAILS_ROOT}/vendor/plugins/typus/public/#{folder}/* #{RAILS_ROOT}/public/#{folder}/"
     end
   end
 
-  desc "Generate +config/typus.yml+"
-  task :setup do
-    require File.dirname(__FILE__) + '/../../../../config/environment'
+  desc "Generate `config/typus.yml`"
+  task :configure do
     begin
       MODEL_DIR = File.join(RAILS_ROOT, "app/models")
       Dir.chdir(MODEL_DIR)
       models = Dir["*.rb"]
       if !File.exists? ("#{RAILS_ROOT}/config/typus.yml")
+        require File.dirname(__FILE__) + '/../../../../config/environment'
         typus = File.open("#{RAILS_ROOT}/config/typus.yml", "w+")
         typus.puts "# ------------------------------------------------"
         typus.puts "# Typus Admin Configuration File"
@@ -63,6 +66,7 @@ namespace :typus do
         typus.puts "#   fields:"
         typus.puts "#     list: title, category_id, created_at, status"
         typus.puts "#     form: title, body, status, created_at"
+        typus.puts "#     relationship: title, status"
         typus.puts "#   actions:"
         typus.puts "#     list: cleanup"
         typus.puts "#     form: send_as_newsletter"
@@ -87,6 +91,7 @@ namespace :typus do
           typus.puts "  fields:"
           typus.puts "    list: #{list.join(", ")}"
           typus.puts "    form: #{list.join(", ")}"
+          typus.puts "    relationship: #{list.join(", ")}"
           typus.puts "  actions:"
           typus.puts "    list:"
           typus.puts "    form:"
@@ -97,10 +102,10 @@ namespace :typus do
           typus.puts "  module: Untitled"
           typus.puts "  description:"
           typus.close
-          puts "#{class_name} => #{class_attributes.join(", ")}"
+          puts "=> [Typus] #{class_name} added to `typus.yml`"
         end
       else
-        puts "=> file typus.yml already exists."
+        puts "=> [Typus] File `typus.yml` already exists."
       end
     rescue Exception => e
       puts "#{e.message}"
