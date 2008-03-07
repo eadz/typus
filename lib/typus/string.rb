@@ -8,7 +8,7 @@ class String
       the_key, the_value = q.split("=").first, q.split("=").last
       if the_key == "search"
         search = Array.new
-        model.typus_defaults_for('search').each { |s| search << "LOWER(#{s}) LIKE '%#{the_value}%'" }
+        model.typus_defaults_for('search').each { |s| search << "LOWER(#{s}) LIKE '%#{CGI.unescape(the_value)}%'" }
         conditions << "AND (#{search.join(" OR ")}) "
       end
       model.model_fields.each do |f|
