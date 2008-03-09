@@ -48,7 +48,8 @@ module Typus
             when 'preview':         @field_type = 'preview'
           end
         end
-        @field_type = (eval f.upcase) rescue @field_type
+        # FIXME
+        # @field_type = (eval f.upcase) rescue @field_type
         @field_type = 'selector' if @field_type.class == Array
         fields_with_type << [ f, @field_type ]
       end
