@@ -51,7 +51,7 @@ class TypusController < ApplicationController
   end
 
   def edit
-    condition = ( @model.new.attributes.include? 'created_at' ) ? 'created_at' : 'id'
+    condition = ( @model.new.attributes.include? 'created_at' ) ? 'created_at' : @model.primary_key
     current = ( condition == 'created_at' ) ? @item.created_at : @item.id
     @previous = @model.typus_find_previous(current, condition)
     @next = @model.typus_find_next(current, condition)
@@ -159,8 +159,7 @@ private
       params[:order_by] = params[:order_by] || order.first
       params[:sort_order] = "desc" if order.first == 'created_at'
     else
-      # params[:order_by] = params[:order_by] || @model.primary_key
-      params[:order_by] = params[:order_by] || 'id'
+      params[:order_by] = params[:order_by] || @model.primary_key
     end
   end
 
