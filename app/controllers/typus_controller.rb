@@ -159,6 +159,7 @@ private
       params[:order_by] = params[:order_by] || order.first
       params[:sort_order] = "desc" if order.first == 'created_at'
     else
+      # params[:order_by] = params[:order_by] || @model.primary_key
       params[:order_by] = params[:order_by] || 'id'
     end
   end
@@ -185,7 +186,7 @@ private
     @fields = @model.typus_fields_for('list')
   end
 
-  # Model +form_fields+ & +form_externals+
+  # Model +form_fields+ and +form_externals+
   def form_fields
     @form_fields = @model.typus_fields_for('form')
     @form_fields_externals = @model.typus_defaults_for('relationships')
