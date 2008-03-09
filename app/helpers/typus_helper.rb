@@ -95,7 +95,7 @@ module TypusHelper
       html << more_actions
     when "new", "create"
       html << "<ul>"
-      html << "<li>#{link_to "Back to list", :action => 'index'}</li>"
+      html << "<li>#{link_to "Back to List", :action => 'index'}</li>"
       html << "</ul>"
     when "edit", "update"
       html << "<ul>"
@@ -107,7 +107,7 @@ module TypusHelper
       html << "</ul>"
       html << more_actions
       html << "<ul>"
-      html << "<li>#{link_to "Back to list", :action => 'index'}</li>"
+      html << "<li>#{link_to "Back to List", :action => 'index'}</li>"
       html << "</ul>"
     else
       html << more_actions
