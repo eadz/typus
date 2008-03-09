@@ -1,37 +1,42 @@
-= Typus
+Typus
+=====
 
 Rails Plugin to create a basic and default admin interface.
 
-Once installed and configured you can login at http://0.0.0.0:3000/typus/
+Once installed and configured you can login at http://0.0.0.0:3000/admin/
 
-== Requirements
+== Installing
 
-    script/plugin install svn://errtheblog.com/svn/plugins/will_paginate
-    script/plugin install attachment_fu
-    script/plugin install acts_as_list
+You can install some extra plugins using:
 
-NOTE: <code>attachment_fu</code> is only needed if you need uploads.
+    rake typus:dependencies
 
-== Example Usage
+This task will install for you `will_paginate`, `attachment_fu`, `acts_as_list`
+and `acts_as_tree`.
 
-To create the first user and copy the stylesheets ...
+Install the admin interface stylesheets.
 
-    rake typus:setup
+    rake typus:assets
 
-Default user and password are +admin+ and +typus+.
+Create an initial configuration file at `config/typus.yml`
+
+    rake typus:configure
+
+You can view the available tasks running
+
+    rake typus
 
 == Typus::Configuration options
+
+You can overwriting the following settings:
 
     Typus::Configuration.options[:app_name] = "Your app name"
     Typus::Configuration.options[:app_description] = "App Details"
     Typus::Configuration.options[:per_page] = "20"
-
-You can set your _username_ and _password_ overwriting the following settings:
-
     Typus::Configuration.options[:username] = 'username'
     Typus::Configuration.options[:password] = 'password'
 
-You can place this settings in a initializer at <code>config/initializers/typus.rb</code>.
+Place this settings in a initializer at <code>config/initializers/typus.rb</code>.
 
 == Configuration file options
 
@@ -63,7 +68,7 @@ NOTE: <code>order_by</code> only accepts one field.
 
 === Searches
 
-    search: attribute1 attribute2
+    search: attribute1, attribute2
 
 === Want more actions?
 
@@ -73,21 +78,9 @@ NOTE: <code>order_by</code> only accepts one field.
 
 These actions will only be available on the context +list+ and +form+ of Typus.
 
-You have to add these routes to your <code>routes.rb</code>.
+Run the following task to create the `TypusExtras` controller.
 
-    map.connect '/admin/:model/:action', :controller => 'typus_extras'
-    map.connect '/admin/:model/:id/:action', :controller => 'typus_extras', 
-                                             :requirements => { :id => /\d+/ }
-
-And add a controller called <code>TypusExtrasController</code>
-
-    class TypusExtrasController << TypusController
-
-      # Notify all ...
-      def notify_all
-      end
-
-    end
+    rake typus:extra_actions
 
 === Module
 
@@ -108,4 +101,4 @@ REPORT BUGS on Trac: http://dev.intraducibles.net/trac/typus
 
 BROWSE SOURCE on SVN: http://dev.intraducibles.net/svn/rails/plugins/typus
 
-Copyright (c) 2007 Francesc Esplugas Marti, released under the MIT license
+Copyright (c) 2007-2008 Francesc Esplugas Marti, released under the MIT license
