@@ -7,7 +7,8 @@ begin
 
   %w( sha1 ).each { |lib| require lib }
 
-  require "#{RAILS_ROOT}/vendor/plugins/will_paginate/lib/will_paginate"
+  # require "#{RAILS_ROOT}/vendor/plugins/will_paginate/lib/will_paginate"
+  require 'data_mapper' unless defined?(ActiveRecord)
   require 'typus'
 
   TYPUS_ROLES = %w( admin editor writer moderator visitor )
