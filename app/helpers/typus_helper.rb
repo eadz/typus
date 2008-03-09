@@ -295,7 +295,7 @@ module TypusHelper
       end
       case field[1] # Field Type
       when "boolean"
-        html << "#{check_box :item, field[0]} Checked if active"
+        html << "<label style=\"font-weight: normal;\"> #{check_box :item, field[0]} Checked if activeaaaaaa</label>"
       when "blob"
         html << "#{file_field :item, field[0], :style => 'border: 0px;'}"
       when "datetime"
