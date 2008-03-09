@@ -238,7 +238,7 @@ module TypusHelper
         when 'boolean'
           image = "#{image_tag(status = item.send(column[0])? "typus_status_true.gif" : "typus_status_false.gif")}"
           if column[0] == 'status'
-            html << "<td width=\"20px\" align=\"center\">#{link_to image, :controller => 'typus', :model => model, :action => 'status', :id => item.id}</td>"
+            html << "<td width=\"20px\" align=\"center\">#{link_to image, :params => params.merge(:controller => 'typus', :model => model, :action => 'status', :id => item.id)}</td>"
           else
             html << "<td width=\"20px\" align=\"center\">#{image}</td>"
           end
@@ -328,7 +328,7 @@ module TypusHelper
           html << "No Preview Available"
         elsif @item.content_type.include? "image"
           # html << "<td>#{lightview_image_tag item.public_filename, :title => item.filename}</td>"
-          html << "<a href=\"#{@item.public_filename}\" title=\"::\" rel=\"lightview\">#{image_tag (@item.public_filename(), {:style => "border: 1px solid #000;", :width => "250px" })}</a>"
+          html << "<a href=\"#{@item.public_filename}\" title=\"::\" rel=\"lightview\">#{image_tag(@item.public_filename(), {:style => "border: 1px solid #000;", :width => "250px" })}</a>"
         else
           html << "No Preview Available for <strong>#{@item.content_type}</strong>"
         end
