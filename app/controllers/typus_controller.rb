@@ -86,9 +86,7 @@ class TypusController < ApplicationController
       when 'down': @item.move_lower
     end
     flash[:notice] = "Position changed ..."
-    # FIXME: This only works on Safari and Firefox
-    redirect_to :back
-    # redirect_to :action => 'index'
+    redirect_to :params => params.merge(:action => 'index', :id => nil)
   end
 
   # Relate a model object to another.
