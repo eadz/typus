@@ -69,18 +69,14 @@ class TypusController < ApplicationController
   def destroy
     @item.destroy
     flash[:notice] = "#{@model.to_s.titleize} successfully removed."
-    params.delete('id')
-    params.delete('action')
-    redirect_to typus_index_url(:model => params[:model], :params => params)
+    redirect_to :params => params.merge(:action => 'index', :id => nil)
   end
 
   # Toggle the status of an item.
   def status
     @item.toggle!('status')
     flash[:notice] = "#{@model.to_s.titleize.capitalize} status changed"
-    # FIXME: This only works on Safari and Firefox
-    redirect_to :back
-    # redirect_to :action => 'index'
+    redirect_to :params => params.merge(:action => 'index', :id => nil)
   end
 
   # Change item position
