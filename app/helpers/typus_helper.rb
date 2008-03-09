@@ -12,11 +12,7 @@ module TypusHelper
       <meta name="generator" content="" />
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
       #{stylesheet_link_tag "typus", :media => "screen"}
-      #{stylesheet_link_tag "lightview", :media => "screen"}
       #{javascript_include_tag :defaults}
-      <script type=\"text/javascript\" src=\"/javascripts/prototype.js\"></script>
-      <script type=\"text/javascript\" src=\"/javascripts/scriptaculous.js?load=effects\"></script>
-      <script type=\"text/javascript\" src=\"/javascripts/lightview.js\"></script>
     HTML
   end
 
