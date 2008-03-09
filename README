@@ -5,7 +5,7 @@ Rails Plugin to create a basic and default admin interface.
 
 Once installed and configured you can login at http://0.0.0.0:3000/admin/
 
-== Installing
+## Installing
 
 You can install some extra plugins using:
 
@@ -26,7 +26,7 @@ You can view the available tasks running
 
     rake typus
 
-== Typus::Configuration options
+## Typus::Configuration options
 
 You can overwriting the following settings:
 
@@ -38,11 +38,11 @@ You can overwriting the following settings:
 
 Place this settings in a initializer at <code>config/initializers/typus.rb</code>.
 
-== Configuration file options
+## Configuration file options
 
 If the configuration file is broken you'll see a +typus.yml+ text on the admin interface.
 
-=== Typus Fields
+### Typus Fields
 
     fields:
       list: name, created_at, category_id, status
@@ -52,25 +52,25 @@ If you want to be able to upload data to your application add `uploaded_data` to
 
 (Upload will only work with `attachment_fu`)
 
-=== External Forms
+### External Forms
 
     externals: category_id
 
-=== Filters
+### Filters
 
     filters: status author_id created_at
 
-=== Order
+### Order
 
     order_by: attribute1
 
 NOTE: <code>order_by</code> only accepts one field.
 
-=== Searches
+### Searches
 
     search: attribute1, attribute2
 
-=== Want more actions?
+### Want more actions?
 
     actions:
       list: notify_all
@@ -82,13 +82,36 @@ Run the following task to create the `TypusExtras` controller.
 
     rake typus:extra_actions
 
-=== Module
+### Module
 
 Used to group models on the main screen.
 
     module: Site
 
-== Acknowledgments
+## Customize Interface
+
+You can customize the interface by placing on `views/typus` the following files.
+
+### Dashboard
+
+- `_dashboard_sidebar.html.erb`
+- `_dashboard_top.html.erb`
+- `_dashboard_bottom.html.erb`
+
+### Models
+
+- `MODEL/_index_top.html.erb`
+- `MODEL/_index_bottom.html.erb`
+- `MODEL/_new_top.html.erb`
+- `MODEL/_new_bottom.html.erb`
+- `MODEL/_new_bottom.html.erb`
+- `MODEL/_new_sidebar.html.erb`
+- `MODEL/_edit_top.html.erb`
+- `MODEL/_edit_bottom.html.erb`
+- `MODEL/_edit_bottom.html.erb`
+- `MODEL/_edit_sidebar.html.erb`
+
+## Acknowledgments
 
 - Isaac Feliu - http://railslab.net
 - Jaime Iniesta - http://railes.net
