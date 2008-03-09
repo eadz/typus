@@ -4,21 +4,13 @@ end
 
 namespace :typus do
 
-  desc "Configures, installs dependencies and creates needed files."
-  task :setup do
-    Rake::Task['typus:configure'].invoke
-    Rake::Task['typus:dependencies'].invoke
-    Rake::Task['typus:extra_actions'].invoke
-    Rake::Task['typus:assets'].invoke
-  end
-
   desc "Add controller to have new actions available"
   task :extra_actions do
     if !File.exists? ("#{RAILS_ROOT}/app/controllers/typus_extras_controller.rb")
       system "script/generate controller typus_extras -q"
-      puts "=> [Typus] Added controller +typus_extras+"
+      puts "=> [Typus] Added controller `typus_extras`."
     else
-      puts "=> [Typus] Controller +typus_extras+ already exists."
+      puts "=> [Typus] Controller `typus_extras` already exists."
     end
   end
 
@@ -29,22 +21,24 @@ namespace :typus do
                 "http://svn.techno-weenie.net/projects/plugins/attachment_fu/",
                 "http://dev.rubyonrails.org/svn/rails/plugins/acts_as_list/",
                 "http://dev.rubyonrails.org/svn/rails/plugins/acts_as_tree/"]
-    plugins.each do |plugin|
-      puts "=> [Typus] Installing `#{plugin.split("/")[-1]}` plugin"
-      system "script/plugin install #{plugin} -q"
+    plugins.each do |plugin_url|
+      plugin = plugin_url.split("/")[-1]
+      puts "=> [Typus] Installing `#{plugin}` plugin."
+      system "rm -rf vendor/plugins/#{plugin}"
+      system "script/plugin install #{plugin_url} -q"
     end
   end
 
   desc "Update Typus Plugin"
   task :update do
     system "script/plugin install http://dev.intraducibles.net/svn/rails/plugins/typus --force"
-    puts "=> [Typus] Updating Typus Plugin"
+    puts "=> [Typus] Updating Typus Plugin."
   end
 
   desc "Copy Typus images and stylesheets"
   task :assets do
     %w( images stylesheets ).each do |folder|
-      puts "=> [Typus] Added `#{folder}` assets"
+      puts "=> [Typus] Added `#{folder}` assets."
       system "cp #{RAILS_ROOT}/vendor/plugins/typus/public/#{folder}/* #{RAILS_ROOT}/public/#{folder}/"
     end
   end
@@ -102,7 +96,7 @@ namespace :typus do
           typus.puts "  module: Untitled"
           typus.puts "  description:"
           typus.close
-          puts "=> [Typus] #{class_name} added to `typus.yml`"
+          puts "=> [Typus] #{class_name} added to `typus.yml`."
         end
       else
         puts "=> [Typus] File `typus.yml` already exists."
