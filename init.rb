@@ -1,5 +1,7 @@
 begin
-  ActionController::Base.view_paths << File.join(File.dirname(__FILE__), 'app', 'views')
+
+  ActionController::Base.append_view_path(File.join(File.dirname(__FILE__), 'app', 'views'))
+  # ActionController::Base.view_paths << File.join(File.dirname(__FILE__), 'app', 'views')
 
   %w( controllers models helpers ).each do |m|
     Dependencies.load_paths << File.join(File.dirname(__FILE__), 'app', m)
@@ -7,7 +9,7 @@ begin
 
   %w( sha1 ).each { |lib| require lib }
 
-  # require "#{RAILS_ROOT}/vendor/plugins/will_paginate/lib/will_paginate"
+  require "#{RAILS_ROOT}/vendor/plugins/will_paginate/lib/will_paginate"
   require 'data_mapper' unless defined?(ActiveRecord)
   require 'typus'
 
@@ -18,5 +20,5 @@ begin
   Typus::Configuration.options[:version] = '0.9.5 r378'
 
 rescue LoadError
-  puts "To install required plugins run => rake typus:dependencies"
+  puts "=> [TYPUS] Install required plugins with `rake typus:dependencies`"
 end
