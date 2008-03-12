@@ -120,7 +120,7 @@ class TypusController < ApplicationController
         session[:typus] = @user
         redirect_to typus_dashboard_url
       else
-        flash[:error] = "Username/Password Incorrect"
+        flash[:error] = "The Email and/or Password you entered is invalid."
         redirect_to typus_login_url
       end
     else
@@ -140,14 +140,10 @@ class TypusController < ApplicationController
       if typus_user
         password = generate_password
         typus_user.reset_password(password)
-        if RAILS_ENV == 'development'
-          flash[:success] = "Sent a new password to #{params[:user][:email]} (#{password})"
-        else
-          flash[:success] = "Sent a new password to #{params[:user][:email]}"
-        end
+        flash[:success] = "New password sent to #{params[:user][:email]}"
         redirect_to typus_login_url
       else
-        flash[:error] = "This is chelm ..."
+        flash[:error] = "Email doesn't exist on the system."
         redirect_to typus_email_password_url
       end
     else
