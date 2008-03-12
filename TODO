@@ -8,6 +8,10 @@ TODO
 [ ] Salted password
 [ ] Admin user should never be able to change itself to user.
 [ ] A user can never add himself admin privileges.
+[ ] Update feedback error on empty fields.
+[ ] Update flash.
+[ ] Update CSS with something like a framework.
+[ ] ...
 
 DONE
 ====
