@@ -6,7 +6,8 @@ TODO
 [ ] Add `preview` to images (javascript)
 [ ] If RedCloth of BlueCloth is defined add message in `text` fields.
 [ ] Salted password
-[ ] ...
+[ ] Admin user should never be able to change itself to user.
+[ ] A user can never add himself admin privileges.
 
 DONE
 ====
