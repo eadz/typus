@@ -1,9 +1,15 @@
 class TypusController < ApplicationController
 
-  before_filter :authenticate, :except => [ :login, :logout ]
+  include Authentication
+
+  before_filter :require_login, :except => [ :login, :logout ]
+  before_filter :current_user, :except => [ :login, :logout ]
+
   before_filter :set_previous_action, :except => [ :dashboard, :login, :logout, :create ]
   before_filter :set_model, :except => [ :dashboard, :login, :logout ]
-  before_filter :check_role, :except => [ :dashboard, :login, :logout ]
+
+  before_filter :check_permissions, :only => [ :edit ]
+
   before_filter :set_order, :only => [ :index ]
   before_filter :find_model, :only => [ :show, :edit, :update, :destroy, :status, :position ]
   before_filter :fields, :only => [ :index ]
@@ -109,28 +115,13 @@ class TypusController < ApplicationController
   # Basic session creation.
   def login
     if request.post?
-      # Login using Typus::Configuration.options
-      if Typus::Configuration.options[:username] && Typus::Configuration.options[:password]
-        username = Typus::Configuration.options[:username]
-        password = Typus::Configuration.options[:password]
-        if params[:user][:name] == username && params[:user][:password] == password
-          session[:typus] = true
-          redirect_to typus_dashboard_url
-        else
-          flash[:error] = "Username/Password Incorrect"
-          redirect_to typus_login_url
-        end
-      # Login using TypusUser
+      @user = TypusUser.authenticate(params[:user])
+      if @user
+        session[:typus] = @user
+        redirect_to typus_dashboard_url
       else
-        # TypusUser.count.size > 0
-        @user = TypusUser.authenticate(params[:user])
-        if @user
-          session[:typus] = @user
-          redirect_to typus_dashboard_url
-        else
-          flash[:error] = "Username/Password Incorrect"
-          redirect_to typus_login_url
-        end
+        flash[:error] = "Username/Password Incorrect"
+        redirect_to typus_login_url
       end
     else
       render :layout => 'typus_login'
@@ -191,24 +182,12 @@ private
 
 private
 
-  # Authenticate
-  def authenticate
-    if session[:typus]
-      if session[:typus].class == TypusUser
-        @typus_user = TypusUser.find(session[:typus].id)
-      end
-    else
-      redirect_to typus_login_url
-    end
-  end
-
-  # if TypusUser.count.size > 0
-  def check_role
-    unless Typus::Configuration.options[:username] && Typus::Configuration.options[:password]
-      if !@typus_user.models.include? @model
-        flash[:notice] = "Don't have access to #{params[:model].capitalize}"
-        redirect_to :action => "dashboard"
-      end
+  # Before filter to bail unless the user has permission to edit the post.
+  def check_permissions
+    unless can_edit? @model
+      flash[:notice] = "You can't edit that #{@model.to_s.titleize}."
+      redirect_to :controller => 'typus', :action => 'index', :model => params[:model]
+      return false
     end
   end
 

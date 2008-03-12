@@ -4,6 +4,11 @@ end
 
 namespace :typus do
 
+  desc "Create first user"
+  task :create_user do
+    puts "=> [Typus] Here we create a new user ..."
+  end
+
   desc "Add controller to have new actions available"
   task :extra_actions do
     if !File.exists? ("#{RAILS_ROOT}/app/controllers/typus_extras_controller.rb")

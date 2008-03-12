@@ -1,16 +1,20 @@
 class TypusUser < ActiveRecord::Base
 
-  validates_presence_of :email
+  attr_accessor :password
+  attr_protected :hashed_password
 
-  def self.authenticate(user)
-    user = find_by_email(user[:name])
-    # if person && person.hashed_password == hashed(person_info[:password])
-    if user && user.password == user[:password]
-      return user
-    end
-  end
+  validates_presence_of :email, :first_name, :last_name
+  validates_presence_of :password, :password_confirmation, :if => :new_record?
+  validates_uniqueness_of :email
+  validates_format_of :email, :with => /^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i
+  validates_confirmation_of :password, :if => lambda { |person| person.new_record? or not person.password.blank? }
+  validates_length_of :password, :within => 6..40, :if => lambda { |person| person.new_record? or not person.password.blank? }
+
+  before_create :generate_token
+  before_save :update_password
 
   # This will get the list of the available models for this user
+  # Currently is not working
   def models
     available_models = Typus::Configuration.config
     models_for_this_user = []
@@ -20,6 +24,38 @@ class TypusUser < ActiveRecord::Base
     return models_for_this_user
   rescue
     []
+  end
+
+  def full_name
+    "#{first_name} #{last_name}"
+  end
+
+  def reset_password(password)
+    Mailer.deliver_password(self, password)
+    self.update_attributes(:password => password, :password_confirmation => password)
+  end
+
+private
+
+  def self.hashed(str)
+    SHA1.new(str).to_s
+  end
+
+  def self.authenticate(person_info)
+    person = find_by_email(person_info[:email])
+    if person && person.hashed_password == hashed(person_info[:password]) && person.status == true
+      return person
+    end
+  end
+
+  def update_password
+    if not self.password.blank?
+      self.hashed_password = self.class.hashed(password)
+    end
+  end
+
+  def generate_token
+    @attributes['token'] = Digest::SHA1.hexdigest((object_id + rand(255)).to_s).slice(0..15)
   end
 
 end

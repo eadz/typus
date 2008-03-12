@@ -3,15 +3,16 @@ TODO
 
 [ ] Sort by LANGUAGES is not working.
 [ ] Translations with the Translation plugin.
-[ ] Add on README instructions on how to add messages to views (index_top, edit_top, new_top)
-[ ] Add on README instructions on how to add messages to login and dashboard.
 [ ] Add `preview` to images (javascript)
 [ ] If RedCloth of BlueCloth is defined add message in `text` fields.
+[ ] Salted password
 [ ] ...
 
 DONE
 ====
 
+[X] Add on README instructions on how to add messages to login and dashboard.
+[X] Add on README instructions on how to add messages to views (index_top, edit_top, new_top)
 [X] Add custom lists for externals.
 [X] Sort by Collection is not working. (sort_by=category&sort_order=asc)
 [X] Sidebar filters should read current filters.
