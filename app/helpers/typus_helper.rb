@@ -53,10 +53,15 @@ module TypusHelper
     html = "<div id=\"list\">"
     modules = []
     Typus::Configuration.config.to_a.each { |model| modules << ((model[1].has_key? 'module') ? model[1]['module'].capitalize : 'Typus') }
+
+    if modules.size == 0
+      return "<p>Run <code>rake typus:config</code> to create <code>config/typus.yml</code></p>"
+    end
+
     modules.uniq.each do |m|
       html << "<table>\n"
       html << "<tr><th colspan=\"2\">#{m.titleize}</th></tr>\n"
-      
+
       if Typus::Configuration.options[:username] && Typus::Configuration.options[:password]
         @models = Typus::Configuration.config
       else
@@ -64,7 +69,7 @@ module TypusHelper
         @models = Hash.new
         @user.models.each { |mo| @models["#{mo}"] = Typus::Configuration.config["#{mo}"] }
       end
-      
+
       @models.each do |model|
         current = (model[1]['module']) ? model[1]['module'].capitalize : 'Typus'
         if current == m
@@ -231,11 +236,7 @@ module TypusHelper
         case column[1]
         when 'boolean'
           image = "#{image_tag(status = item.send(column[0])? "typus_status_true.gif" : "typus_status_false.gif")}"
-          if column[0] == 'status'
-            html << "<td width=\"20px\" align=\"center\">#{link_to image, :params => params.merge(:controller => 'typus', :model => model, :action => 'status', :id => item.id)}</td>"
-          else
-            html << "<td width=\"20px\" align=\"center\">#{image}</td>"
-          end
+          html << "<td width=\"20px\" align=\"center\">#{link_to image, :params => params.merge(:controller => 'typus', :model => model, :action => 'toggle', :field => column[0], :id => item.id)}</td>"
         when "datetime"
           html << "<td width=\"80px\">#{fmt_date(item.send(column[0]))}</td>"
         when "collection"
@@ -382,9 +383,7 @@ module TypusHelper
 
   # Block of code
   def typus_block(name)
-    render :partial => "typus/#{params[:model]}/#{name}"
-  rescue
-    nil
+    render :partial => "typus/#{params[:model]}/#{name}" rescue nil
   end
 
   def expand_tree_into_select_field(categories)
