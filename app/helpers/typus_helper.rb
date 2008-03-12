@@ -183,8 +183,7 @@ module TypusHelper
     flash_types = [ :error, :warning, :notice ]
     flash_type = flash_types.detect{ |a| flash.keys.include?(a) } || flash.keys.first
     if flash_type
-      # "<span id=\"notice\">#{flash[:notice]}</span>"
-      "<span id=\"notice\" class=\"flash %s\">%s</span>" % [flash_type.to_s, flash[flash_type]]
+      "<div id=\"flash\" class=\"flash %s\">%s</</div>" % [flash_type.to_s, flash[flash_type]]
     end
   end
 
@@ -264,7 +263,7 @@ module TypusHelper
       when model
         # Remove the current action, to be able to set the new one
         params.delete('action')
-        @perform = link_to image_tag("typus_trash.gif"), { :model => model, :action => 'destroy', :id => item.id, :params => params }, :confirm => "Remove this entry?"
+        @perform = link_to image_tag("typus_trash.gif"), { :model => model, :action => 'destroy', :id => item.id, :params => params }, :confirm => "Remove this #{@model.to_s.downcase}?"
       else
         @perform = link_to image_tag("typus_trash.gif"), { :action => "unrelate", :unrelated => model, :unrelated_id => item.id, :id => params[:id] }, :confirm => "Remove #{model.singularize} \"#{item.name}\" from #{params[:model].singularize}?"
       end
