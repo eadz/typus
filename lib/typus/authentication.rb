@@ -38,9 +38,23 @@ module Authentication
     # Determine if the user can edit/modify the current record
     def can_edit? record
       return true if current_user.admin?
-      case record.to_s
+      case record.class.to_s
       when 'TypusUser' # regular users can't edit other users
         record.id == current_user.id
+      #when 'Message'
+        # messages can only be edited by their creators
+        # record.created_by == current_user.id
+      else # everyone can edit anything else
+        true
+      end
+    end
+
+    # Determine if the user can edit/modify the current record
+    def can_add? record
+      return true if current_user.admin?
+      case record.class.to_s
+      when 'TypusUser' # regular users can't edit other users
+        false # true # record.id == current_user.id
       #when 'Message'
         # messages can only be edited by their creators
         # record.created_by == current_user.id

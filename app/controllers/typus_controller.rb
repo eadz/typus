@@ -8,10 +8,12 @@ class TypusController < ApplicationController
   before_filter :set_previous_action, :except => [ :dashboard, :login, :logout, :create, :email_password ]
   before_filter :set_model, :except => [ :dashboard, :login, :logout, :email_password ]
 
-  before_filter :check_permissions, :only => [ :edit ]
+  before_filter :find_model, :only => [ :show, :edit, :update, :destroy, :toggle, :position ]
+
+  before_filter :check_new_permissions, :only => [ :new, :create ]
+  before_filter :check_edit_permissions, :only => [ :edit ]
 
   before_filter :set_order, :only => [ :index ]
-  before_filter :find_model, :only => [ :show, :edit, :update, :destroy, :toggle, :position ]
   before_filter :fields, :only => [ :index ]
   before_filter :form_fields, :only => [ :new, :edit, :create, :update ]
 
@@ -200,10 +202,19 @@ private
 
 private
 
-  # Before filter to bail unless the user has permission to edit the post.
-  def check_permissions
-    unless can_edit? @model
-      flash[:notice] = "You can't edit that #{@model.to_s.titleize}."
+  # Before filter to check if has permission to edit/add the post.
+  def check_edit_permissions
+    unless can_edit? @item
+      flash[:notice] = "You can't edit that #{@item.class.to_s.titleize}."
+      redirect_to :controller => 'typus', :action => 'index', :model => params[:model]
+      return false
+    end
+  end
+
+  def check_new_permissions
+    @item = @model.new
+    unless can_add? @item
+      flash[:notice] = "You can't add that #{@item.class.to_s.titleize}."
       redirect_to :controller => 'typus', :action => 'index', :model => params[:model]
       return false
     end
