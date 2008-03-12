@@ -139,7 +139,8 @@ class TypusController < ApplicationController
       typus_user = TypusUser.find_by_email(params[:user][:email])
       if typus_user
         password = generate_password
-        typus_user.reset_password(password)
+        host = request.env['HTTP_HOST']
+        typus_user.reset_password(password, host)
         flash[:success] = "New password sent to #{params[:user][:email]}"
         redirect_to typus_login_url
       else

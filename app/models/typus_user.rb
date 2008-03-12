@@ -30,8 +30,8 @@ class TypusUser < ActiveRecord::Base
     "#{first_name} #{last_name}"
   end
 
-  def reset_password(password)
-    TypusMailer.deliver_password(self, password)
+  def reset_password(password, host)
+    TypusMailer.deliver_password(self, password, host)
     self.update_attributes(:password => password, :password_confirmation => password)
   end
 
