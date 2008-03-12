@@ -367,15 +367,6 @@ module TypusHelper
     <pre>#{error}</pre>"
   end
 
-  def process_query(q)
-    if params[:search]
-      query = "Search results on <strong>#{params[:model]}</strong> "
-      query << "for <strong>\"#{params[:search]}\"</strong>"
-    end
-    return query
-  end
-
-  # Block of code
   def typus_block(name)
     render :partial => "typus/#{params[:model]}/#{name}" rescue nil
   end
