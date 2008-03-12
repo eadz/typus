@@ -6,14 +6,16 @@ namespace :typus do
 
   desc "Create first TypusUser"
   task :create_user do
+
     require "#{RAILS_ROOT}/config/environment"
+    include Authentication
 
     # Don't create a first user if already there are Typus on the user.
     return "" if TypusUser.count > 0
 
     # Create the new user with the params.
     email = ENV['email']
-    password = ENV['password'] || "thisischelm"
+    password = ENV['password'] || generate_password
     typus_user = TypusUser.new(:email => email, 
                                :password => password, 
                                :password_confirmation => password, 
@@ -26,7 +28,6 @@ namespace :typus do
       puts "=> [Typus]    Email: #{typus_user.email}"
       puts "=> [Typus]    Password: #{password}"
     else
-      puts typus_user.errors.inspect
       puts "=> [Typus] Could not create Typus User."
     end
   end
