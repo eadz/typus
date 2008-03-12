@@ -48,7 +48,7 @@ class TypusController < ApplicationController
         flash[:notice] = "Assigned #{@item.class} to #{btm} successfully."
         redirect_to :action => bta, :model => btm, :id => bti
       else
-        flash[:notice] = "#{@model.to_s.capitalize} successfully created."
+        flash[:notice] = "#{@model.to_s.titleize} successfully created."
         redirect_to :action => 'edit', :id => @item.id
       end
     else
