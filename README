@@ -26,7 +26,7 @@ And finally create the needed tables on the database by running.
 
     script/generate typus_migration
     rake db:migrate
-    rake typus:create_user email='youremail@yourdomain.com'
+    rake typus:create_user email='youremail@yourdomain.com' RAILS_ENV=production
 
 You can view the available tasks running
 

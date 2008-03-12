@@ -17,7 +17,7 @@ namespace :typus do
     typus_user = TypusUser.new(:email => email, 
                                :password => password, 
                                :password_confirmation => password, 
-                               :first_name => 'Appname',
+                               :first_name => 'Typus',
                                :last_name => 'Admin', 
                                :admin => true,
                                :status => true)

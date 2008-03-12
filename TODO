@@ -11,7 +11,7 @@ TODO
 [ ] Update feedback error on empty fields.
 [ ] Update flash.
 [ ] Update CSS with something like a framework.
-[ ] ...
+[ ] Typus should not boot if cannot find `config/typus.yml`.
 
 DONE
 ====
