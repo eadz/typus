@@ -180,10 +180,11 @@ module TypusHelper
   end
 
   def feedback
-    if flash[:notice]
-      "<span id=\"notice\">#{flash[:notice]}</span>"
-    elsif flash[:error]
-      "<div id=\"notice\" class=\"error\">#{flash[:error]}</div>"
+    flash_types = [ :error, :warning, :notice ]
+    flash_type = flash_types.detect{ |a| flash.keys.include?(a) } || flash.keys.first
+    if flash_type
+      # "<span id=\"notice\">#{flash[:notice]}</span>"
+      "<span id=\"notice\" class=\"flash %s\">%s</span>" % [flash_type.to_s, flash[flash_type]]
     end
   end
 
