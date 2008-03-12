@@ -14,7 +14,7 @@
 
   <div id="dialog">
     <h1><%= link_to Typus::Configuration.options[:app_name], :action => "login" %></h1>
-    <%= feedback %>
+    <%= display_flash_message %>
     <%= yield %>
     <%= signature %>
   </div>
