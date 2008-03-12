@@ -12,7 +12,7 @@ module TypusHelper
 
   def header
     html = <<-HTML
-      <h1>#{Typus::Configuration.options[:app_name]} #{feedback}</span></h1>
+      <h1>#{Typus::Configuration.options[:app_name]} #{display_flash_message}</span></h1>
       <h2>#{Typus::Configuration.options[:app_description]}</h2>
     HTML
   end
@@ -179,7 +179,7 @@ module TypusHelper
     return html
   end
 
-  def feedback
+  def display_flash_message
     flash_types = [ :error, :warning, :notice ]
     flash_type = flash_types.detect{ |a| flash.keys.include?(a) } || flash.keys.first
     if flash_type
