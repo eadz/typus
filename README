@@ -22,6 +22,12 @@ Create an initial configuration file at `config/typus.yml`
 
     rake typus:configure
 
+And finally create the needed tables on the database by running.
+
+    script/generate typus_migration
+    rake db:migrate
+    rake typus:create_user email='youremail@yourdomain.com'
+
 You can view the available tasks running
 
     rake typus
@@ -33,8 +39,6 @@ You can overwriting the following settings:
     Typus::Configuration.options[:app_name] = "Your app name"
     Typus::Configuration.options[:app_description] = "App Details"
     Typus::Configuration.options[:per_page] = "20"
-    Typus::Configuration.options[:username] = 'username'
-    Typus::Configuration.options[:password] = 'password'
 
 Place this settings in a initializer at <code>config/initializers/typus.rb</code>.
 
