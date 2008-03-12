@@ -2,16 +2,16 @@ class TypusController < ApplicationController
 
   include Authentication
 
-  before_filter :require_login, :except => [ :login, :logout ]
-  before_filter :current_user, :except => [ :login, :logout ]
+  before_filter :require_login, :except => [ :login, :logout, :email_password ]
+  before_filter :current_user, :except => [ :login, :logout, :email_password ]
 
-  before_filter :set_previous_action, :except => [ :dashboard, :login, :logout, :create ]
-  before_filter :set_model, :except => [ :dashboard, :login, :logout ]
+  before_filter :set_previous_action, :except => [ :dashboard, :login, :logout, :create, :email_password ]
+  before_filter :set_model, :except => [ :dashboard, :login, :logout, :email_password ]
 
   before_filter :check_permissions, :only => [ :edit ]
 
   before_filter :set_order, :only => [ :index ]
-  before_filter :find_model, :only => [ :show, :edit, :update, :destroy, :status, :position ]
+  before_filter :find_model, :only => [ :show, :edit, :update, :destroy, :toggle, :position ]
   before_filter :fields, :only => [ :index ]
   before_filter :form_fields, :only => [ :new, :edit, :create, :update ]
 
@@ -79,9 +79,9 @@ class TypusController < ApplicationController
   end
 
   # Toggle the status of an item.
-  def status
-    @item.toggle!('status')
-    flash[:notice] = "#{@model.to_s.titleize.capitalize} status changed"
+  def toggle
+    @item.toggle!(params[:field])
+    flash[:notice] = "#{@model.to_s.titleize.capitalize} #{params[:field]} changed."
     redirect_to :params => params.merge(:action => 'index', :id => nil)
   end
 
@@ -132,6 +132,27 @@ class TypusController < ApplicationController
   def logout
     session[:typus] = nil
     redirect_to typus_login_url
+  end
+
+  def email_password
+    if request.post?
+      typus_user = TypusUser.find_by_email(params[:user][:email])
+      if typus_user
+        password = generate_password
+        typus_user.reset_password(password)
+        if RAILS_ENV == 'development'
+          flash[:error] = "Sent a new password to #{params[:user][:email]} (#{password})"
+        else
+          flash[:error] = "Sent a new password to #{params[:user][:email]}"
+        end
+        redirect_to typus_login_url
+      else
+        flash[:error] = "This is chelm ..."
+        redirect_to typus_email_password_url
+      end
+    else
+      render :layout => 'typus_login'
+    end
   end
 
 private
