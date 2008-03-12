@@ -14,8 +14,6 @@ module Typus
         :app_description => '',
         :per_page => 15,
         :prefix => 'admin',
-        :username => 'admin',
-        :password => 'typus',
         :version => '',
         :signature => ''
         }
