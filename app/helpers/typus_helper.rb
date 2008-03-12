@@ -2,15 +2,9 @@ module TypusHelper
 
   def head
     html = <<-HTML
-      <title>#{Typus::Configuration.options[:app_name]} #{page_title}</title>
-      <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-      <meta http-equiv="imagetoolbar" content="no" />
-      <meta name="description" content="" />
-      <meta name="keywords" content="" />
-      <meta name="author" content="" />
-      <meta name="copyright" content="" />
-      <meta name="generator" content="" />
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+      <title>#{Typus::Configuration.options[:app_name]} #{page_title}</title>
+      <meta http-equiv="imagetoolbar" content="no" />
       #{stylesheet_link_tag "typus", :media => "screen"}
       #{javascript_include_tag :defaults}
     HTML
@@ -26,7 +20,7 @@ module TypusHelper
   def breadcrumbs
     html = "<p>"
     if params[:model]
-      html << "#{link_to "Home", typus_dashboard_url}" 
+      html << "#{link_to "Home", typus_dashboard_url}"
       case params[:action]
       when "index"
         html << " &rsaquo; #{params[:model].titleize}\n"
@@ -50,6 +44,7 @@ module TypusHelper
 
   # Dashboard list of modules
   def modules
+
     html = "<div id=\"list\">"
     modules = []
     Typus::Configuration.config.to_a.each { |model| modules << ((model[1].has_key? 'module') ? model[1]['module'].capitalize : 'Typus') }
@@ -136,15 +131,13 @@ module TypusHelper
   end
 
   def search
-    the_model = (@model.to_s.tableize.singularize.split("_").each { |i| i.capitalize! }).join(" ")
-    if Typus::Configuration.config["#{the_model}"]["search"]
-      search = <<-HTML
-        <h2>Search</h2>
-        <form action="" method="get">
-        <p><input id="search" name="search" type="text" value="#{params[:search]}"/></p>
-        </form>
-      HTML
-    end
+    search = <<-HTML
+      <h2>Search</h2>
+      <form action="" method="get">
+      <p><input id="search" name="search" type="text" value="#{params[:search]}"/></p>
+      </form>
+    HTML
+    return search if Typus::Configuration.config["#{@model.to_s.titleize}"]["search"]
   end
 
   def filters
