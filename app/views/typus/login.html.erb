@@ -1,11 +1,11 @@
 <%= typus_block("login_top") %>
 
 <% form_tag :action => 'login' do %>
-<p><label for="email">Email</label>
-<%= text_field :user, :email, :size => "20", :class => "big" %></p>
-<p><label for="password">Password</label>
-<%= password_field :user, :password, :size => "20", :class => "big" %></p>
-<p><%= submit_tag "Login" %></p>
+  <p><label for="email">Email</label>
+  <%= text_field :user, :email, :size => "20", :class => "big" %></p>
+  <p><label for="password">Password</label>
+  <%= password_field :user, :password, :size => "20", :class => "big" %></p>
+  <p><%= submit_tag "Login" %> <%= link_to "Recover Password?", typus_email_password_url %></p>
 <% end %>
 
 <%= typus_block("login_bottom") %>
