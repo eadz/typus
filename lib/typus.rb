@@ -7,6 +7,7 @@ module Typus
       enable_orm
       enable_routes
       enable_string
+      enable_authentication
     end
 
     def enable_configuration
@@ -32,6 +33,11 @@ module Typus
     def enable_string
       require 'typus/string'
       puts "=> [TYPUS] Loaded String Extension"
+    end
+
+    def enable_authentication
+      require 'typus/authentication'
+      puts "=> [TYPUS] Loaded Authentication"
     end
 
   end
