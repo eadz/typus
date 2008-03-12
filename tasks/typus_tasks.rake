@@ -4,9 +4,31 @@ end
 
 namespace :typus do
 
-  desc "Create first user"
+  desc "Create first TypusUser"
   task :create_user do
-    puts "=> [Typus] Here we create a new user ..."
+    require "#{RAILS_ROOT}/config/environment"
+
+    # Don't create a first user if already there are Typus on the user.
+    return "" if TypusUser.count > 0
+
+    # Create the new user with the params.
+    email = ENV['email']
+    password = ENV['password'] || "thisischelm"
+    typus_user = TypusUser.new(:email => email, 
+                               :password => password, 
+                               :password_confirmation => password, 
+                               :first_name => 'Appname',
+                               :last_name => 'Admin', 
+                               :admin => true,
+                               :status => true)
+    if typus_user.save
+      puts "=> [Typus] Typus User successfully created."
+      puts "=> [Typus]    Email: #{typus_user.email}"
+      puts "=> [Typus]    Password: #{password}"
+    else
+      puts typus_user.errors.inspect
+      puts "=> [Typus] Could not create Typus User."
+    end
   end
 
   desc "Add controller to have new actions available"
@@ -77,6 +99,19 @@ namespace :typus do
         typus.puts "#   description: Some text to describe the model"
         typus.puts "#"
         typus.puts "# ------------------------------------------------"
+        typus.puts ""
+        typus.puts "Typus User:"
+        typus.puts "  fields:"
+        typus.puts "    list: first_name, last_name, email, status, admin"
+        typus.puts "    form: first_name, last_name, email, password, password_confirmation, status, admin"
+        typus.puts "  actions:"
+        typus.puts "    list:"
+        typus.puts "    form:"
+        typus.puts "  filters: status"
+        typus.puts "  search: first_name, last_name, email"
+        typus.puts "  module: Typus"
+        typus.puts "  description: System Users Administration"
+        typus.puts ""
         typus.close
         models.each do |model|
           class_name = eval model.sub(/\.rb$/,'').camelize
