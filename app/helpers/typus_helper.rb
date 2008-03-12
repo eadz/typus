@@ -57,13 +57,12 @@ module TypusHelper
       html << "<table>\n"
       html << "<tr><th colspan=\"2\">#{m.titleize}</th></tr>\n"
 
-      if Typus::Configuration.options[:username] && Typus::Configuration.options[:password]
-        @models = Typus::Configuration.config
-      else
-        @user = TypusUser.find(session[:typus].id)
-        @models = Hash.new
-        @user.models.each { |mo| @models["#{mo}"] = Typus::Configuration.config["#{mo}"] }
-      end
+      @models = Typus::Configuration.config
+
+      # FIXME
+      # @user = TypusUser.find(session[:typus].id)
+      # @models = Hash.new
+      # @user.models.each { |mo| @models["#{mo}"] = Typus::Configuration.config["#{mo}"] }
 
       @models.each do |model|
         current = (model[1]['module']) ? model[1]['module'].capitalize : 'Typus'
