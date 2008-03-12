@@ -141,9 +141,9 @@ class TypusController < ApplicationController
         password = generate_password
         typus_user.reset_password(password)
         if RAILS_ENV == 'development'
-          flash[:error] = "Sent a new password to #{params[:user][:email]} (#{password})"
+          flash[:success] = "Sent a new password to #{params[:user][:email]} (#{password})"
         else
-          flash[:error] = "Sent a new password to #{params[:user][:email]}"
+          flash[:success] = "Sent a new password to #{params[:user][:email]}"
         end
         redirect_to typus_login_url
       else
