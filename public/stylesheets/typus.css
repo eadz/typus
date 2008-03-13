@@ -2,7 +2,7 @@
 Title:     Typus
 Details:   Master styles for Typus
 Author:    fesplugas@intraducibles.net
-Updated:   January 2007
+Updated:   March 2008
 ---------------------------------------------------------- */
 
 /* reset all styles
@@ -71,13 +71,14 @@ a:hover {
   font-weight: normal;
 }
 
-#header h1 #notice {
+#header h1 #flash {
   color: #FFF;
   background: #09C;
   font-size: 75%;
   font-weight: bold!important;
   margin: 0px 0px 0px 5px;
   padding: 3px 5px;
+  display: inline;
 }
 
 #header h1 a,
@@ -187,27 +188,6 @@ a:hover {
   padding: 0px;
 }
 
-/*
-#content blockquote[cite]:after {
-	border: 1px solid #cc0000;
-	content: "" attr(cite);
-	display: block;
-	margin: 0px;
-	color: #960;
-	font-size: 90%;
-	text-align: right;
-}
-
-#content blockquote[title]:after {
-	content: "" attr(title);
-	display: block;
-	margin: 0px;
-	color: #960;
-	font-size: 90%;
-	text-align: right;
-}
-*/
-
 #content ul {
   margin: 5px 0px;
   padding: 0px;
@@ -229,47 +209,50 @@ a:hover {
   width: 230px;
 }
 
-#sidebar label {
-  font-size: 15px;
-}
+  #sidebar label {
+    font-size: 15px;
+  }
 
-#sidebar h2 {
-  margin: 0px 0px 10px 0px;
-  padding: 0px;
-}
+  #sidebar h2 {
+    margin: 0px 0px 10px 0px;
+  }
 
-#sidebar p {
-  margin: 0px 0px 15px 0px;
-}
+  #sidebar h3 {
+    margin: 0px 0px 5px 0px;
+  }
 
-#sidebar form {
-  margin: 0px 0px 10px 0px;
-}
+  #sidebar p {
+    margin: 0px 0px 15px 0px;
+  }
 
-#sidebar ul {
-  line-height: 150%;
-  padding: 0px;
-  margin: 0px 0px 15px 0px;
-}
+  #sidebar form {
+    margin: 0px 0px 10px 0px;
+  }
 
-#sidebar li {
-  list-style: none;
-  line-height: 150%;
-}
+  #sidebar ul {
+    line-height: 150%;
+    padding: 0px;
+    margin: 0px 0px 15px 0px;
+  }
 
-#sidebar a.on {
-  color: #FFF;
-  background: #0099CC;
-  padding: 0px 2px;
-}
+  #sidebar li {
+    list-style: none;
+    line-height: 150%;
+  }
 
-#sidebar a:hover {
-  padding: 0px 2px;
-}
+  #sidebar a.on {
+    color: #FFF;
+    background: #0099CC;
+    padding: 0px 2px;
+  }
 
-#sidebar a.on:hover {
-  text-decoration: none;
-}
+  #sidebar a:hover {
+    padding: 0px 2px;
+  }
+
+  #sidebar a.on:hover {
+    text-decoration: none;
+  }
 
 /* footer
 ---------------------------------------------------------- */
@@ -281,14 +264,14 @@ a:hover {
   padding: 20px;
 }
 
-#footer a {
-  color: #FFF;
-}
+  #footer a {
+    color: #FFF;
+  }
 
-#footer a:hover {
-  background: transparent;
-  color: #09C;
-}
+  #footer a:hover {
+    background: transparent;
+    color: #09C;
+  }
 
 /* form
 ---------------------------------------------------------- */
@@ -498,54 +481,70 @@ body#login {
   width: 420px;
 }
 
-#dialog h1 {
-  color: #09C;
-  font-size: 1.6em;
-  margin: 5px 0px 15px -5px;
-  padding: 0px 0px 0px 5px;
-}
+  #dialog h1 {
+    color: #09C;
+    font-size: 1.6em;
+    margin: 5px 0px 15px -5px;
+    padding: 0px 0px 0px 5px;
+  }
 
-#dialog h2 {
-  color: #7A9496;
-  font-size: 120%;
-  margin: 1em 0px 0.75em 0px;
-}
+  #dialog h2 {
+    color: #7A9496;
+    font-size: 120%;
+    margin: 1em 0px 0.75em 0px;
+  }
 
-#dialog label {
-  display: block;
-  font-weight: bold;
-  margin: 0px 0px 3px 0px;
-}
+  #dialog label {
+    display: block;
+    font-weight: bold;
+    margin: 0px 0px 3px 0px;
+  }
 
-#dialog input {
-  margin: 0px 10px 10px 0px;
-}
+  #dialog input {
+    margin: 0px 10px 10px 0px;
+  }
 
-#dialog input.big {
-  font-size: 20px;
-  font-family: georgia;
-  padding: 3px 2px;
-  width: 97%;
-}
+  #dialog input.big {
+    font-size: 20px;
+    font-family: georgia;
+    padding: 3px 2px;
+    width: 97%;
+  }
 
-#dialog input:focus {
-  background-color: #FFFCE1;
-}
+  #dialog input:focus {
+    background-color: #FFFCE1;
+  }
 
-#dialog #signature {
-  color: #FFF;
-  margin: 0px auto;
-  text-align: right;
-  width: 450px;
-}
+  #dialog #signature {
+    color: #FFF;
+    margin: 0px auto;
+    text-align: right;
+    width: 450px;
+  }
 
-#dialog .error {
-  background: #000;
-  border-left: 5px solid #CC0000;
-  color: #FFF;
-  margin-bottom: 1em;
-  padding: 5px 5px 5px 10px;
-}
+  #dialog .error {
+    background: #000;
+    border-left: 5px solid red;
+    color: #FFF;
+    margin-bottom: 1em;
+    padding: 5px 5px 5px 10px;
+  }
+
+  #dialog .success {
+    background: #000;
+    border-left: 5px solid green;
+    color: #FFF;
+    margin-bottom: 1em;
+    padding: 5px 5px 5px 10px;
+  }
+
+  #dialog .warning {
+    background: #000;
+    border-left: 5px solid yellow;
+    color: #FFF;
+    margin-bottom: 1em;
+    padding: 5px 5px 5px 10px;
+  }
 
 /* pagination
 ---------------------------------------------------------- */
