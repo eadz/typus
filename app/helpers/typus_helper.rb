@@ -175,7 +175,7 @@ module TypusHelper
     flash_types = [ :error, :warning, :notice ]
     flash_type = flash_types.detect{ |a| flash.keys.include?(a) } || flash.keys.first
     if flash_type
-      "<div id=\"flash\" class=\"flash %s\">%s</</div>" % [flash_type.to_s, flash[flash_type]]
+      "<div id=\"flash\" class=\"flash %s\">%s</div>" % [flash_type.to_s, flash[flash_type]]
     end
   end
 
