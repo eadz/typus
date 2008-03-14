@@ -104,7 +104,7 @@ namespace :typus do
         typus.puts "Typus User:"
         typus.puts "  fields:"
         typus.puts "    list: first_name, last_name, email, status, admin"
-        typus.puts "    form: first_name, last_name, email, password, password_confirmation, status, admin"
+        typus.puts "    form: first_name, last_name, email, password, password_confirmation"
         typus.puts "  actions:"
         typus.puts "    list:"
         typus.puts "    form:"
