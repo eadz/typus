@@ -2,10 +2,10 @@
 
 <% form_tag :action => 'login' do %>
   <p><label for="email">Email</label>
-  <%= text_field :user, :email, :size => "20", :class => "big" %></p>
+  <%= text_field :user, :email, :size => "20", :class => "title" %></p>
   <p><label for="password">Password</label>
-  <%= password_field :user, :password, :size => "20", :class => "big" %></p>
-  <p><%= submit_tag "Sign in" %> <%= link_to "Recover Password?", typus_email_password_url %></p>
+  <%= password_field :user, :password, :size => "20", :class => "title" %></p>
+  <p><%= submit_tag "Sign in", :class => 'button' %> <%= link_to "Recover Password?", typus_email_password_url %></p>
 <% end %>
 
 <%= typus_block("login_bottom") %>
