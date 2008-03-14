@@ -49,16 +49,28 @@ module Authentication
       end
     end
 
-    # Determine if the user can edit/modify the current record
+    # Users cannot add other users.
     def can_add? record
       return true if current_user.admin?
       case record.class.to_s
-      when 'TypusUser' # regular users can't edit other users
-        false # true # record.id == current_user.id
-      #when 'Message'
-        # messages can only be edited by their creators
-        # record.created_by == current_user.id
-      else # everyone can edit anything else
+      when 'TypusUser'
+        false
+      else
+        true
+      end
+    end
+
+    # Only admins can destroy content.
+    def can_destroy? record
+      return true if current_user.admin? && record.id != current_user.id
+    end
+
+    def can_toggle? record
+      return true if current_user.admin? && record.id != current_user.id
+      case record.class.to_s
+      when 'TypusUser'
+        false
+      else
         true
       end
     end
