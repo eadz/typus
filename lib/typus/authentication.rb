@@ -35,21 +35,20 @@ module Authentication
       current_user.admin?
     end
 
-    # Determine if the user can edit/modify the current record
+    # Admin can edit everything.
+    # Users can edit themselves and their content.
     def can_edit? record
       return true if current_user.admin?
       case record.class.to_s
-      when 'TypusUser' # regular users can't edit other users
+      when 'TypusUser'
         record.id == current_user.id
-      #when 'Message'
-        # messages can only be edited by their creators
-        # record.created_by == current_user.id
-      else # everyone can edit anything else
-        true
+      else
+        true # record.user_id == current_user.id # created_by
       end
     end
 
-    # Users cannot add other users.
+    # Admin can add anything
+    # Users can add anything EXCEPT TypusUsers
     def can_add? record
       return true if current_user.admin?
       case record.class.to_s
@@ -62,16 +61,23 @@ module Authentication
 
     # Only admins can destroy content.
     def can_destroy? record
-      return true if current_user.admin? && record.id != current_user.id
-    end
-
-    def can_toggle? record
-      return true if current_user.admin? && record.id != current_user.id
       case record.class.to_s
       when 'TypusUser'
+        return true if current_user.admin? && record.id != current_user.id
+      else
+        return true if current_user.admin?
+      end
+    end
+
+    # Admin can toggle anything except themselved
+    # Users can toggle only their things
+    def can_toggle? record
+      case record.class.to_s
+      when 'TypusUser'
+        return true if current_user.admin? && record.id != current_user.id
         false
       else
-        true
+        record.user_id == current_user.id
       end
     end
 
