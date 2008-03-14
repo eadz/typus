@@ -8,7 +8,7 @@
 
 <% form_for :item, :url  => { :action => "update", :id => @item.id }, :html => { :multipart => true } do %>
   <%= typus_form %>
-  <p><%= submit_tag "Update #{params[:model].titleize.singularize}" %></p>
+  <p><%= submit_tag "Update #{params[:model].titleize.singularize}", :class => 'button' %></p>
 <% end %>
 
 <%= typus_form_externals %>
