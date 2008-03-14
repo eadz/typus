@@ -1,0 +1,17 @@
+admin:
+  id: 1
+  email: admin@typus.org
+  first_name: Francesc
+  last_name: Esplugas
+  status: true
+  admin: true
+  hashed_password: 7c222fb2927d828af22f592134e8932480637c0d
+
+user:
+  id: 2
+  email: user@typus.org
+  first_name: Typus
+  last_name: User
+  status: true
+  admin: false
+  hashed_password: 7c222fb2927d828af22f592134e8932480637c0d

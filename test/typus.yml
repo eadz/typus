@@ -2,6 +2,7 @@ Post:
   fields:
     list: title, created_at, status
     form: title, body, created_at, status
+    relationship: title, created_at
   actions:
     list: cleanup
     form: send_as_newsletter
@@ -9,4 +10,4 @@ Post:
   filters: status, created_at, category
   search: title
   order_by: created_at
-  module: blog
+  module: Blog
