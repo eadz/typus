@@ -221,7 +221,7 @@ module TypusHelper
         case column[1]
         when 'boolean'
           image = "#{image_tag(status = item.send(column[0])? "typus_status_true.gif" : "typus_status_false.gif")}"
-          html << "<td width=\"20px\" align=\"center\">#{link_to image, { :params => params.merge(:controller => 'typus', :model => model, :action => 'toggle', :field => column[0], :id => item.id) } , :confirm => "Change this #{@model.to_s.titleize} #{params[:field]}?"}</td>"
+          html << "<td width=\"20px\" align=\"center\">#{link_to image, { :params => params.merge(:controller => 'typus', :model => model, :action => 'toggle', :field => column[0], :id => item.id) } , :confirm => "Change this #{@model.to_s.titleize} #{column[0]}?"}</td>"
         when "datetime"
           html << "<td width=\"80px\">#{fmt_date(item.send(column[0]))}</td>"
         when "collection"
