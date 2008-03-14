@@ -1,7 +1,7 @@
 
 $:.unshift(File.dirname(__FILE__) + '/../lib')
 require 'test/unit'
-RAILS_ENV = "test"
+ENV['RAILS_ENV'] = "test"
 # rails_root = ARGV.shift || File.expand_path(File.join(File.dirname(__FILE__), '../../../..'))
 # require "#{rails_root}/config/environment.rb"
 

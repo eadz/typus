@@ -1,6 +1,4 @@
 require File.dirname(__FILE__) + '/../test_helper'
-require File.dirname(__FILE__) + '/../test_helper'
-
 require File.dirname(__FILE__) + '/../../app/controllers/typus_controller'
 
 class TypusControllerTest < ActionController::TestCase
@@ -21,13 +19,11 @@ class TypusControllerTest < ActionController::TestCase
   end
 
   def test_should_render_index
-    # @request.session[:typus] = 1 # typus_user
-    # FIXME
     post :login, { :user => { :email => 'admin@typus.org', :password => '12345678' }}
     assert_equal @request.session[:typus], 1
-    get :index, { :model => 'posts' } # admin/posts' # :index, { :params => params.merge(:model => 'posts') }
-    #assert_response :success
-    #assert_template 'index'
+    get :index, { :model => 'posts' }
+    assert_response :success
+    assert_template 'index'
   end
 
 #  def test_should_not_render_index_for_undefined_model
@@ -37,41 +33,50 @@ class TypusControllerTest < ActionController::TestCase
 #    assert_redirected_to :action => 'dashboard'
 #  end
 
-#  def test_should_render_new
-#    @request.session[:typus] = 1 # typus_user
-#    get :new, { :model => 'posts' }
-#    assert_response :success
-#    assert_template 'new'
-#  end
-
-=begin
+  def test_should_render_new
+    @request.session[:typus] = 1
+    get :new, { :model => 'posts' }
+    assert_response :success
+    assert_template 'new'
+  end
 
   def test_should_create_item
     @request.session[:typus] = true
     items = Post.count
     post :create, { :model => 'posts', :item => { :title => "This is another title", :body => "This is the body."}}
     assert_response :redirect
+    assert_redirected_to :action => 'edit'
     assert_equal items, 2
   end
 
-=end
-
-#  def test_should_render_edit
-#    @request.session[:typus] = 1
-#    get :edit, { :model => 'posts', :id => 1 }
-#    assert_response :success
-#  end
-
-=begin
-
-  def test_should_update_item
-    @request.session[:typus] = true
-    post :update, { :model => 'posts', :id => 1, :title => "Updated" }
+  def test_should_render_edit
+    @request.session[:typus] = 1
+    get :edit, { :model => 'posts', :id => 1 }
     assert_response :success
     assert_template 'edit'
   end
 
-=end
+  def test_should_update_item
+    @request.session[:typus] = 1
+    post :update, { :model => 'posts', :id => 1, :title => "Updated" }
+    assert_response :redirect
+    assert_redirected_to :action => 'edit'
+  end
+
+  def test_should_logout
+    @request.session[:typus] = 1
+    get :logout
+    assert_equal @request.session[:typus], nil
+    assert_response :redirect
+    assert_redirected_to typus_login_url
+  end
+
+  def test_should_perform_a_search
+    @request.session[:typus] = 1
+    get :index, { :model => 'posts', :search => 'neinonon' }
+    assert_response :success
+    assert_template 'index'
+  end
 
 =begin
 
@@ -101,21 +106,6 @@ class TypusControllerTest < ActionController::TestCase
     get :run, { :model => 'posts',  :id => 1, :task => 'send_as_email' }
     assert_response :redirect
     assert_redirected_to :action => 'index'
-  end
-
-  def test_should_logout
-    @request.session[:typus] = true
-    get :logout
-    assert_equal @request.session[:typus], nil
-    assert_response :redirect
-    assert_redirected_to typus_login_url
-  end
-
-  def test_should_perform_a_search
-    @request.session[:typus] = true
-    get :index, { :model => 'posts', :search => 'neinonon' }
-    assert_response :success
-    assert_template 'index'
   end
 
 =end
