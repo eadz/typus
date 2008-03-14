@@ -54,6 +54,8 @@ module Typus
         fields_with_type << [ f, @field_type ]
       end
       return fields_with_type
+    rescue
+      self.typus_fields_for('list')
     end
 
     # Typus sidebar filters.
