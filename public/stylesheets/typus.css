@@ -48,7 +48,7 @@ a:active {
 }
 
 a:hover {
-  background: #0099CC;
+  background: #408BB6;
   color: #FFF;
   display: inline;
   text-decoration: none;
@@ -73,7 +73,7 @@ a:hover {
 
 #header h1 #flash {
   color: #FFF;
-  background: #09C;
+  background: #408BB6;
   font-size: 75%;
   font-weight: bold!important;
   margin: 0px 0px 0px 5px;
@@ -164,7 +164,7 @@ a:hover {
 }
 
 #content h2 a:hover {
-  color: #0099CC;
+  color: #408BB6;
   background: transparent;
   text-decoration: none;
 }
@@ -242,7 +242,7 @@ a:hover {
 
   #sidebar a.on {
     color: #FFF;
-    background: #0099CC;
+    background: #408BB6;
     padding: 0px 2px;
   }
 
@@ -270,7 +270,7 @@ a:hover {
 
   #footer a:hover {
     background: transparent;
-    color: #09C;
+    color: #408BB6;
   }
 
 /* form
@@ -281,10 +281,25 @@ form {
 
 input {
   font-size: 12px;
-  padding: 2px;
+  padding: 5px;
+  border: 1px solid #999;
 }
 
-input.big {
+input.button {
+  background: #408BB6;
+  border: 2px solid #408BB6;
+  color: white;
+  font-weight: bold;
+  padding: 5px;
+}
+
+input.button:hover {
+  background: #59A5D1;
+  border: 2px solid #408BB6;
+  padding: 5px;
+}
+
+input.title {
   font-family: Georgia, monaco;
   font-size: 20px;
   font-weight: normal;
@@ -299,12 +314,15 @@ textarea:focus {
 textarea {
   font-family: Monaco, "Courier New", Courier, monospace;
   font-size: 13px;
-  padding: 2px;
+  padding: 5px;
   width: 100%;
+  border: 1px solid #999;
 }
 
 select {
   border: 1px solid #999;
+  font-family: Georgia;
+  font-size: 20px;
 }
 
 /* label
@@ -313,7 +331,7 @@ select {
 label {
   display: block;
   font-weight: bold;
-  margin: 5px 0px 3px 0px;
+  margin: 0px 0px -10px 0px;
 }
 
 /* notice & dialogs
@@ -358,7 +376,7 @@ table tr.even {
 table tr.even:hover,
 table tr.odd:hover {
   color: white;
-  background: #0099CC!important;
+  background: #408BB6!important;
 }
 
 table tr.even:hover a,
@@ -403,11 +421,11 @@ fieldset {
 }
 
 fieldset.on {
-  border: 1px solid #0099CC;
+  border: 1px solid #408BB6;
 }
 
 fieldset.on legend {
-  color: #0099CC;
+  color: #408BB6;
   text-transform: uppercase;
 }
 
@@ -440,8 +458,11 @@ h2 {
 }
 
 .errorExplanation {
-  border: 2px solid #3366CC;
-  padding: 0px 10px 5px 10px;
+  background: #3D3D3D;
+  color: #AAA;
+  padding: 1px 15px 6px 15px;
+  -moz-border-radius: 10px 200px 200px 10px;
+  -webkit-border-radius: 10px;
 }
 
 /* searchbox
@@ -475,14 +496,22 @@ body#login {
 
 #dialog {
   background: #FFF;
-  border: 5px solid #09C;
+  border: 5px solid #408BB6;
   margin: 100px auto 10px auto;
   padding: 15px 20px;
   width: 420px;
+
+  -moz-border-radius: 25px;
+  -webkit-border-radius: 25px;
+
 }
 
+  #dialog p a:hover {
+    padding: 0px 2px;
+  }
+
   #dialog h1 {
-    color: #09C;
+    color: #408BB6;
     font-size: 1.6em;
     margin: 5px 0px 15px -5px;
     padding: 0px 0px 0px 5px;
@@ -504,11 +533,12 @@ body#login {
     margin: 0px 10px 10px 0px;
   }
 
-  #dialog input.big {
+  #dialog input.title {
     font-size: 20px;
     font-family: georgia;
     padding: 3px 2px;
     width: 97%;
+    border: 1px solid #999;
   }
 
   #dialog input:focus {
@@ -521,10 +551,17 @@ body#login {
     text-align: right;
     width: 450px;
   }
+  
+  /*
+
+  .error      { background: #FBE3E4; color: #8a1f11; border-color: #FBC2C4; }
+  .notice     { background: #FFF6BF; color: #514721; border-color: #FFD324; }
+  .success    { background: #E6EFC2; color: #264409; border-color: #C6D880; }
+*/
 
   #dialog .error {
     background: #000;
-    border-left: 5px solid red;
+    border-left: 5px solid #CC0000;
     color: #FFF;
     margin-bottom: 1em;
     padding: 5px 5px 5px 10px;
@@ -558,7 +595,7 @@ body#login {
 }
 
 .pagination a {
-  color: #0099CC;
+  color: #408BB6;
   margin: 2px;
   padding: 2px 3px;
   text-decoration: none;
@@ -568,7 +605,7 @@ body#login {
   color: #000;
 }
 .pagination span.current {
-  background-color: #0099CC;
+  background-color: #408BB6;
   color: #FFF;
   font-weight: bold;
   margin: 2px;
