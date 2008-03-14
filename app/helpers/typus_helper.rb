@@ -11,10 +11,7 @@ module TypusHelper
   end
 
   def header
-    html = <<-HTML
-      <h1>#{Typus::Configuration.options[:app_name]} #{display_flash_message}</span></h1>
-      <h2>#{Typus::Configuration.options[:app_description]}</h2>
-    HTML
+    html = "<h1>#{Typus::Configuration.options[:app_name]} #{display_flash_message}</span></h1>"
   end
 
   def breadcrumbs
@@ -142,13 +139,11 @@ module TypusHelper
   def filters
     current_request = request.env['QUERY_STRING'] || []
     if @model.typus_filters.size > 0
-      html = "<h2>Filter <small>"
-      html << "#{link_to "Remove", :action => 'index'}" if current_request.size > 0
-      html << "</small></h2>"
+      html = ""
       @model.typus_filters.each do |f|
+        html << "<h2>#{f[0].humanize}</h2>\n"
         case f[1]
         when 'boolean'
-          html << "<h3>By #{f[0].titleize}</h3>\n"
           html << "<ul>\n"
           %w( true false ).each do |status|
             switch = (current_request.include? "#{f[0]}=#{status}") ? 'on' : 'off'
@@ -156,8 +151,7 @@ module TypusHelper
           end
           html << "</ul>\n"
         when 'datetime'
-          html << "<h3>By #{f[0].titleize}</h3>\n<ul>\n"
-          %w(today past_7_days this_month this_year).each do |timeline|
+          %w( today past_7_days this_month this_year ).each do |timeline|
             switch = (current_request.include? "#{f[0]}=#{timeline}") ? 'on' : 'off'
             html << "<li>#{link_to timeline.titleize, { :params => params.merge(f[0] => timeline) }, :class => switch}</li>"
           end
@@ -165,7 +159,6 @@ module TypusHelper
         when 'integer'
           model = f[0].split("_id").first.capitalize.constantize
           if model.count > 0
-            html << "<h3>By #{f[0].humanize}</h3>\n<ul>\n"
             model.find(:all).each do |item|
               switch = (current_request.include? "#{f[0]}=#{item.id}") ? 'on' : 'off'
               html << "<li>#{link_to item.name, { :params => params.merge(f[0] => item.id) }, :class => switch}</li>"
@@ -217,14 +210,14 @@ module TypusHelper
     @model.typus_fields_for(fields).each do |column|
       order_by = column[0]
       sort_order = (params[:sort_order] == "asc") ? "desc" : "asc"
-      html << "<th>#{link_to "<div class=\"#{sort_order}\">#{column[0].titleize}</div>", { :params => params.merge( :order_by => order_by, :sort_order => sort_order) }}</th>"
+      html << "<th>#{link_to "<div class=\"#{sort_order}\">#{column[0].humanize}</div>", { :params => params.merge( :order_by => order_by, :sort_order => sort_order) }}</th>"
     end
     html << "<th>&nbsp;</th>\n</tr>"
     
     # Body of the table
     @items.each do |item|
       html << "<tr class=\"#{cycle('even', 'odd')}\" id=\"item_#{item.id}\">"
-      @model.typus_fields_for('list').each do |column|
+      @model.typus_fields_for(fields).each do |column|
         case column[1]
         when 'boolean'
           image = "#{image_tag(status = item.send(column[0])? "typus_status_true.gif" : "typus_status_false.gif")}"
@@ -280,23 +273,23 @@ module TypusHelper
     fields.each do |field|
       case field[0] # Field Name
       when 'uploaded_data'
-        html << "<p><label>Upload File</label>"
+        html << "<p><label>Upload File</label><br />"
       else
-        html << "<p><label>#{field[0].titleize}</label>"
+        html << "<p><label>#{field[0].titleize}</label><br />"
       end
       case field[1] # Field Type
       when "boolean"
-        html << "<label style=\"font-weight: normal;\"> #{check_box :item, field[0]} Checked if active</label>"
+        html << "#{check_box :item, field[0]} Checked if active"
       when "blob"
         html << "#{file_field :item, field[0], :style => 'border: 0px;'}"
       when "datetime"
         html << "#{datetime_select :item, field[0], { :minute_step => 5 }}"
       when "password"
-        html << "#{password_field :item, field[0], :class => 'big'}"
+        html << "#{password_field :item, field[0], :class => 'title'}"
       when "string", "integer", "float"
-        html << "#{text_field :item, field[0], :class => 'big'}"
+        html << "#{text_field :item, field[0], :class => 'title'}"
       when "text"
-        html << "#{text_area :item, field[0], :rows => '10'}"
+        html << "#{text_area :item, field[0], :class => 'text', :rows => '10'}"
       when "tree"
         html << "<select id=\"item_#{field[0]}\" name=\"item[#{field[0]}]\">\n"
         html << "#{expand_tree_into_select_field(Category.top)}"
@@ -355,7 +348,7 @@ module TypusHelper
         end
         current_model = params[:model].singularize.camelize.constantize
         @items = current_model.find(params[:id]).send(field)
-        html << typus_table(field) if @items.size > 0
+        html << typus_table(field, 'relationship') if @items.size > 0
       end
     end
     return html
