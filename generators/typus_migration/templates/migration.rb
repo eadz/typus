@@ -1,4 +1,4 @@
-class AddTypusUser < ActiveRecord::Migration
+class CreateTypusUsers < ActiveRecord::Migration
 
   def self.up
     create_table :typus_users do |t|
