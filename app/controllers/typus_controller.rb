@@ -118,7 +118,7 @@ class TypusController < ApplicationController
     if request.post?
       @user = TypusUser.authenticate(params[:user])
       if @user
-        session[:typus] = @user
+        session[:typus] = @user.id
         redirect_to typus_dashboard_url
       else
         flash[:error] = "The Email and/or Password you entered is invalid."
