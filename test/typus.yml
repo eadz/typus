@@ -11,3 +11,15 @@ Post:
   search: title
   order_by: created_at
   module: Blog
+
+Typus User:
+  fields:
+    list: first_name, last_name, email, status, admin
+    form: first_name, last_name, email, password, password_confirmation
+  actions:
+    list:
+    form:
+  filters: status
+  search: first_name, last_name, email
+  module: Typus
+  description: System Users Administration

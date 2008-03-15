@@ -15,3 +15,12 @@ user:
   status: true
   admin: false
   hashed_password: 7c222fb2927d828af22f592134e8932480637c0d
+
+disabled_user:
+  id: 3
+  email: disabled_user@typus.org
+  first_name: Typus
+  last_name: User
+  status: false
+  admin: false
+  hashed_password: 7c222fb2927d828af22f592134e8932480637c0d
