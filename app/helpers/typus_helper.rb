@@ -284,13 +284,14 @@ module TypusHelper
         html << "#{datetime_select :item, field[0], { :minute_step => 5 }}"
       when "password"
         html << "#{password_field :item, field[0], :class => 'title'}"
-      when "string", "integer", "float"
+      when "string", "integer", "float", "position"
         html << "#{text_field :item, field[0], :class => 'title'}"
       when "text"
         html << "#{text_area :item, field[0], :class => 'text', :rows => '10'}"
       when "tree"
         html << "<select id=\"item_#{field[0]}\" name=\"item[#{field[0]}]\">\n"
-        html << "#{expand_tree_into_select_field(Category.top)}"
+        html << %{<option value=""></option>}
+        html << "#{expand_tree_into_select_field(@item.class.top)}"
         html << "</select>\n"
       when "selector"
         values = eval field[0].upcase
