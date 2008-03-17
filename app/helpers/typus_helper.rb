@@ -291,7 +291,7 @@ module TypusHelper
       when "tree"
         html << "<select id=\"item_#{field[0]}\" name=\"item[#{field[0]}]\">\n"
         html << %{<option value=""></option>}
-        html << "#{expand_tree_into_select_field(Section.top)}"
+        html << "#{expand_tree_into_select_field(@item.class.top)}"
         html << "</select>\n"
       when "selector"
         values = eval field[0].upcase
