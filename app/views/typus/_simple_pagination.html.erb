@@ -1,0 +1,4 @@
+<div class="pagination">
+  <%= link_to "&laquo; Previous", :params => params.merge(:page => @items.prev.number) if @items.prev? %>
+  <%= link_to "Next &raquo;", :params => params.merge(:page => @items.next.number) if @items.next? %>
+</div>

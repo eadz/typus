@@ -1,0 +1,19 @@
+<div class="pagination">
+
+  <% last_page = 0 -%>
+
+  <% windowed_pagination_links(@pager, 
+                               :window_size => 5, 
+                               :link_to_current_page => true, 
+                               :always_show_anchors => true) do |n| -%>
+    <% if @items.number == n -%>
+      <li class="currentpage"><%= n %></li>
+    <% else -%>
+      <%= "..." if last_page + 1 < n %>
+      <%= link_to n, :page => n %>
+    <% end -%>
+    <% last_page = n -%>
+
+  <% end -%>
+
+</div>
