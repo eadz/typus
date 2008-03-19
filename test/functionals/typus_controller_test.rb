@@ -88,23 +88,22 @@ class TypusControllerTest < ActionController::TestCase
   end
 
   def test_should_allow_admin_add_users
-    admin = TypusUser.find(1)
+    admin = typus_users(:admin)
     @request.session[:typus] = admin.id
     get :new, { :model => 'typus_users' }
     assert_response :success
   end
 
   def test_should_not_allow_a_user_add_users
-    user = TypusUser.find(2)
+    user = typus_users(:user)
     @request.session[:typus] = user.id
     get :new, { :model => 'typus_users' }
     assert_response :redirect
     assert_redirected_to :action => 'index'
   end
 
-  # FIXME: probably duplicated
   def test_should_allow_admin_to_edit_himself
-    admin = TypusUser.find(1)
+    admin = typus_users(:admin)
     @request.session[:typus] = admin.id
     get :edit, { :model => 'typus_users', :id => admin.id }
     assert_response :success
@@ -112,8 +111,8 @@ class TypusControllerTest < ActionController::TestCase
   end
 
   def test_should_allow_admin_to_edit_other_users
-    admin = TypusUser.find(1)
-    user = TypusUser.find(2)
+    admin = typus_users(:admin)
+    user = typus_users(:user)
     @request.session[:typus] = admin.id
     get :edit, { :model => 'typus_users', :id => user.id }
     assert_response :success
@@ -121,7 +120,7 @@ class TypusControllerTest < ActionController::TestCase
   end
 
   def test_should_allow_user_to_edit_himself
-    user = TypusUser.find(2)
+    user = typus_users(:user)
     @request.session[:typus] = user.id
     get :edit, { :model => 'typus_users', :id => user.id }
     assert_response :success
@@ -129,46 +128,12 @@ class TypusControllerTest < ActionController::TestCase
   end
 
   def test_should_not_allow_uset_to_edit_other_users
-    admin = TypusUser.find(1)
-    user = TypusUser.find(2)
+    admin = typus_users(:admin)
+    user = typus_users(:user)
     @request.session[:typus] = user.id
     get :edit, { :model => 'typus_users', :id => admin.id }
     assert_response :redirect
     assert_redirected_to :action => 'index'
   end
-
-  def test_should_run_defined_action
-    admin = TypusUser.find(1)
-    @request.session[:typus] = admin.id
-    # FIXME
-    # get :run, { :model => 'posts', :task => 'cleanup' }
-    # assert_response :redirect
-    # assert_redirected_to :action => 'index'
-  end
-
-=begin
-
-  def test_should_not_run_undefined_action
-    @request.session[:typus] = true
-    get :run, { :model => 'posts', :task => 'undefined_task' }
-    assert_response :redirect
-    assert_redirected_to :action => 'index'
-  end
-
-  def test_should_run_defined_action_on_item
-    @request.session[:typus] = true
-    get :run, { :model => 'posts',  :id => 1, :task => 'send_as_newsletter' }
-    assert_response :redirect
-    assert_redirected_to :action => 'index'
-  end
-
-  def test_should_not_run_undefined_action_on_item
-    @request.session[:typus] = true
-    get :run, { :model => 'posts',  :id => 1, :task => 'send_as_email' }
-    assert_response :redirect
-    assert_redirected_to :action => 'index'
-  end
-
-=end
 
 end
