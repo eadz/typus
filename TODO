@@ -14,6 +14,7 @@ TODO
 [X] Typus should not boot if cannot find `config/typus.yml`.
 [ ] Only Admins can add other users ...
 [ ] Add `default_filter :active => true`.
+[ ] `will_paginate` plugin is no longer required.
 
 DONE
 ====

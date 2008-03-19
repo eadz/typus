@@ -200,7 +200,7 @@ module TypusHelper
     date.strftime("%d.%m.%Y")
   end
 
-  def typus_table(model = params[:model], fields = 'list')
+  def typus_table(model = params[:model], fields = 'list', items = @items)
 
     @model = model.camelize.singularize.constantize
     html = "<table>"
@@ -215,7 +215,7 @@ module TypusHelper
     html << "<th>&nbsp;</th>\n</tr>"
     
     # Body of the table
-    @items.each do |item|
+    items.each do |item|
       html << "<tr class=\"#{cycle('even', 'odd')}\" id=\"item_#{item.id}\">"
       @model.typus_fields_for(fields).each do |column|
         case column[1]
@@ -260,10 +260,10 @@ module TypusHelper
       html << "<td width=\"10px\">#{@perform}</td>\n</tr>"
     end
     html << "</table>"
-  rescue Exception => error
-    "<p>There was an error when loading <code>config/typus.yml</code>.</p>
-    <h3>Error</h3>
-    <pre>#{error}</pre>"
+#  rescue Exception => error
+#    "<p>There was an error when loading <code>config/typus.yml</code>.</p>
+#    <h3>Error</h3>
+#    <pre>#{error}</pre>"
   end
 
   def typus_form(fields = @form_fields)
@@ -368,6 +368,34 @@ module TypusHelper
         html << expand_tree_into_select_field(category.children) if category.has_children?
       end
     end
+  end
+
+  def windowed_pagination_links(pager, options)
+    link_to_current_page = options[:link_to_current_page]
+    always_show_anchors = options[:always_show_anchors]
+    padding = options[:window_size]
+
+    pg = params[:pg].blank? ? 1 : params[:pg].to_i
+
+    current_page = pager.page(pg)
+    html = ''
+    #Calculate the window start and end pages
+    padding = padding < 0 ? 0 : padding
+
+    first = (pager.first.number <= (current_page.number - padding) && pager.last.number >= (current_page.number - padding)) ? current_page.number - padding : 1
+    last = pager.first.number <= (current_page.number + padding) && pager.last.number >= (current_page.number + padding) ? current_page.number + padding : pager.last.number
+
+    # Print start page if anchors are enabled
+    html << yield(1) if always_show_anchors and not first == 1
+
+    # Print window pages
+    first.upto(last) do |page|
+    (current_page.number == page && !link_to_current_page) ? html << page.to_s : html << (yield(page)).to_s
+    end
+
+    # Print end page if anchors are enabled
+    html << yield(pager.last.number).to_s if always_show_anchors and not last == pager.last.number
+    html
   end
 
 end

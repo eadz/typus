@@ -44,9 +44,9 @@ namespace :typus do
 
   desc "Install plugin dependencies"
   task :dependencies do
-    puts "Installing required plugins ..."
-    plugins = [ "svn://errtheblog.com/svn/plugins/will_paginate",
-                "http://svn.techno-weenie.net/projects/plugins/attachment_fu/",
+    # Plugins
+    puts "Installing required Plugins ..."
+    plugins = [ "http://svn.techno-weenie.net/projects/plugins/attachment_fu/",
                 "http://dev.rubyonrails.org/svn/rails/plugins/acts_as_list/",
                 "http://dev.rubyonrails.org/svn/rails/plugins/acts_as_tree/"]
     plugins.each do |plugin_url|
@@ -54,6 +54,13 @@ namespace :typus do
       puts "=> [Typus] Installing `#{plugin}` plugin."
       system "rm -rf vendor/plugins/#{plugin}"
       system "script/plugin install #{plugin_url} -q"
+    end
+    # Gems
+    puts "Installing required Gems ..."
+    gems = [ "paginator" ]
+    gems.each do |gem|
+      puts "=> [Typus] Installing `#{gem}` gem."
+      system "sudo gem install #{gem} --no-rdoc --no-ri"
     end
   end
 

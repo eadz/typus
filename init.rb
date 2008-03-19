@@ -9,8 +9,8 @@ begin
 
   %w( sha1 ).each { |lib| require lib }
 
-  require "#{RAILS_ROOT}/vendor/plugins/will_paginate/lib/will_paginate"
   require 'data_mapper' unless defined?(ActiveRecord)
+  require 'paginator'
   require 'typus'
 
   TYPUS_ROLES = %w( admin editor writer moderator visitor )
@@ -20,5 +20,5 @@ begin
   Typus::Configuration.options[:version] = '0.9.5 r427'
 
 rescue LoadError
-  puts "=> [TYPUS] Install required plugins with `rake typus:dependencies`"
+  puts "=> [TYPUS] Install required plugins and gems with `rake typus:dependencies`"
 end

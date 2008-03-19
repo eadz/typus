@@ -22,10 +22,23 @@ class TypusController < ApplicationController
   def index
     conditions = "1 = 1"
     conditions << " " + (request.env['QUERY_STRING']).build_conditions(@model) if request.env['QUERY_STRING']
-    @items = @model.paginate :page => params[:page], 
-                             :per_page => Typus::Configuration.options[:per_page], 
-                             :order => "#{params[:order_by]} #{params[:sort_order]}", 
-                             :conditions => "#{conditions}"
+    # @items = @model.paginate :page => params[:page], 
+    #                          :per_page => Typus::Configuration.options[:per_page], 
+    #                          :order => "#{params[:order_by]} #{params[:sort_order]}", 
+    #                          :conditions => "#{conditions}"
+    items_count = @model.count(:conditions => conditions)
+    items_per_page = Typus::Configuration.options[:per_page].to_i
+    @pager = ::Paginator.new(items_count, items_per_page) do |offset, per_page|
+      # ActiveRecord
+      @model.find(:all, 
+                  :conditions => "#{conditions}", 
+                  :order => "#{params[:order_by]} #{params[:sort_order]}", 
+                  :limit => per_page, 
+                  :offset => offset)
+      # DataMapper
+      # @model.all(:limit => per_page, :offset => offset)
+    end
+    @items = @pager.page(params[:page])
   rescue
     flash[:notice] = "There was an error on #{@model}."
     redirect_to :action => 'dashboard'
@@ -191,12 +204,12 @@ private
     @item = @model.find(params[:id])
   end
 
-  # Model fields
+  # Model +fields+
   def fields
     @fields = @model.typus_fields_for('list')
   end
 
-  # Model +form_fields+ and +form_externals+
+  # Model +form_fields+ and +form_fields_externals+
   def form_fields
     @form_fields = @model.typus_fields_for('form')
     @form_fields_externals = @model.typus_defaults_for('relationships')
