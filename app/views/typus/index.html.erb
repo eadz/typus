@@ -25,9 +25,7 @@
     <!-- /Listing -->
 
     <!-- Pagination -->
-    <%# = render :partial => 'simple_pagination' %>
-    <%= render :partial => 'pagination' %>
-    <%#= will_paginate @items %>
+    <%= render :partial => 'pagination' if @items.prev || @items.next %>
     <!-- /Pagination links -->
 
   <% elsif @model.count == 0 %>
