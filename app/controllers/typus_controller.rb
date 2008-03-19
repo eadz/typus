@@ -206,29 +206,24 @@ private
 
   # Before filter to check if has permission to edit/add the post.
   def check_permissions
+
     case params[:action]
     when 'new'
       @item = @model.new
-      unless can_add? @item
-        flash[:notice] = "You can't add that #{@item.class.to_s.titleize}."
-        redirect_to :controller => 'typus', :action => 'index', :model => params[:model]
-      end
+      action = "add" unless can_add? @item
     when 'edit'
-      unless can_edit? @item
-        flash[:notice] = "You can't edit that #{@item.class.to_s.titleize}."
-        redirect_to :controller => 'typus', :action => 'index', :model => params[:model]
-      end
+      action = "edit" unless can_edit? @item
     when 'destroy'
-      unless can_destroy? @item
-        flash[:notice] = "You can't destroy that #{@item.class.to_s.titleize}."
-        redirect_to :controller => 'typus', :action => 'index', :model => params[:model]
-      end
+      action = "destroy" unless can_destroy? @item
     when 'toggle'
-      unless can_toggle? @item
-        flash[:notice] = "You can't toggle that #{@item.class.to_s.titleize}."
-        redirect_to :controller => 'typus', :action => 'index', :model => params[:model]
-      end
+      action = "toogle" unless can_toggle? @item
     end
+
+    if action
+      flash[:notice] = "You can't #{action} a #{@item.class.to_s.titleize}."
+      redirect_to :controller => 'typus', :action => 'index', :model => params[:model]
+    end
+
   end
 
 end
