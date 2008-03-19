@@ -49,12 +49,12 @@ class TypusControllerTest < ActionController::TestCase
   end
 
   def test_should_create_item
-    @request.session[:typus] = true
+    @request.session[:typus] = 1
     items = Post.count
     post :create, { :model => 'posts', :item => { :title => "This is another title", :body => "This is the body."}}
     assert_response :redirect
     assert_redirected_to :action => 'edit'
-    assert_equal items, 2
+    assert_equal items + 1, Post.count
   end
 
   def test_should_render_edit
