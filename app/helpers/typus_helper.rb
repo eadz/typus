@@ -371,31 +371,36 @@ module TypusHelper
   end
 
   def windowed_pagination_links(pager, options)
+
     link_to_current_page = options[:link_to_current_page]
     always_show_anchors = options[:always_show_anchors]
     padding = options[:window_size]
 
-    pg = params[:pg].blank? ? 1 : params[:pg].to_i
+    pg = params[:page].blank? ? 1 : params[:page].to_i
 
     current_page = pager.page(pg)
     html = ''
-    #Calculate the window start and end pages
+
+    # Calculate the window start and end pages
     padding = padding < 0 ? 0 : padding
 
-    first = (pager.first.number <= (current_page.number - padding) && pager.last.number >= (current_page.number - padding)) ? current_page.number - padding : 1
+    first = pager.first.number <= (current_page.number - padding) && pager.last.number >= (current_page.number - padding) ? current_page.number - padding : 1
     last = pager.first.number <= (current_page.number + padding) && pager.last.number >= (current_page.number + padding) ? current_page.number + padding : pager.last.number
 
     # Print start page if anchors are enabled
-    html << yield(1) if always_show_anchors and not first == 1
+    html << yield(1) if always_show_anchors && !first == 1
 
     # Print window pages
     first.upto(last) do |page|
-    (current_page.number == page && !link_to_current_page) ? html << page.to_s : html << (yield(page)).to_s
+      (current_page.number == page && !link_to_current_page) ? html << page.to_s : html << (yield(page)).to_s
     end
 
     # Print end page if anchors are enabled
     html << yield(pager.last.number).to_s if always_show_anchors and not last == pager.last.number
-    html
+
+    # return the html
+    return html
+
   end
 
 end

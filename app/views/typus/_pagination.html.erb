@@ -1,13 +1,19 @@
 <div class="pagination">
 
+  <% if @items.prev? %>
+    <%= link_to "&laquo; Previous", :params => params.merge(:page => @items.prev.number) %>
+  <% else %>
+    <span class="disabled">&laquo; Previous</span>
+  <% end %>
+
   <% last_page = 0 -%>
 
   <% windowed_pagination_links(@pager, 
-                               :window_size => 5, 
+                               :window_size => 1, 
                                :link_to_current_page => true, 
                                :always_show_anchors => true) do |n| -%>
     <% if @items.number == n -%>
-      <li class="currentpage"><%= n %></li>
+      <span class="current"><%= n %></span>
     <% else -%>
       <%= "..." if last_page + 1 < n %>
       <%= link_to n, :page => n %>
@@ -15,5 +21,11 @@
     <% last_page = n -%>
 
   <% end -%>
+
+  <% if @items.next? %>
+    <%= link_to "Next &raquo;", :params => params.merge(:page => @items.next.number) %>
+  <% else %>
+    <span class="disabled">Next &raquo;</span>
+  <% end %>
 
 </div>
