@@ -18,11 +18,18 @@
   <% end %>
   <!-- /Query -->
 
-  <% if @items.size > 0 -%>
-    <!-- Listing & Feedback -->
+  <% if @items.count > 0 -%>
+
+    <!-- Listing -->
     <%= typus_table %>
-    <%= will_paginate @items %>
-    <!-- /Listing & Feedback -->
+    <!-- /Listing -->
+
+    <!-- Pagination -->
+    <%= render :partial => 'simple_pagination' %>
+    <%#= render :partial => 'pagination' %>
+    <%#= will_paginate @items %>
+    <!-- /Pagination links -->
+
   <% elsif @model.count == 0 %>
     <!-- Shown when there are no items -->
     <div class="box" id="empty">
