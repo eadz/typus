@@ -35,11 +35,10 @@ class TypusControllerTest < ActionController::TestCase
   end
 
   def test_should_not_render_index_for_undefined_model
-    assert true
-    # @request.session[:typus] = 1
-    # get :index, { :model => 'unexisting' }
-    # assert_response :redirect
-    # assert_redirected_to :action => 'dashboard'
+    @request.session[:typus] = 1
+    get :index, { :model => 'unexisting' }
+    assert_response :redirect
+    assert_redirected_to :action => 'dashboard'
   end
 
   def test_should_render_new

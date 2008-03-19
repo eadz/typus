@@ -158,6 +158,9 @@ private
   # Set the current model.
   def set_model
     @model = params[:model].singularize.camelize.constantize
+  rescue
+    flash[:warning] = "Unexisting Model"
+    redirect_to :action => 'dashboard'
   end
 
   # Set default order on the listings.
