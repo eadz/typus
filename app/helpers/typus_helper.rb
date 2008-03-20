@@ -1,17 +1,7 @@
 module TypusHelper
 
-  def head
-    html = <<-HTML
-      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-      <title>#{Typus::Configuration.options[:app_name]} #{page_title}</title>
-      <meta http-equiv="imagetoolbar" content="no" />
-      #{stylesheet_link_tag "typus", :media => "screen"}
-      #{javascript_include_tag :defaults}
-    HTML
-  end
-
   def header
-    html = "<h1>#{Typus::Configuration.options[:app_name]} #{display_flash_message}</span></h1>"
+    html = "<h1>#{Typus::Configuration.options[:app_name]}</h1>"
   end
 
   def breadcrumbs
@@ -21,7 +11,7 @@ module TypusHelper
       case params[:action]
       when "index"
         html << " &rsaquo; #{params[:model].titleize}\n"
-      when "new", "edit"
+      when "new", "edit", "create"
         html << " &rsaquo; #{link_to params[:model].titleize, :action => 'index'} &rsaquo; #{params[:action].titleize}"
       end
     else
@@ -89,7 +79,7 @@ module TypusHelper
       html << more_actions
     when "new", "create"
       html << "<ul>"
-      html << "<li>#{link_to "Back to List", :action => 'index'}</li>"
+      html << "<li>#{link_to "Back to list", :action => 'index'}</li>"
       html << "</ul>"
     when "edit", "update"
       html << "<ul>"
@@ -101,7 +91,7 @@ module TypusHelper
       html << "</ul>"
       html << more_actions
       html << "<ul>"
-      html << "<li>#{link_to "Back to List", :action => 'index'}</li>"
+      html << "<li>#{link_to "Back to list", :action => 'index'}</li>"
       html << "</ul>"
     else
       html << more_actions
@@ -175,7 +165,7 @@ module TypusHelper
     flash_types = [ :error, :warning, :notice ]
     flash_type = flash_types.detect{ |a| flash.keys.include?(a) } || flash.keys.first
     if flash_type
-      "<div id=\"flash\" class=\"flash %s\">%s</div>" % [flash_type.to_s, flash[flash_type]]
+      "<div id=\"flash\" class=\"%s\">%s</div>" % [flash_type.to_s, flash[flash_type]]
     end
   end
 
@@ -184,10 +174,6 @@ module TypusHelper
     html << " &rsaquo; #{params[:model].titleize}" if params[:model]
     html << " &rsaquo; #{params[:action].titleize}" if params[:action]
     return html
-  end
-
-  def footer
-    %{<p>#{link_to "Typus #{Typus::Configuration.options[:version]}", "http://intraducibles.net/projects/typus"}</p>}
   end
 
   def signature
@@ -258,28 +244,35 @@ module TypusHelper
         @perform = link_to image_tag("typus_trash.gif"), { :action => "unrelate", :unrelated => model, :unrelated_id => item.id, :id => params[:id] }, :confirm => "Remove #{model.singularize} \"#{item.name}\" from #{params[:model].titleize.singularize}?"
       end
       html << "<td width=\"10px\">#{@perform}</td>\n</tr>"
+
     end
+
     html << "</table>"
-#  rescue Exception => error
-#    "<p>There was an error when loading <code>config/typus.yml</code>.</p>
-#    <h3>Error</h3>
-#    <pre>#{error}</pre>"
+
+  rescue Exception => error
+    "<p>There was an error when loading <code>config/typus.yml</code>.</p>
+    <h3>Error</h3>
+    <pre>#{error}</pre>"
   end
 
   def typus_form(fields = @form_fields)
     html = error_messages_for :item, :header_tag => "h3"
     fields.each do |field|
-      case field[0] # Field Name
+
+      # Field Name
+      case field[0]
       when 'uploaded_data'
-        html << "<p><label>Upload File</label><br />"
+        html << "<p><label>Upload File</label>"
       else
-        html << "<p><label>#{field[0].titleize}</label><br />"
+        html << "<p><label>#{field[0].titleize}</label>"
       end
-      case field[1] # Field Type
+
+      # Field Type
+      case field[1]
       when "boolean"
         html << "#{check_box :item, field[0]} Checked if active"
       when "blob"
-        html << "#{file_field :item, field[0], :style => 'border: 0px;'}"
+        html << "#{file_field :item, field[0], :style => "border: 0px;"}"
       when "datetime"
         html << "#{datetime_select :item, field[0], { :minute_step => 5 }}"
       when "password"
@@ -295,7 +288,6 @@ module TypusHelper
         html << "</select>\n"
       when "selector"
         values = eval field[0].upcase
-        # html << "#{select :item, field[0], values.collect { |p| [ "#{p[0]} (#{p[1]})", p[1] ] }, :include_blank => true}"
         html << "<select id=\"item_#{field[0]}\" name=\"item[#{field[0]}]\">"
         html << "<option value=\"\">Select a #{field[0].capitalize}</option>"
         values.each do |value|
@@ -371,36 +363,26 @@ module TypusHelper
   end
 
   def windowed_pagination_links(pager, options)
-
     link_to_current_page = options[:link_to_current_page]
     always_show_anchors = options[:always_show_anchors]
     padding = options[:window_size]
-
     pg = params[:page].blank? ? 1 : params[:page].to_i
-
     current_page = pager.page(pg)
-    html = ''
-
+    html = ""
     # Calculate the window start and end pages
     padding = padding < 0 ? 0 : padding
-
     first = pager.first.number <= (current_page.number - padding) && pager.last.number >= (current_page.number - padding) ? current_page.number - padding : 1
     last = pager.first.number <= (current_page.number + padding) && pager.last.number >= (current_page.number + padding) ? current_page.number + padding : pager.last.number
-
     # Print start page if anchors are enabled
     html << yield(1) if always_show_anchors && !first == 1
-
     # Print window pages
     first.upto(last) do |page|
       (current_page.number == page && !link_to_current_page) ? html << page.to_s : html << (yield(page)).to_s
     end
-
     # Print end page if anchors are enabled
     html << yield(pager.last.number).to_s if always_show_anchors and not last == pager.last.number
-
     # return the html
     return html
-
   end
 
 end
