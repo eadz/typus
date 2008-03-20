@@ -6,19 +6,19 @@ TODO
 [ ] Add `preview` to images (javascript)
 [ ] If RedCloth of BlueCloth is defined add message in `text` fields.
 [ ] Salted password
-[ ] Admin user should never be able to change itself to user.
-[ ] A user can never add himself admin privileges.
 [ ] Update feedback error on empty fields.
 [ ] Update flash.
 [ ] Update CSS with something like a framework.
-[X] Typus should not boot if cannot find `config/typus.yml`.
-[ ] Only Admins can add other users ...
 [ ] Add `default_filter :active => true`.
-[ ] `will_paginate` plugin is no longer required.
 
 DONE
 ====
 
+[X] Typus should not boot if cannot find `config/typus.yml`. (20080320)
+[X] Admin user should never be able to change itself to user. (20080310)
+[X] A user can never add himself admin privileges. (20080310)
+[X] Only Admins can add other users ... (20080310)
+[X] `will_paginate` plugin is no longer required. (20080318)
 [X] Add on README instructions on how to add messages to login and dashboard.
 [X] Add on README instructions on how to add messages to views (index_top, edit_top, new_top)
 [X] Add custom lists for externals.
