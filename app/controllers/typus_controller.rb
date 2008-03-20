@@ -40,7 +40,7 @@ class TypusController < ApplicationController
     end
     @items = @pager.page(params[:page])
   rescue
-    flash[:notice] = "There was an error on #{@model}."
+    flash[:error] = "There was an error on #{@model}."
     redirect_to :action => 'dashboard'
   end
 
@@ -59,10 +59,10 @@ class TypusController < ApplicationController
         model_to_relate = btm.singularize.camelize.constantize
         @item.send(btm) << model_to_relate.find(bti)
         # And finally redirect to the previous action
-        flash[:notice] = "Assigned #{@item.class} to #{btm} successfully."
+        flash[:success] = "Assigned #{@item.class} to #{btm} successfully."
         redirect_to :action => bta, :model => btm, :id => bti
       else
-        flash[:notice] = "#{@model.to_s.titleize} successfully created."
+        flash[:success] = "#{@model.to_s.titleize} successfully created."
         redirect_to :action => 'edit', :id => @item.id
       end
     else
@@ -79,7 +79,7 @@ class TypusController < ApplicationController
 
   def update
     if @item.update_attributes(params[:item])
-      flash[:notice] = "#{@model.to_s.titleize} successfully updated."
+      flash[:success] = "#{@model.to_s.titleize} successfully updated."
       redirect_to :action => 'edit', :id => @item.id
     else
       render :action => 'edit'
@@ -88,14 +88,14 @@ class TypusController < ApplicationController
 
   def destroy
     @item.destroy
-    flash[:notice] = "#{@model.to_s.titleize} successfully removed."
+    flash[:success] = "#{@model.to_s.titleize} successfully removed."
     redirect_to :params => params.merge(:action => 'index', :id => nil)
   end
 
   # Toggle the status of an item.
   def toggle
     @item.toggle!(params[:field])
-    flash[:notice] = "#{@model.to_s.titleize.capitalize} #{params[:field]} changed."
+    flash[:success] = "#{@model.to_s.titleize.capitalize} #{params[:field]} changed."
     redirect_to :params => params.merge(:action => 'index', :id => nil)
   end
 
@@ -105,7 +105,7 @@ class TypusController < ApplicationController
       when 'up':   @item.move_higher
       when 'down': @item.move_lower
     end
-    flash[:notice] = "Position changed ..."
+    flash[:success] = "Position changed ..."
     redirect_to :params => params.merge(:action => 'index', :id => nil)
   end
 
@@ -113,7 +113,7 @@ class TypusController < ApplicationController
   def relate
     model_to_relate = params[:related].singularize.camelize.constantize
     @model.find(params[:id]).send(params[:related]) << model_to_relate.find(params[:model_id_to_relate][:related_id])
-    flash[:notice] = "#{model_to_relate} added to #{@model.to_s.titleize}"
+    flash[:success] = "#{model_to_relate} added to #{@model.to_s.titleize}"
     redirect_to :action => 'edit', :id => params[:id]
   end
 
@@ -122,7 +122,7 @@ class TypusController < ApplicationController
     model_to_unrelate = params[:unrelated].singularize.camelize.constantize
     unrelate = model_to_unrelate.find(params[:unrelated_id])
     @model.find(params[:id]).send(params[:unrelated]).delete(unrelate)
-    flash[:notice] = "#{model_to_unrelate} removed from #{@model.to_s.titleize}"
+    flash[:success] = "#{model_to_unrelate} removed from #{@model.to_s.titleize}"
     redirect_to :action => 'edit', :id => params[:id]
   end
 
@@ -172,7 +172,7 @@ private
   def set_model
     @model = params[:model].singularize.camelize.constantize
   rescue
-    flash[:warning] = "Unexisting Model"
+    flash[:notice] = "Unexisting Model"
     redirect_to :action => 'dashboard'
   end
 
