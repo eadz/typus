@@ -61,6 +61,7 @@ module Authentication
 
     # Only admins can destroy content.
     def can_destroy? record
+      return true if current_user.admin?
       case record.class.to_s
       when 'TypusUser'
         return true if current_user.admin? && record.id != current_user.id
@@ -72,6 +73,7 @@ module Authentication
     # Admin can toggle anything except themselved
     # Users can toggle only their things
     def can_toggle? record
+      return true if current_user.admin?
       case record.class.to_s
       when 'TypusUser'
         return true if current_user.admin? && record.id != current_user.id
