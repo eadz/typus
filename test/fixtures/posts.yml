@@ -1,13 +1,15 @@
-one:
+published:
   id: 1
   title: Title One
   body: This is the body.
   created_at: 2007-11-08 13:44:15
   updated_at: 2007-11-08 13:44:15
+  status: true
 
-two:
+unpublished:
   id: 2
   title: Title Two
   body: This is the body.
   created_at: 2007-11-08 13:44:15
   updated_at: 2007-11-08 13:44:15
+  status: false
