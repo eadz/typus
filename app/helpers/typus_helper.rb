@@ -165,7 +165,7 @@ module TypusHelper
     flash_types = [ :error, :warning, :notice ]
     flash_type = flash_types.detect{ |a| flash.keys.include?(a) } || flash.keys.first
     if flash_type
-      "<div id=\"flash\" class=\"%s\">%s</div>" % [flash_type.to_s, flash[flash_type]]
+      "<div id=\"flash\" class=\"%s\"><p>%s</p></div>" % [flash_type.to_s, flash[flash_type]]
     end
   end
 
@@ -264,7 +264,7 @@ module TypusHelper
       when 'uploaded_data'
         html << "<p><label>Upload File</label>"
       else
-        html << "<p><label>#{field[0].titleize}</label>"
+        html << "<p><label for=\"item_#{field[0]}\">#{field[0].titleize}</label>"
       end
 
       # Field Type
