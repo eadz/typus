@@ -96,7 +96,7 @@ class TypusController < ApplicationController
   def toggle
     @item.toggle!(params[:field])
     flash[:success] = "#{@model.to_s.titleize.capitalize} #{params[:field]} changed."
-    redirect_to :params => params.merge(:action => 'index', :id => nil)
+    redirect_to :action => 'index', :params => params.merge(:action => 'index', :id => nil)
   end
 
   # Change item position
