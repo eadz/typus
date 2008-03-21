@@ -131,7 +131,7 @@ a:hover {
 ---------------------------------------------------------- */
 
 #content {
-  margin: 20px 300px 20px 15px;
+  margin: 1.5em 25em 1.5em 1em;
 }
 
 #content h2 {
@@ -153,9 +153,8 @@ a:hover {
 
 #sidebar {
   float: right;
-  margin: 20px;
-  min-height: 300px;
-  width: 230px;
+  margin: 1.5em;
+  width: 20em;
 }
 
   #sidebar label {
@@ -243,7 +242,7 @@ input.title {
   font-size: 1.2em;
   font-weight: normal;
   padding: 3px;
-  width: 47.5em;
+  width: 100%;
 }
 
 input:focus, textarea:focus { background: #FFFCE1; }
@@ -370,28 +369,24 @@ h2 {
 }
 
 .fieldWithErrors input {
-  border: 0px;
-  background: #FBE3E4;
-}
-
-.fieldWithErrors {
   margin-top: -7px;
-  border: 2px solid #FBC2C4;
-  padding: 0px;
+  border: 1px solid #FBC2C4;
+  background: #FBE3E4;
 }
 
 .errorExplanation {
-  padding: 1px 15px 6px 15px;
   border: 2px solid #FBC2C4;
   background: #FBE3E4;
   color: #8a1f11;
+  padding: 0em 2px;
+  width: 100%;
 }
 
-.errorExplanation p { font-weight: bold; }
+.errorExplanation p { font-weight: bold; padding: 0px 5px;}
 
 .errorExplanation h3 { display: none;}
 .errorExplanation ul { margin-bottom: 10px; }
-.errorExplanation li { list-style: none; }
+.errorExplanation li { list-style: none; padding: 0px 5px; }
 
 /* searchbox
 ---------------------------------------------------------- */
@@ -502,7 +497,15 @@ div#dialog {
   border: 2px solid #DDD;
   font-weight: bold;
   margin-bottom: 1em;
-  padding: .8em;
+  padding: 0.8em 2px;
+  width: 100%;
+}
+
+.error p,
+.notice p, 
+.success p {
+  margin: 0px 5px 0px 5px!important;
+  padding: 0px!important;
 }
 
 .error {
