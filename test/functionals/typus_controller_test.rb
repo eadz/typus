@@ -1,10 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
-require File.dirname(__FILE__) + '/../../app/controllers/typus_controller'
-require File.dirname(__FILE__) + '/../../app/models/typus_user'
 
 class TypusControllerTest < ActionController::TestCase
-
-  fixtures :posts, :typus_users
 
   def test_should_redirect_to_login
     get :index
@@ -72,7 +68,8 @@ class TypusControllerTest < ActionController::TestCase
   end
 
   def test_should_logout
-    @request.session[:typus] = 1
+    admin = typus_users(:admin)
+    @request.session[:typus] = admin.id
     get :logout
     assert_equal @request.session[:typus], nil
     assert_response :redirect
@@ -80,7 +77,8 @@ class TypusControllerTest < ActionController::TestCase
   end
 
   def test_should_perform_a_search
-    @request.session[:typus] = 1
+    admin = typus_users(:admin)
+    @request.session[:typus] = admin.id
     get :index, { :model => 'posts', :search => 'neinonon' }
     assert_response :success
     assert_template 'index'
@@ -133,6 +131,28 @@ class TypusControllerTest < ActionController::TestCase
     get :edit, { :model => 'typus_users', :id => admin.id }
     assert_response :redirect
     assert_redirected_to :action => 'index'
+  end
+
+  def test_should_allow_admin_to_toggle_item
+    admin = typus_users(:admin)
+    post = posts(:unpublished)
+    @request.session[:typus] = admin.id
+    get :toggle, { :model => 'posts', :id => post.id, :field => 'status' }
+    assert_response :redirect
+    assert_redirected_to :action => 'index'
+    assert flash[:success]
+    assert Post.find(post.id).status
+  end
+
+  def test_should_not_allow_user_to_toggle_an_item
+    user = typus_users(:user)
+    post = posts(:unpublished)
+    @request.session[:typus] = user.id
+    get :toggle, { :model => 'posts', :id => post.id, :field => 'status' }
+    assert_response :redirect
+    assert_redirected_to :action => 'index'
+    assert flash[:notice]
+    assert !Post.find(post.id).status
   end
 
 end
