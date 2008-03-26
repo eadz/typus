@@ -39,6 +39,12 @@ You can overwriting the following settings:
     Typus::Configuration.options[:app_name] = "Your app name"
     Typus::Configuration.options[:app_description] = "App Details"
     Typus::Configuration.options[:per_page] = "20"
+    Typus::Configuration.options[:form_rows] = "20"
+    Typus::Configuration.options[:form_columns] = "20"
+    Typus::Configuration.options[:color] = "20"
+    Typus::Configuration.options[:app_logo] = "url/to/application/logo"
+    Typus::Configuration.options[:app_logo_height] = "400px"
+    Typus::Configuration.options[:app_logo_width] = "400px"
 
 Place this settings in a initializer at <code>config/initializers/typus.rb</code>.
 

@@ -10,12 +10,18 @@ module Typus
     # Typus::Configuration.options[:per_page] = 15
     #
     @@options = {
+        :app_logo => '',
+        :app_logo_height => '',
+        :app_logo_width => '',
         :app_name => 'Typus Admin',
         :app_description => '',
         :per_page => 15,
         :prefix => 'admin',
+        :color => '#000',
         :version => '',
-        :signature => ''
+        :signature => '',
+        :form_rows => '10',
+        :form_columns => '10'
         }
     mattr_reader :options
 
