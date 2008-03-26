@@ -46,11 +46,6 @@ module TypusHelper
 
       @models = Typus::Configuration.config
 
-      # FIXME
-      # @user = TypusUser.find(session[:typus].id)
-      # @models = Hash.new
-      # @user.models.each { |mo| @models["#{mo}"] = Typus::Configuration.config["#{mo}"] }
-
       @models.each do |model|
         current = (model[1]['module']) ? model[1]['module'].capitalize : 'Typus'
         if current == m
@@ -65,8 +60,8 @@ module TypusHelper
       html << "</table>\n<br /><div style=\"clear\"></div>"
     end
     html << "</div>"
-  rescue
-    "There was an error when loading <code>config/typus.yml</code>."
+  rescue Exception => error
+    display_error(error)
   end
 
   def actions
@@ -256,9 +251,7 @@ module TypusHelper
     html << "</table>"
 
   rescue Exception => error
-    "<p>There was an error when loading <code>config/typus.yml</code>.</p>
-    <h3>Error</h3>
-    <pre>#{error}</pre>"
+    display_error(error)
   end
 
   def typus_form(fields = @form_fields)
@@ -321,9 +314,7 @@ module TypusHelper
     end
     return html
   rescue Exception => error
-    "<p>There was an error when loading <code>config/typus.yml</code>.</p>
-    <h3>Error</h3>
-    <pre>#{error}</pre>"
+    display_error(error)
   end
 
   # TODO: Don't show form if there are not more Items available.
@@ -350,9 +341,7 @@ module TypusHelper
     end
     return html
   rescue Exception => error
-    "<p>There was an error when loading <code>config/typus.yml</code>.</p>
-    <h3>Error</h3>
-    <pre>#{error}</pre>"
+    display_error(error)
   end
 
   def typus_block(name)
@@ -389,6 +378,11 @@ module TypusHelper
     html << yield(pager.last.number).to_s if always_show_anchors and not last == pager.last.number
     # return the html
     return html
+  end
+
+  def display_error(error)
+    "<h2 style=\"margin: 20px 0px 10px 0px;\">Error</h2>
+    <pre>#{error}</pre>"
   end
 
 end
