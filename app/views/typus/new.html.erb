@@ -2,6 +2,8 @@
   <%= typus_block("new_sidebar") || actions %>
 <% end %>
 
+<%= display_link_to_previous if params[:btm] %>
+
 <h2><%= link_to "#{params[:model].titleize}", :action => "index", :model => params[:model], :id => nil %> &rsaquo; New</h2>
 
 <%= typus_block("new_top") %>

@@ -161,6 +161,12 @@ module TypusHelper
     return html
   end
 
+  def display_link_to_previous
+    message = "You're adding a new #{@model.to_s.downcase} for #{params[:btm]}. "
+    message << "Do you want to cancel it? <a href=\"/admin/#{params[:btm]}/#{params[:bti]}\">Click Here</a>"
+    "<div id=\"flash\" class=\"notice\"><p>#{message}</p></div>"
+  end
+
   def display_flash_message
     flash_types = [ :error, :warning, :notice ]
     flash_type = flash_types.detect{ |a| flash.keys.include?(a) } || flash.keys.first
