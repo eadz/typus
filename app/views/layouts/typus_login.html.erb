@@ -8,6 +8,9 @@
   <title><%= Typus::Configuration.options[:app_name] %></title>
   <%= stylesheet_link_tag "typus", :media => "screen" %>
   <%= javascript_include_tag :defaults %>
+  <style type="text/css">
+    div#dialog { background: <%= Typus::Configuration.options[:color] %>; }
+  </style>
 </head>
 
 <body onload="$('user_email').focus()" id="login">
