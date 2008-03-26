@@ -333,7 +333,7 @@ module TypusHelper
           html << <<-HTML
             #{form_tag :action => "relate", :related => field, :id => params[:id]}
             <p>#{select "model_id_to_relate", :related_id, items_to_relate.map { |f| [f.name, f.id] }}
-          &nbsp; #{submit_tag "Add"}
+          &nbsp; #{submit_tag "Add", :class => 'button'}
             </form></p>
           HTML
         end
