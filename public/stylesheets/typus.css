@@ -85,12 +85,9 @@ a.on {
 
 #header h1 {
   color: #FFF;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
   font-size: 2em;
   font-weight: normal;
-  font-family: Helvetica;
-  margin: 0em 0em 0.1em 0em;
+  margin: 0em 0em 0.25em 0em;
 }
 
 #header h1 a,
@@ -114,7 +111,7 @@ a.on {
 
 #header .right {
   float: right;
-  margin-top: 2.25em;
+  margin-top: 2.5em;
 }
 
 #header .right ul {
@@ -123,7 +120,7 @@ a.on {
 #header .right li {
   list-style: none;
   display: inline;
-  padding: 0px 0px 0px 10px;
+  padding: 0em 0em 0em 1em;
 }
 
 /* wrapper
@@ -412,11 +409,14 @@ div#dialog {
   }
 
   div#dialog h1 {
-    font-size: 2em;
     color: #408BB6;
     margin: 5px 0px 15px -5px;
     padding: 0px 0px 0px 5px;
     text-shadow: 1px 1px 0px #FFF;
+  }
+
+  div#dialog h1 a {
+    font-weight: bold;
   }
 
   #dialog h1 a:hover {
