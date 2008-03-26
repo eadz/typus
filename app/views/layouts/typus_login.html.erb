@@ -9,7 +9,7 @@
   <%= stylesheet_link_tag "typus", :media => "screen" %>
   <%= javascript_include_tag :defaults %>
   <style type="text/css">
-    div#dialog { border-color: <%= "#408BB6" if Typus::Configuration.options[:color] == "#000" %>; }
+    div#dialog { border-color: <%= (Typus::Configuration.options[:color] == "#000") ? "#408BB6" : Typus::Configuration.options[:color] %>; }
   </style>
 </head>
 
