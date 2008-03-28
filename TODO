@@ -4,9 +4,17 @@ TODO
 [ ] Translations with the Translation plugin.
 [ ] Add `preview` to images (javascript)
 [ ] If RedCloth of BlueCloth is defined add message in `text` fields.
-[ ] Salted password
+[ ] Salted password.
 [ ] Update CSS with something like a framework.
 [ ] Add `default_filter :active => true`.
+[ ] Javascript for textareas. With Markdown and dropdown with a preview.
+[ ] Javascript for images to pop up.
+[ ] Link "View Site" opens the window with a javascript popup.
+[ ] If no attributes are not defined on a model, typus uses database.
+[ ] Release plugin as a gem.
+[ ] Update tests to make it work outside of Rails.
+[ ] Script to allow the plugin to work outside a Rails application.
+[ ] Tests for Datamapper.
 
 DONE
 ====
