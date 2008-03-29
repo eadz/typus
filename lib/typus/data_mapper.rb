@@ -17,14 +17,12 @@ module Typus
     def self.model_fields_hash
       fields = Hash.new
       self.properties.each { |property| fields[property.name.to_s] = property.type.to_s }
-      # self.columns.each { |column| fields[column.name.to_s] = column.type.to_s }
       return fields
     end
 
     def self.model_fields
       fields = Array.new
       self.properties.each { |property| fields << [property.name.to_s, property.type.to_s] }
-      # self.columns.each { |column| fields << [column.name, column.type.to_s] }
       return fields
     end
 
