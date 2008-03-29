@@ -5,7 +5,7 @@ Post:
     relationship: title, created_at
   actions:
     list: cleanup
-    form: send_as_newsletter
+    form: send_as_newsletter, preview
   related: categories
   filters: status, created_at, category
   search: title
