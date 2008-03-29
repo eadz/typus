@@ -1,7 +1,5 @@
 class String
 
-  DB = YAML.load_file("#{RAILS_ROOT}/config/database.yml")[RAILS_ENV]
-
   def build_conditions(model)
     conditions = ""
     self.split('&').each do |q|
@@ -15,7 +13,7 @@ class String
         filter_type = f[1] if f[0] == the_key
         case filter_type
         when "boolean"
-          if %w(sqlite3 sqlite).include? DB['adapter']
+          if %w(sqlite3 sqlite).include? ActiveRecord::Base.configurations[RAILS_ENV]['adapter']
             conditions << "AND #{f[0]} = '#{the_value[0..0]}' "
           else
             status = (the_value == 'true') ? 1 : 0
