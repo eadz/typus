@@ -8,6 +8,7 @@ module Typus
       enable_routes
       enable_string
       enable_authentication
+      enable_patches if Rails.vendor_rails?
     end
 
     def enable_configuration
@@ -38,6 +39,11 @@ module Typus
     def enable_authentication
       require 'typus/authentication'
       puts "=> [TYPUS] Loaded Authentication" unless RAILS_ENV == 'production'
+    end
+
+    def enable_patches
+      require 'typus/patches'
+      puts "=> [TYPUS] Loaded Patches" unless RAILS_ENV == 'production'
     end
 
   end
