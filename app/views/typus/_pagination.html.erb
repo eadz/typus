@@ -16,7 +16,7 @@
       <span class="current"><%= n %></span>
     <% else -%>
       <%= "..." if last_page + 1 < n %>
-      <%= link_to n, :page => n %>
+      <%= link_to n, :params => params.merge(:page => n) %>
     <% end -%>
     <% last_page = n -%>
 
