@@ -144,6 +144,7 @@ module TypusHelper
         when 'integer'
           model = f[0].split("_id").first.capitalize.constantize
           if model.count > 0
+            html << "<ul>\n"
             model.find(:all).each do |item|
               switch = (current_request.include? "#{f[0]}=#{item.id}") ? 'on' : 'off'
               html << "<li>#{link_to item.name, { :params => params.merge(f[0] => item.id) }, :class => switch}</li>"
@@ -305,9 +306,9 @@ module TypusHelper
       when "collection"
         related = field[0].split("_id").first.capitalize.constantize
         if (related.new.attributes.keys.include? 'name') || (related.new.methods.include? 'name')
-          html << "#{collection_select :item, "#{field[0]}", related.find(:all), :id, :name, :include_blank => true}"
+          html << "#{select :item, "#{field[0]}", related.find(:all).collect { |p| [p.name, p.id] }.sort_by { |e| e.first }, :include_blank => true}"
         else
-          html << "#{select :item, "#{field[0]}", related.find(:all).collect { |p| ["#{related}##{p.id}", p.id] }, :include_blank => true}"
+          html << "#{select :item, "#{field[0]}", related.find(:all).collect { |p| ["#{related}##{p.id}", p.id] }.sort_by { |e| e.first }, :include_blank => true}"
         end
       end
       html << "</p>"
