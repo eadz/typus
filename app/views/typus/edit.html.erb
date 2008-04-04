@@ -11,6 +11,8 @@
   <p><%= submit_tag "Update #{params[:model].titleize.singularize}", :class => 'button' %></p>
 <% end %>
 
-<%= typus_form_externals %>
+<%= typus_form_has_many %>
+
+<%= typus_form_has_and_belongs_to_many %>
 
 <%= typus_block("edit_bottom") %>

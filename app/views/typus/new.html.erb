@@ -2,15 +2,15 @@
   <%= typus_block("new_sidebar") || actions %>
 <% end %>
 
-<%= display_link_to_previous if params[:btm] %>
+<%= display_link_to_previous if params.size > 0 %>
 
-<h2><%= link_to "#{params[:model].titleize}", :action => "index", :model => params[:model], :id => nil %> &rsaquo; New</h2>
+<h2><%= link_to @model, :action => "index", :model => params[:model], :id => nil %> &rsaquo; New</h2>
 
 <%= typus_block("new_top") %>
 
 <% form_for :item, :url  => { :action => "create" }, :html => { :multipart => true } do %>
   <%= typus_form %>
-  <p><%= submit_tag "Create #{params[:model].titleize.singularize}", :class => 'button' %></p>
+  <p><%= submit_tag "Create #{@model.to_s.titleize.singularize}", :class => 'button' %></p>
 <% end %>
 
 <%= typus_block("new_bottom") %>
