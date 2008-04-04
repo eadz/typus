@@ -88,7 +88,7 @@ module Typus
       Typus::Configuration.config["#{self.to_s.titleize}"]["actions"][filter].split(", ") rescue []
     end
 
-    # Used for +order_by+, +related+, +search+ and more ...
+    # Used for +order_by+, +search+ and more ...
     #
     # Someday we could use something like:
     #     typus_search :title, :details
@@ -98,6 +98,11 @@ module Typus
     # Default order is ASC, except for datetime items that is DESC.
     def self.typus_defaults_for(filter)
       Typus::Configuration.config["#{self.to_s.titleize}"][filter].split(", ") rescue []
+    end
+
+    # Used for +relationships+
+    def self.typus_relationships_for(filter)
+      Typus::Configuration.config["#{self.to_s.titleize}"]["relationships"][filter].split(", ") rescue []
     end
 
     # This is used by acts_as_tree
