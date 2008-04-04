@@ -157,10 +157,13 @@ module TypusHelper
     return html
   end
 
+  # FIXME: ...
   def display_link_to_previous
-    message = "You're adding a new #{@model.to_s.downcase} for #{params[:btm]}. "
+    message = "You're adding a new #{@model.to_s} on a #{params[:btm].capitalize}. "
     message << "Do you want to cancel it? <a href=\"/admin/#{params[:btm]}/#{params[:bti]}\">Click Here</a>"
     "<div id=\"flash\" class=\"notice\"><p>#{message}</p></div>"
+  rescue
+    nil
   end
 
   def display_flash_message
@@ -241,9 +244,16 @@ module TypusHelper
       # relationship between the models.
       case params[:model]
       when model
-        @perform = link_to image_tag("typus_trash.gif"), { :model => model, :id => item.id, :params => params.merge(:action => 'destroy') }, :confirm => "Remove this #{@model.to_s.titleize}?"
+        @perform = link_to image_tag("typus_trash.gif"), { :model => model, 
+                                                           :id => item.id, 
+                                                           :params => params.merge(:action => 'destroy') }, 
+                                                         :confirm => "Remove this #{@model.to_s.titleize}?"
       else
-        @perform = link_to image_tag("typus_trash.gif"), { :action => "unrelate", :unrelated => model, :unrelated_id => item.id, :id => params[:id] }, :confirm => "Remove #{model.singularize} \"#{item.name}\" from #{params[:model].titleize.singularize}?"
+        @perform = link_to image_tag("typus_trash.gif"), { :action => "unrelate", 
+                                                           :unrelated => model, 
+                                                           :unrelated_id => item.id, 
+                                                           :id => params[:id] }, 
+                                                         :confirm => "Remove #{model.singularize} \"#{item.name}\" from #{params[:model].titleize.singularize}?"
       end
       html << "<td width=\"10px\">#{@perform}</td>\n</tr>"
 
@@ -255,7 +265,7 @@ module TypusHelper
     display_error(error)
   end
 
-  def typus_form(fields = @form_fields)
+  def typus_form(fields = @item_fields)
     html = error_messages_for :item, :header_tag => "h3"
     fields.each do |field|
 
@@ -318,19 +328,35 @@ module TypusHelper
     display_error(error)
   end
 
-  # TODO: Don't show form if there are not more Items available.
-  def typus_form_externals
+  # FIXME: The admin shouldn't be hardcoded.
+  def typus_form_has_many
     html = ""
-    if @form_fields_externals
-      @form_fields_externals.each do |field|
+    if @item_has_many
+      @item_has_many.each do |field|
         model_to_relate = field.singularize.camelize.constantize
-        # FIXME: The admin shouldn't be hardcoded.
+        html << "<h2 style=\"margin: 20px 0px 10px 0px;\"><a href=\"/admin/#{field}\">#{field.titleize}</a> <small>#{ link_to "Add new", :model => field, :action => 'new', "#{params[:model].singularize.downcase}_id" => @item.id, :btm => params[:model], :bti => params[:id], :bta => "edit" }</small></h2>"
+        current_model = params[:model].singularize.camelize.constantize
+        @items = current_model.find(params[:id]).send(field)
+        html << typus_table(field, 'relationship') if @items.size > 0
+      end
+    end
+    return html
+  rescue Exception => error
+    display_error(error)
+  end
+
+  # FIXME: The admin shouldn't be hardcoded.
+  def typus_form_has_and_belongs_to_many
+    html = ""
+    if @item_has_and_belongs_to_many
+      @item_has_and_belongs_to_many.each do |field|
+        model_to_relate = field.singularize.camelize.constantize
         html << "<h2 style=\"margin: 20px 0px 10px 0px;\"><a href=\"/admin/#{field}\">#{field.titleize}</a> <small>#{link_to "Add new", :model => field, :action => 'new', :btm => params[:model], :bti => params[:id], :bta => params[:action]}</small></h2>"
         items_to_relate = (model_to_relate.find(:all) - @item.send(field))
         if items_to_relate.size > 0
           html << <<-HTML
             #{form_tag :action => "relate", :related => field, :id => params[:id]}
-            <p>#{select "model_id_to_relate", :related_id, items_to_relate.map { |f| [f.name, f.id] }}
+            <p>#{ select "model_id_to_relate", :related_id, items_to_relate.collect { |f| [f.name, f.id] }.sort_by { |e| e.first } }
           &nbsp; #{submit_tag "Add", :class => 'button'}
             </form></p>
           HTML

@@ -45,7 +45,14 @@ class TypusController < ApplicationController
   end
 
   def new
-    @item = @model.new
+    item_params = params.dup
+    item_params.delete_if { |key, value| key == 'action' }
+    item_params.delete_if { |key, value| key == 'controller' }
+    item_params.delete_if { |key, value| key == 'model' }
+    item_params.delete_if { |key, value| key == 'btm' }
+    item_params.delete_if { |key, value| key == 'bta' }
+    item_params.delete_if { |key, value| key == 'bti' }
+    @item = @model.new(item_params.symbolize_keys)
   end
 
   def create
@@ -211,8 +218,9 @@ private
 
   # Model +form_fields+ and +form_fields_externals+
   def form_fields
-    @form_fields = @model.typus_fields_for('form')
-    @form_fields_externals = @model.typus_defaults_for('relationships')
+    @item_fields = @model.typus_fields_for('form')
+    @item_has_many = @model.typus_relationships_for('has_many')
+    @item_has_and_belongs_to_many = @model.typus_relationships_for('has_and_belongs_to_many')
   end
 
 private
