@@ -337,7 +337,11 @@ module TypusHelper
         html << "<h2 style=\"margin: 20px 0px 10px 0px;\"><a href=\"/admin/#{field}\">#{field.titleize}</a> <small>#{ link_to "Add new", :model => field, :action => 'new', "#{params[:model].singularize.downcase}_id" => @item.id, :btm => params[:model], :bti => params[:id], :bta => "edit" }</small></h2>"
         current_model = params[:model].singularize.camelize.constantize
         @items = current_model.find(params[:id]).send(field)
-        html << typus_table(field, 'relationship') if @items.size > 0
+        if @items.size > 0
+          html << typus_table(field, 'relationship')
+        else
+          html << "<div id=\"flash\" class=\"notice\"><p>There are no #{field}.</p></div>"
+        end
       end
     end
     return html
