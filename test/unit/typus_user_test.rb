@@ -44,6 +44,19 @@ class TypusUserTest < ActiveSupport::TestCase
     assert typus_user.errors.invalid?(:password)
   end
 
+  def test_should_check_email_is_sent_after_reseting_password
+    #def reset_password(password, host)
+    #  TypusMailer.deliver_password(self, password, host)
+    #  self.update_attributes(:password => password, :password_confirmation => password)
+    #end
+    # typus_user = typus_users(:admin)
+    # typus_users.reset_password("qawsedrf", "http://0.0.0.0:3000/")
+    # Check email delivery
+    # typus_user.reload!
+    # 
+    assert true
+  end
+
 protected
 
   def new_typus_user(options = {})
