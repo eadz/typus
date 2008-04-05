@@ -218,7 +218,7 @@ module TypusHelper
         when "collection"
           this_model = column[0].split("_id").first.capitalize.constantize
           if (this_model.new.methods.include? 'name') || (this_model.new.attributes.keys.include? 'name')
-            html << "<td>#{item.send(column[0].split("_id").first).name if item.send(column[0])}</td>"
+            html << "<td>#{link_to item.send(column[0].split("_id").first).name, :controller => "typus", :action => "edit", :model => "#{column[0].split("_id").first.pluralize}", :id => item.send(column[0]) if item.send(column[0])}</td>"
           else
             html << "<td>#{"#{this_model}##{item.send(column[0])}" if item.send(column[0])}</td>"
           end
