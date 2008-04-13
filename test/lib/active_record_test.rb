@@ -65,7 +65,7 @@ class ActiveRecordTest < Test::Unit::TestCase
 
   def test_should_return_order_by_for_model
     order = Post.typus_order_by
-    expected_order = "title ASC AND created_at DESC"
+    expected_order = "title ASC, created_at DESC"
     assert_equal order, expected_order
     assert_equal expected_order.class, String
   end

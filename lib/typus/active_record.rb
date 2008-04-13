@@ -115,9 +115,9 @@ module Typus
           order << "#{field} ASC"
         end
       end
-      return order.join(" AND ")
+      return order.join(", ")
     rescue
-      ""
+      "id ASC"
     end
 
     # This is used by acts_as_tree

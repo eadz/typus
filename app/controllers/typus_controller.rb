@@ -22,17 +22,13 @@ class TypusController < ApplicationController
   def index
     conditions = "1 = 1"
     conditions << " " + (request.env['QUERY_STRING']).build_conditions(@model) if request.env['QUERY_STRING']
-    # @items = @model.paginate :page => params[:page], 
-    #                          :per_page => Typus::Configuration.options[:per_page], 
-    #                          :order => "#{params[:order_by]} #{params[:sort_order]}", 
-    #                          :conditions => "#{conditions}"
     items_count = @model.count(:conditions => conditions)
     items_per_page = Typus::Configuration.options[:per_page].to_i
     @pager = ::Paginator.new(items_count, items_per_page) do |offset, per_page|
       # ActiveRecord
       @model.find(:all, 
                   :conditions => "#{conditions}", 
-                  :order => @order, # .join("AND "), # "#{params[:order_by]} #{params[:sort_order]}", 
+                  :order => @order, 
                   :limit => per_page, 
                   :offset => offset)
       # DataMapper
