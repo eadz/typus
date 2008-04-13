@@ -32,7 +32,7 @@ class TypusController < ApplicationController
       # ActiveRecord
       @model.find(:all, 
                   :conditions => "#{conditions}", 
-                  :order => "#{params[:order_by]} #{params[:sort_order]}", 
+                  :order => @order, # .join("AND "), # "#{params[:order_by]} #{params[:sort_order]}", 
                   :limit => per_page, 
                   :offset => offset)
       # DataMapper
@@ -185,12 +185,10 @@ private
 
   # Set default order on the listings.
   def set_order
-    order = @model.typus_defaults_for('order_by')
-    if order.size > 0
-      params[:order_by] = params[:order_by] || order.first
-      params[:sort_order] = "desc" if order.first == 'created_at'
+    unless params[:order_by]
+      @order = @model.typus_order_by
     else
-      params[:order_by] = params[:order_by] || @model.primary_key
+      @order = "#{params[:order_by]} #{params[:sort_order]}"
     end
   end
 

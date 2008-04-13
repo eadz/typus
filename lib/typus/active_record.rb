@@ -105,6 +105,21 @@ module Typus
       Typus::Configuration.config["#{self.to_s.titleize}"]["relationships"][filter].split(", ") rescue []
     end
 
+    def self.typus_order_by
+      fields = Typus::Configuration.config["#{self.to_s.titleize}"]["order_by"].split(", ")
+      order = []
+      fields.each do |field|
+        if field.include?("-")
+          order << "#{field.delete("-")} DESC"
+        else
+          order << "#{field} ASC"
+        end
+      end
+      return order.join(" AND ")
+    rescue
+      ""
+    end
+
     # This is used by acts_as_tree
     def self.top
       find :all, :conditions => [ "parent_id IS ?", nil ]
