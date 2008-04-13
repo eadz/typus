@@ -9,7 +9,7 @@ Post:
   related: categories
   filters: status, created_at, category
   search: title
-  order_by: created_at
+  order_by: title, -created_at
   module: Blog
 
 Typus User:
