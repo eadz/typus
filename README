@@ -1,36 +1,46 @@
 Typus
 =====
 
-Rails Plugin to create a basic and default admin interface.
+As Django Admin, Typus is designed for a single activity:
 
-Once installed and configured you can login at http://0.0.0.0:3000/admin/
+> Trusted users editing structured content.
+
+Once installed and configured you can login at http://application.tld/admin/
+
+Note: Typus doesn't try to be all the thing to all the people.
 
 ## Installing
 
-You can install some extra plugins using:
+You can view the available tasks running
+
+    rake typus
+
+### Recommended steps ...
+
+Step1. Install extra plugins
 
     rake typus:dependencies
 
 This task will install for you `will_paginate`, `attachment_fu`, `acts_as_list`
 and `acts_as_tree`.
 
-Install the admin interface stylesheets.
+Step2. Copy stylesheets to your public/ folder.
 
     rake typus:assets
 
-Create an initial configuration file at `config/typus.yml`
+Step3. Create an initial configuration file at `config/typus.yml`
 
     rake typus:configure
 
-And finally create the needed tables on the database by running.
+Step4. Create the needed tables on the db by running.
 
     script/generate typus_migration
     rake db:migrate
     rake typus:create_user email='youremail@yourdomain.com' RAILS_ENV=production
 
-You can view the available tasks running
+Step5. Start your application
 
-    rake typus
+Start your application and go to http://application.tld/admin/
 
 ## Typus::Configuration options
 
@@ -57,6 +67,7 @@ If the configuration file is broken you'll see a +typus.yml+ text on the admin i
     fields:
       list: name, created_at, category_id, status
       form: name, body, created_at, status
+      relationship: name, category_id
 
 If you want to be able to upload data to your application add `uploaded_data` to form.
 
@@ -70,7 +81,7 @@ If you want to be able to upload data to your application add `uploaded_data` to
 
 ### Filters
 
-    filters: status author_id created_at
+    filters: status, author_id, created_at
 
 ### Order
 
@@ -96,7 +107,7 @@ Run the following task to create the `TypusExtras` controller.
 
 ### Module
 
-Used to group models on the main screen.
+To group models on the main screen use `module`.
 
     module: Site
 
