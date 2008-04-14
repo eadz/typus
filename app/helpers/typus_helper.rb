@@ -126,7 +126,7 @@ module TypusHelper
     if @model.typus_filters.size > 0
       html = ""
       @model.typus_filters.each do |f|
-        html << "<h2>#{f[0].humanize}</h2>\n"
+        html << "<h2>#{f[0].titleize}</h2>\n"
         case f[1]
         when 'boolean'
           html << "<ul>\n"
@@ -202,7 +202,7 @@ module TypusHelper
     @model.typus_fields_for(fields).each do |column|
       order_by = column[0]
       sort_order = (params[:sort_order] == "asc") ? "desc" : "asc"
-      html << "<th>#{link_to "<div class=\"#{sort_order}\">#{column[0].humanize}</div>", { :params => params.merge( :order_by => order_by, :sort_order => sort_order) }}</th>"
+      html << "<th>#{link_to "<div class=\"#{sort_order}\">#{column[0].titleize}</div>", { :params => params.merge( :order_by => order_by, :sort_order => sort_order) }}</th>"
     end
     html << "<th>&nbsp;</th>\n</tr>"
     
