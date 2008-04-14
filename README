@@ -74,9 +74,9 @@ If you want to be able to upload data to your application add `uploaded_data` to
 
 ### Order
 
-    order_by: attribute1
+Adding minus (-) sign before the attribute will make the order DESC.
 
-NOTE: <code>order_by</code> only accepts one field.
+    order_by: -attribute1, attribute2
 
 ### Searches
 
