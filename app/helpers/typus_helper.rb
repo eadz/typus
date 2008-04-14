@@ -136,6 +136,7 @@ module TypusHelper
           end
           html << "</ul>\n"
         when 'datetime'
+          html << "<ul>\n"
           %w( today past_7_days this_month this_year ).each do |timeline|
             switch = (current_request.include? "#{f[0]}=#{timeline}") ? 'on' : 'off'
             html << "<li>#{link_to timeline.titleize, { :params => params.merge(f[0] => timeline) }, :class => switch}</li>"
