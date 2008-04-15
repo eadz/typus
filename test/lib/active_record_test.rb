@@ -8,12 +8,6 @@ class ActiveRecordTest < Test::Unit::TestCase
     assert_equal fields, expected_fields
   end
 
-  def test_should_return_model_fields_hash_for_typus_user
-    fields_hash = TypusUser.model_fields_hash
-    expected_fields_hash = {"status"=>"boolean", "updated_at"=>"datetime", "hashed_password"=>"string", "admin"=>"boolean", "id"=>"integer", "first_name"=>"string", "last_name"=>"string", "created_at"=>"datetime", "email"=>"string"}
-    assert_equal fields_hash, expected_fields_hash
-  end
-
   def test_should_return_typus_fields_for_list_for_typus_user
     fields = TypusUser.typus_fields_for('list')
     expected_fields = [["first_name", "string"], ["last_name", "string"], ["email", "string"], ["status", "boolean"], ["admin", "boolean"]]

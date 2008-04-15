@@ -14,16 +14,8 @@ module Typus
            :conditions => ["#{condition} > ?", current]
     end
 
-    def self.model_fields_hash
-      fields = Hash.new
-      self.columns.each { |column| fields[column.name.to_s] = column.type.to_s }
-      return fields
-    end
-
     def self.model_fields
-      fields = Array.new
-      self.columns.each { |column| fields << [column.name, column.type.to_s] }
-      return fields
+      self.content_columns.map { |u| ["#{u.name}", "#{u.type}"] }
     end
 
     # Form and list fields
