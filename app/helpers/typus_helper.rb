@@ -104,7 +104,7 @@ module TypusHelper
     html = ""
     case params[:action]
     when 'index'
-      @model.typus_actions_for('list').each { |a| html << "<li>#{link_to a.titleize, :controller => 'typus_extras', :model => params[:model], :action => a }</li>" }
+      @model.typus_actions_for('list').each { |a| html << "<li>#{link_to a.titleize, :params => params.merge(:controller => 'typus_extras', :model => params[:model], :action => a) }</li>" }
     when 'edit'
       @model.typus_actions_for('form').each { |a| html << "<li>#{link_to a.titleize, :controller => 'typus_extras', :model => params[:model], :action => a, :id => params[:id] }</li>" }
     end
