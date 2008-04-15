@@ -4,7 +4,7 @@ class ActiveRecordTest < Test::Unit::TestCase
 
   def test_should_return_model_fields_for_typus_user
     fields = TypusUser.model_fields
-    expected_fields = [["id", "integer"], ["email", "string"], ["hashed_password", "string"], ["first_name", "string"], ["last_name", "string"], ["status", "boolean"], ["admin", "boolean"], ["created_at", "datetime"], ["updated_at", "datetime"]]
+    expected_fields = [["email", "string"], ["hashed_password", "string"], ["first_name", "string"], ["last_name", "string"], ["status", "boolean"], ["admin", "boolean"], ["created_at", "datetime"], ["updated_at", "datetime"], ["id", "integer"]]
     assert_equal fields, expected_fields
   end
 
