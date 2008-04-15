@@ -15,7 +15,7 @@ module Typus
     end
 
     def self.model_fields
-      self.content_columns.map { |u| ["#{u.name}", "#{u.type}"] } << [self.primary_key, "integer"]
+      self.columns.map { |u| ["#{u.name}", "#{u.type}"] }
     end
 
     # Form and list fields
