@@ -11,12 +11,6 @@ class Post < ActiveRecord::Base
   has_many :comments
   belongs_to :user
 
-#  def send_as_newsletter
-#  end
-
-#  def self.cleanup
-#  end
-
 end
 
 class Category < ActiveRecord::Base
