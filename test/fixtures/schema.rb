@@ -1,8 +1,8 @@
 ActiveRecord::Schema.define do
 
   create_table :typus_users, :force => true do |t|
-    t.string :email, :hashed_password
-    t.string :first_name, :last_name
+    t.string :email, :first_name, :last_name
+    t.string :salt, :crypted_password
     t.boolean :status, :default => false
     t.boolean :admin, :default => false
     t.timestamps
@@ -38,6 +38,10 @@ ActiveRecord::Schema.define do
     t.string :email, :name
     t.text :body
     t.integer :post_id
+  end
+
+  create_table :schema_info, :force => true do |t|
+    t.string :version
   end
 
 end
