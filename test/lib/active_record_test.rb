@@ -4,27 +4,48 @@ class ActiveRecordTest < Test::Unit::TestCase
 
   def test_should_return_model_fields_for_typus_user
     fields = TypusUser.model_fields
-    expected_fields = [["id", "integer"], ["email", "string"], ["hashed_password", "string"], ["first_name", "string"], ["last_name", "string"], ["status", "boolean"], ["admin", "boolean"], ["created_at", "datetime"], ["updated_at", "datetime"]]
+    expected_fields = [["id", "integer"], 
+                       ["email", "string"], 
+                       ["first_name", "string"], 
+                       ["last_name", "string"], 
+                       ["salt", "string"], 
+                       ["crypted_password", "string"], 
+                       ["status", "boolean"], 
+                       ["admin", "boolean"], 
+                       ["created_at", "datetime"], 
+                       ["updated_at", "datetime"]]
     assert_equal fields, expected_fields
   end
 
   def test_should_return_typus_fields_for_list_for_typus_user
     fields = TypusUser.typus_fields_for('list')
-    expected_fields = [["first_name", "string"], ["last_name", "string"], ["email", "string"], ["status", "boolean"], ["admin", "boolean"]]
+    expected_fields = [["first_name", "string"], 
+                       ["last_name", "string"], 
+                       ["email", "string"], 
+                       ["status", "boolean"], 
+                       ["admin", "boolean"]]
     assert_equal fields, expected_fields
     assert_equal expected_fields.class, Array
   end
 
   def test_should_return_typus_fields_for_form_for_typus_user
     fields = TypusUser.typus_fields_for('form')
-    expected_fields = [["first_name", "string"], ["last_name", "string"], ["email", "string"], ["password", "password"], ["password_confirmation", "password"]]
+    expected_fields = [["first_name", "string"], 
+                       ["last_name", "string"], 
+                       ["email", "string"], 
+                       ["password", "password"], 
+                       ["password_confirmation", "password"]]
     assert_equal fields, expected_fields
     assert_equal expected_fields.class, Array
   end
 
   def test_should_return_typus_fields_for_relationship_for_typus_user
     fields = TypusUser.typus_fields_for('relationship')
-    expected_fields = [["first_name", "string"], ["last_name", "string"], ["email", "string"], ["status", "boolean"], ["admin", "boolean"]]
+    expected_fields = [["first_name", "string"], 
+                       ["last_name", "string"], 
+                       ["email", "string"], 
+                       ["status", "boolean"], 
+                       ["admin", "boolean"]]
     assert_equal fields, expected_fields
     assert_equal expected_fields.class, Array
   end
