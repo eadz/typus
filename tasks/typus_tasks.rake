@@ -10,12 +10,10 @@ namespace :typus do
     require "#{RAILS_ROOT}/config/environment"
     include Authentication
 
-    # Don't create a first user if already there are Typus on the user.
-    return "" if TypusUser.count > 0
-
     # Create the new user with the params.
     email = ENV['email']
     password = ENV['password'] || generate_password
+
     typus_user = TypusUser.new(:email => email, 
                                :password => password, 
                                :password_confirmation => password, 

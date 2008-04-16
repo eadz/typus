@@ -87,7 +87,6 @@ module Authentication
       chars = ('a'..'z').to_a + ('A'..'Z').to_a + ('0'..'9').to_a
       password = ""
       1.upto(length) { |i| password << chars[rand(chars.size - 1)] }
-      puts password
       return password
     end
 
