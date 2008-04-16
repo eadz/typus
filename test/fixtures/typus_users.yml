@@ -1,3 +1,5 @@
+<% time = Time.now.to_s %>
+
 admin:
   id: 1
   email: admin@typus.org
@@ -5,7 +7,8 @@ admin:
   last_name: Esplugas
   status: true
   admin: true
-  hashed_password: 7c222fb2927d828af22f592134e8932480637c0d
+  salt: <%= "--#{time}--admin@typus.org--" %>
+  crypted_password: <%= Digest::SHA1.hexdigest("----#{time}--admin@typus.org----#{12345678}") %>
 
 user:
   id: 2
@@ -14,7 +17,8 @@ user:
   last_name: User
   status: true
   admin: false
-  hashed_password: 7c222fb2927d828af22f592134e8932480637c0d
+  salt: <%= "--#{time}--user@typus.org--" %>
+  crypted_password: <%= Digest::SHA1.hexdigest("----#{time}--user@typus.org----#{12345678}") %>
 
 disabled_user:
   id: 3
@@ -23,4 +27,5 @@ disabled_user:
   last_name: User
   status: false
   admin: false
-  hashed_password: 7c222fb2927d828af22f592134e8932480637c0d
+  salt: <%= "--#{time}--disabled_user@typus.org--" %>
+  crypted_password: <%= Digest::SHA1.hexdigest("----#{time}--disabled_user@typus.org----#{12345678}") %>
