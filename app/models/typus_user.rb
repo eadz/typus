@@ -1,7 +1,7 @@
 class TypusUser < ActiveRecord::Base
 
   attr_accessor :password
-  attr_protected :hashed_password
+  attr_protected :hashed_password, :status, :admin
 
   validates_presence_of :email, :first_name, :last_name
   validates_presence_of :password, :password_confirmation, :if => :new_record?
