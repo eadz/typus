@@ -1,4 +1,4 @@
-class TypusMigrationGenerator < Rails::Generator::Base 
+class TypusMigrationGenerator < Rails::Generator::Base
 
   def manifest
     record do |m|
@@ -7,7 +7,7 @@ class TypusMigrationGenerator < Rails::Generator::Base
   end
 
   def file_name
-    "create_typus_users"
+    'create_typus_users'
   end
 
 end

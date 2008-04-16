@@ -2,7 +2,7 @@ class CreateTypusUsers < ActiveRecord::Migration
 
   def self.up
     create_table :typus_users do |t|
-      t.string :email, :hashed_password
+      t.string :email, :salt, :crypted_password
       t.string :first_name, :last_name
       t.boolean :status, :default => false
       t.boolean :admin, :default => false

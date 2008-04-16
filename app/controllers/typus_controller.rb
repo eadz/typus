@@ -132,7 +132,7 @@ class TypusController < ApplicationController
   # Basic session creation.
   def login
     if request.post?
-      @user = TypusUser.authenticate(params[:user])
+      @user = TypusUser.authenticate(params[:user][:email], params[:user][:password])
       if @user
         session[:typus] = @user.id
         redirect_to typus_dashboard_url

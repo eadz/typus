@@ -1,7 +1,6 @@
 class TypusUser < ActiveRecord::Base
 
   attr_accessor :password
-  attr_protected :hashed_password, :status, :admin
 
   validates_presence_of :email, :first_name, :last_name
   validates_presence_of :password, :password_confirmation, :if => :new_record?
@@ -11,7 +10,7 @@ class TypusUser < ActiveRecord::Base
   validates_length_of :password, :within => 6..40, :if => lambda { |person| person.new_record? or not person.password.blank? }
 
   before_create :generate_token
-  before_save :update_password
+  before_save :encrypt_password
 
   # This will get the list of the available models for this user
   # Currently is not working
@@ -35,23 +34,25 @@ class TypusUser < ActiveRecord::Base
     self.update_attributes(:password => password, :password_confirmation => password)
   end
 
-private
-
-  def self.hashed(str)
-    SHA1.new(str).to_s
+  def self.authenticate(email, password)
+    user = find_by_email(email)
+    user && user.authenticated?(password) ? user : nil
   end
 
-  def self.authenticate(person_info)
-    person = find_by_email(person_info[:email])
-    if person && person.hashed_password == hashed(person_info[:password]) && person.status == true
-      return person
-    end
+  def authenticated?(password)
+    crypted_password == encrypt(password)
   end
 
-  def update_password
-    if not self.password.blank?
-      self.hashed_password = self.class.hashed(password)
-    end
+protected
+
+  def encrypt_password
+    return if password.blank?
+    self.salt = Digest::SHA1.hexdigest("--#{Time.now.to_s}--#{full_name}--") if new_record?
+    self.crypted_password = encrypt(password)
+  end
+
+  def encrypt(password)
+    Digest::SHA1.hexdigest("--#{salt}--#{password}")
   end
 
   def generate_token
