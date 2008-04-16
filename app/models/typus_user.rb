@@ -35,7 +35,7 @@ class TypusUser < ActiveRecord::Base
   end
 
   def self.authenticate(email, password)
-    user = find_by_email(email)
+    user = find_by_email_and_status(email, true)
     user && user.authenticated?(password) ? user : nil
   end
 
@@ -47,7 +47,7 @@ protected
 
   def encrypt_password
     return if password.blank?
-    self.salt = Digest::SHA1.hexdigest("--#{Time.now.to_s}--#{full_name}--") if new_record?
+    self.salt = Digest::SHA1.hexdigest("--#{Time.now.to_s}--#{email}--") if new_record?
     self.crypted_password = encrypt(password)
   end
 
