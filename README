@@ -15,34 +15,32 @@ You can view the available tasks running
 
     rake typus
 
-### Recommended steps ...
-
-Step1. Install extra plugins
+### Step 1: Install extra plugins
 
     rake typus:dependencies
 
 This task will install for you `will_paginate`, `attachment_fu`, `acts_as_list`
 and `acts_as_tree`.
 
-Step2. Copy stylesheets to your public/ folder.
+### Step 2: Copy stylesheets to your public/ folder.
 
     rake typus:assets
 
-Step3. Create an initial configuration file at `config/typus.yml`
+### Step 3: Create an initial configuration file at `config/typus.yml`
 
     rake typus:configure
 
-Step4. Create the needed tables on the db by running.
+### Step 4: Create the needed tables on the db by running.
 
     script/generate typus_migration
     rake db:migrate
     rake typus:create_user email='youremail@yourdomain.com' RAILS_ENV=production
 
-Step5. Start your application
+### Step 5: Start your application
 
 Start your application and go to http://application.tld/admin/
 
-## Typus::Configuration options
+## Plugin Configuration Options
 
 You can overwriting the following settings:
 
@@ -140,7 +138,7 @@ You can customize the interface by placing on `views/typus` the following files.
 - Jaime Iniesta - http://railes.net
 - supercoco9, sd and hydrus (sort_by)
 
-== Author, contact & bugs
+## Author, contact & bugs
 
 You can contact me at <fesplugas@intraducibles.net>
 
