@@ -4,7 +4,6 @@ TODO
 [ ] Translations with the Translation plugin.
 [ ] Add `preview` to images (javascript)
 [ ] If RedCloth of BlueCloth is defined add message in `text` fields.
-[ ] Salted password.
 [ ] Update CSS with something like a framework.
 [ ] Add `default_filter :active => true`.
 [ ] Javascript for textareas. With Markdown and dropdown with a preview.
@@ -19,6 +18,7 @@ TODO
 DONE
 ====
 
+[X] Salted password.
 [X] Update feedback error on empty fields. (20080322)
 [X] Update flash. (20080322)
 [X] Typus should not boot if cannot find `config/typus.yml`. (20080320)
