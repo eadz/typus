@@ -19,8 +19,8 @@ You can view the available tasks running
 
     rake typus:dependencies
 
-This task will install for you `will_paginate`, `attachment_fu`, `acts_as_list`
-and `acts_as_tree`.
+This task will install for you, `attachment_fu`, `acts_as_list`, `acts_as_tree` 
+and `paginator` gem under under `vendor/gems` folder.
 
 ### Step 2: Copy stylesheets to your public/ folder.
 
