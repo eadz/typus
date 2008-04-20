@@ -205,7 +205,7 @@ module TypusHelper
       html << "<th>#{link_to "<div class=\"#{sort_order}\">#{column[0].titleize}</div>", { :params => params.merge( :order_by => order_by, :sort_order => sort_order) }}</th>"
     end
     html << "<th>&nbsp;</th>\n</tr>"
-    
+
     # Body of the table
     items.each do |item|
       html << "<tr class=\"#{cycle('even', 'odd')}\" id=\"item_#{item.id}\">"
@@ -300,7 +300,7 @@ module TypusHelper
       when "selector"
         values = eval field[0].upcase
         html << "<select id=\"item_#{field[0]}\" name=\"item[#{field[0]}]\">"
-        html << "<option value=\"\">Select a #{field[0].capitalize}</option>"
+        html << "<option value=\"\">Select a #{field[0].titleize}</option>"
         values.each do |value|
           html << "<option #{"selected" if @item.send(field[0]).to_s == value.last.to_s} value=\"#{value.last}\">#{value.first}</option>"
         end
