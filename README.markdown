@@ -142,8 +142,6 @@ You can customize the interface by placing on `views/typus` the following files.
 
 You can contact me at <fesplugas@intraducibles.net>
 
-REPORT BUGS on Trac: http://dev.intraducibles.net/trac/typus
-
-BROWSE SOURCE on SVN: http://dev.intraducibles.net/svn/rails/plugins/typus
+BROWSE SOURCE on GitHub: http://github.com/fesplugas/typus
 
 Copyright (c) 2007-2008 Francesc Esplugas Marti, released under the MIT license
