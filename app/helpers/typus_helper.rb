@@ -152,6 +152,14 @@ module TypusHelper
             end
             html << "</ul>\n"
           end
+        when 'string'
+          values = eval f[0].upcase
+          html << "<ul>"
+          values.each do |item|
+            html << "<li>#{link_to item.last, { :params => params.merge(f[0] => item.first) }}</li>"
+          end
+          html << "</ul>"
+          # html << "me"
         end
       end
     end

@@ -30,6 +30,8 @@ class String
           conditions << "AND created_at > '#{start_date}' AND created_at < '#{end_date}' "
         when "integer"
           conditions << "AND #{f[0]} = #{the_value} " if f[0].include? "_id"
+        when "string"
+          conditions << "AND #{f[0]} = '#{the_value}' "
         end
       end
     end
