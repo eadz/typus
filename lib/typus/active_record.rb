@@ -29,33 +29,39 @@ module Typus
       fields = Typus::Configuration.config["#{self.to_s.titleize}"]["fields"][filter].split(", ")
       fields_with_type = []
       fields.each do |f|
+
         available_fields.each do |af|
-          @field_type = af[1] if af[0] == f
-          case f
-            when 'parent_id':       @field_type = 'tree'
-            when /_id/:             @field_type = 'collection'
-            when /password/:        @field_type = 'password'
-            when 'uploaded_data':   @field_type = 'blob'
-            when 'position':        @field_type = 'position'
-            when 'preview':         @field_type = 'preview'
-            else
-              @field_type ||= 'string'
-          end
+          @field_type = af.last if af.first == f
         end
+
+        case f
+          when 'parent_id':       @field_type = 'tree'
+          when /password/:        @field_type = 'password'
+          when 'uploaded_data':   @field_type = 'blob'
+          when 'position':        @field_type = 'position'
+          when 'preview':         @field_type = 'preview'
+          when /_id/:             @field_type = 'collection'
+          else
+              @field_type = 'string' if @field_type == ""
+        end
+
         @field_type = (eval f.upcase) rescue @field_type
         @field_type = 'selector' if @field_type.class == Array
         fields_with_type << [ f, @field_type ]
+        @field_type = ""
+
       end
       return fields_with_type
     rescue
       self.typus_fields_for('list')
     end
 
+    ##
     # Typus sidebar filters.
     #
     # Someday we could use something like:
     #   typus_filters :created_at, :status
-    #
+
     def self.typus_filters
       available_fields = self.model_fields
       fields = Typus::Configuration.config["#{self.to_s.titleize}"]["filters"].split(", ")
@@ -71,16 +77,18 @@ module Typus
       []
     end
 
+    ##
     #  Extended actions for this model on Typus.
     #
     # Someday we could use something like:
     #     typus_list_actions :action_one
     #     typus_form_actions :action_two, :action_three
-    #
+
     def self.typus_actions_for(filter)
       Typus::Configuration.config["#{self.to_s.titleize}"]["actions"][filter].split(", ") rescue []
     end
 
+    ##
     # Used for +order_by+, +search+ and more ...
     #
     # Someday we could use something like:
@@ -89,11 +97,14 @@ module Typus
     #     typus_order_by :title, :created_at
     #
     # Default order is ASC, except for datetime items that is DESC.
+
     def self.typus_defaults_for(filter)
       Typus::Configuration.config["#{self.to_s.titleize}"][filter].split(", ") rescue []
     end
 
+    ##
     # Used for +relationships+
+
     def self.typus_relationships_for(filter)
       Typus::Configuration.config["#{self.to_s.titleize}"]["relationships"][filter].split(", ") rescue []
     end
@@ -113,12 +124,16 @@ module Typus
       "id ASC"
     end
 
+    ##
     # This is used by acts_as_tree
+
     def self.top
       find :all, :conditions => [ "parent_id IS ?", nil ]
     end
 
+    ##
     # This is used by acts_as_tree
+
     def has_children?
       children.size > 0
     end
