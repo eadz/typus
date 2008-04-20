@@ -156,10 +156,10 @@ module TypusHelper
           values = eval f[0].upcase
           html << "<ul>"
           values.each do |item|
-            html << "<li>#{link_to item.last, { :params => params.merge(f[0] => item.first) }}</li>"
+            switch = (current_request.include? "#{f[0]}=#{item.last}") ? 'on' : 'off'
+            html << "<li>#{link_to item.last, { :params => params.merge(f[0] => item.first) }, :class => switch }</li>"
           end
           html << "</ul>"
-          # html << "me"
         end
       end
     end
