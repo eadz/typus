@@ -38,10 +38,11 @@ module Typus
             when 'uploaded_data':   @field_type = 'blob'
             when 'position':        @field_type = 'position'
             when 'preview':         @field_type = 'preview'
+            else
+              @field_type = 'string'
           end
         end
-        # FIXME
-        # @field_type = (eval f.upcase) rescue @field_type
+        @field_type = (eval f.upcase) rescue @field_type
         @field_type = 'selector' if @field_type.class == Array
         fields_with_type << [ f, @field_type ]
       end
