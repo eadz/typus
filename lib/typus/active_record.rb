@@ -39,7 +39,7 @@ module Typus
             when 'position':        @field_type = 'position'
             when 'preview':         @field_type = 'preview'
             else
-              @field_type = 'string'
+              @field_type ||= 'string'
           end
         end
         @field_type = (eval f.upcase) rescue @field_type
