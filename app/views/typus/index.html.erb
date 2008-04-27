@@ -6,6 +6,8 @@
 
 <h2><a href="<%= params[:model] %>"><%= params[:model].titleize %></a> <small><%= link_to "Remove filter", :action => 'index' if (request.env['QUERY_STRING'] || []).size > 0 %></small></h2>
 
+<% Typus.submodules("#{params[:model].singularize.titleize}").inspect %>
+
 <%= typus_block("index_top") %>
 
 <div id="list">

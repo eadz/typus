@@ -2,18 +2,20 @@ module Typus
 
   class << self
 
-    def apps
-      modules = []
+    def applications
+      apps = []
       Typus::Configuration.config.to_a.each do |model|
-        modules << ((model[1].has_key? 'module') ? model[1]['module'] : 'Typus')
+        if model[1].has_key? 'application'
+          apps << model[1]['application']
+        end
       end
-      return modules.uniq
+      return apps.uniq
     end
 
     def modules(app_name)
       submodules = []
       Typus::Configuration.config.to_a.each do |model|
-        if model[1]['module'] == app_name
+        if model[1]['application'] == app_name
           submodules << model[0]
         end
       end
@@ -23,7 +25,7 @@ module Typus
     def submodules(module_name)
       submodules = []
       Typus::Configuration.config.to_a.each do |model|
-        if model[1]['submodule'] == module_name
+        if model[1]['module'] == module_name
           submodules << model[0]
         end
       end
