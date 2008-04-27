@@ -36,30 +36,25 @@ module TypusHelper
     modules = []
     Typus::Configuration.config.to_a.each { |model| modules << ((model[1].has_key? 'module') ? model[1]['module'].capitalize : 'Typus') }
 
-    if modules.size == 0
+    if Typus.apps.size == 0
       return "<p>Run <code>rake typus:config</code> to create <code>config/typus.yml</code></p>"
     end
 
-    modules.uniq.each do |m|
+    Typus.apps.each do |module_name|
       html << "<table>\n"
-      html << "<tr><th colspan=\"2\">#{m.titleize}</th></tr>\n"
-
-      @models = Typus::Configuration.config
-
-      @models.each do |model|
-        current = (model[1]['module']) ? model[1]['module'].capitalize : 'Typus'
-        if current == m
-          html << "<tr class=\"#{cycle('even', 'odd')}\"><td>"
-          html << "#{link_to model[0].pluralize, :action => 'index', :model => model[0].to_s.delete(" ").tableize}<br />"
-          html << "<small>#{model[1]['description']}</small></td>"
-          html << "<td align=\"right\" valign=\"bottom\"><small>"
-          html << "#{link_to 'Add', :action => 'new', :model => model[0].to_s.delete(" ").tableize}"
-          html << "</small></td></tr>\n"
-        end
+      html << "<tr><th colspan=\"2\">#{module_name}</th></tr>\n"
+      Typus.modules(module_name).each do |model|
+        html << "<tr class=\"#{cycle('even', 'odd')}\"><td>"
+        html << "#{link_to model.to_s.pluralize, :action => 'index', :model => model.delete(" ").tableize}<br />"
+        # html << "<small>#{model[1]['description']}</small></td>"
+        html << "<td align=\"right\" valign=\"bottom\"><small>"
+        html << "#{link_to 'Add', :action => 'new', :model => model.delete(" ").tableize}"
+        html << "</small></td></tr>\n"
       end
       html << "</table>\n<br /><div style=\"clear\"></div>"
     end
     html << "</div>"
+
   rescue Exception => error
     display_error(error)
   end
