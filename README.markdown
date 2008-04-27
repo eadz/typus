@@ -103,11 +103,35 @@ Run the following task to create the `TypusExtras` controller.
 
     rake typus:extra_actions
 
-### Module
+### Applications, modules and submodules
 
-To group models on the main screen use `module`.
+To group modules into an application use `application`.
 
-    module: Site
+    application: CMS
+
+Each module has submodules grouped using `module`.
+
+    module: Article
+
+Example: (E-Commerce Application)
+
+    Product:
+      application: ECommerce
+    Client:
+      application: ECommerce
+    Category:
+      module: Product
+    Option Type:
+      module: Product
+
+Example: (Blog)
+
+    Post:
+      application: Blog
+    Category:
+      application: Blog
+    Tag:
+      module: Post
 
 ## Customize Interface
 
@@ -137,6 +161,7 @@ You can customize the interface by placing on `views/typus` the following files.
 - Isaac Feliu - http://railslab.net
 - Jaime Iniesta - http://railes.net
 - supercoco9, sd and hydrus (sort_by)
+- Laia Gargallo - http://azotacalles.net/
 
 ## Author, contact & bugs
 
