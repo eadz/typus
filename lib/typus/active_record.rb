@@ -25,15 +25,21 @@ module Typus
     #   typus_form_fields :name, :body, :excerpt, :created_at
     #
     def self.typus_fields_for(filter)
+
       available_fields = self.model_fields
-      fields = Typus::Configuration.config["#{self.to_s.titleize}"]["fields"][filter].split(", ")
+
+      if Typus::Configuration.config["#{self.to_s.titleize}"]["fields"].has_key? filter
+        fields = Typus::Configuration.config["#{self.to_s.titleize}"]["fields"][filter]
+        fields = (fields.nil?) ? available_fields : fields.split(", ")
+      else
+        fields = available_fields
+      end
+
       fields_with_type = []
       fields.each do |f|
-
         available_fields.each do |af|
           @field_type = af.last if af.first == f
         end
-
         case f
           when 'parent_id':       @field_type = 'tree'
           when /password/:        @field_type = 'password'
@@ -44,16 +50,14 @@ module Typus
           else
               @field_type = 'string' if @field_type == ""
         end
-
         @field_type = (eval f.upcase) rescue @field_type
         @field_type = 'selector' if @field_type.class == Array
         fields_with_type << [ f, @field_type ]
         @field_type = ""
-
       end
+
       return fields_with_type
-    rescue
-      self.typus_fields_for('list')
+
     end
 
     ##
