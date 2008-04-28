@@ -16,6 +16,7 @@ Typus User:
   fields:
     list: first_name, last_name, email, status, admin
     form: first_name, last_name, email, password, password_confirmation
+    relationship: first_name, last_name, email, status, admin
   actions:
     list:
     form:
