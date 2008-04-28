@@ -133,6 +133,19 @@ Example: (Blog)
     Tag:
       module: Post
 
+## Custom Views
+
+You can add your custom views to match your application requirements. Views 
+you can customize.
+
+- `index.html.erb`
+- `edit.html.erb`
+
+Example:
+
+You need a custom view on the Articles listing. Under `app/view/typus/articles`
+add the file `index.html.erb` and Typus default listing will be overrided.
+
 ## Customize Interface
 
 You can customize the interface by placing on `views/typus` the following files.
