@@ -16,9 +16,13 @@ class TypusController < ApplicationController
   before_filter :fields, :only => [ :index ]
   before_filter :form_fields, :only => [ :new, :edit, :create, :update ]
 
+  ##
+  # Application Dashboard
   def dashboard
   end
 
+  ##
+  # Index
   def index
     conditions = "1 = 1"
     conditions << " " + (request.env['QUERY_STRING']).build_conditions(@model) if request.env['QUERY_STRING']
@@ -35,6 +39,16 @@ class TypusController < ApplicationController
       # @model.all(:limit => per_page, :offset => offset)
     end
     @items = @pager.page(params[:page])
+
+    ##
+    # Render custom index page otherwise render Typus default
+
+    if File.exists? ("#{RAILS_ROOT}/app/views/typus/#{params[:model]}/index.html.erb")
+      render :template => "typus/#{params[:model]}/index"
+    else
+      render :template => "typus/index"
+    end
+
   rescue
     flash[:error] = "There was an error on #{@model}."
     redirect_to :action => 'dashboard'
@@ -58,9 +72,13 @@ class TypusController < ApplicationController
         previous = session[:typus_previous]
         btm, bta, bti = previous[:btm], previous[:bta], previous[:bti]
         session[:typus_previous] = nil
+
+        ##
         # Model to relate
         model_to_relate = btm.singularize.camelize.constantize
         @item.send(btm) << model_to_relate.find(bti)
+
+        ##
         # And finally redirect to the previous action
         flash[:success] = "Assigned #{@item.class} to #{btm} successfully."
         redirect_to :action => bta, :model => btm, :id => bti
@@ -74,10 +92,25 @@ class TypusController < ApplicationController
   end
 
   def edit
+
     condition = ( @model.new.attributes.include? 'created_at' ) ? 'created_at' : @model.primary_key
     current = ( condition == 'created_at' ) ? @item.created_at : @item.id
+
+    ##
+    # Link to previous and next
+
     @previous = @model.typus_find_previous(current, condition)
     @next = @model.typus_find_next(current, condition)
+
+    ##
+    # Render custom index page otherwise render Typus default
+
+    if File.exists? ("#{RAILS_ROOT}/app/views/typus/#{params[:model]}/edit.html.erb")
+      render :template => "typus/#{params[:model]}/edit"
+    else
+      render :template => "typus/edit"
+    end
+
   end
 
   def update
@@ -200,16 +233,19 @@ private
     end
   end
 
+  ##
   # Find
   def find_model
     @item = @model.find(params[:id])
   end
 
+  ##
   # Model +fields+
   def fields
     @fields = @model.typus_fields_for('list')
   end
 
+  ##
   # Model +form_fields+ and +form_fields_externals+
   def form_fields
     @item_fields = @model.typus_fields_for('form')
@@ -219,6 +255,7 @@ private
 
 private
 
+  ##
   # Before filter to check if has permission to edit/add the post.
   def check_permissions
 
