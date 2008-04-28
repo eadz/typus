@@ -14,6 +14,8 @@ TODO
 [ ] Update tests to make it work outside of Rails.
 [ ] Script to allow the plugin to work outside a Rails application.
 [ ] Tests for Datamapper.
+[ ] Update CSS for Internet Explorer.
+
 
 DONE
 ====
