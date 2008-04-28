@@ -43,7 +43,7 @@ class TypusController < ApplicationController
     ##
     # Render custom index page otherwise render Typus default
 
-    if File.exists? ("#{RAILS_ROOT}/app/views/typus/#{params[:model]}/index.html.erb")
+    if File.exists?("#{RAILS_ROOT}/app/views/typus/#{params[:model]}/index.html.erb")
       render :template => "typus/#{params[:model]}/index"
     else
       render :template => "typus/index"
@@ -105,7 +105,7 @@ class TypusController < ApplicationController
     ##
     # Render custom index page otherwise render Typus default
 
-    if File.exists? ("#{RAILS_ROOT}/app/views/typus/#{params[:model]}/edit.html.erb")
+    if File.exists?("#{RAILS_ROOT}/app/views/typus/#{params[:model]}/edit.html.erb")
       render :template => "typus/#{params[:model]}/edit"
     else
       render :template => "typus/edit"
