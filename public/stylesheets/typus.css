@@ -210,7 +210,6 @@ a.on {
   #footer a:hover {
     background: #000;
     color: #FFF;
-    padding: 5px;
   }
 
 /* form
@@ -403,10 +402,6 @@ div#dialog {
   padding: 0.75em 1.25em;
   width: 36em;
 }
-
-  div#dialog p a:hover {
-    padding: 0px 2px;
-  }
 
   div#dialog h1 {
     color: #408BB6;
