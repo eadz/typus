@@ -33,11 +33,9 @@ module TypusHelper
   def modules
 
     html = "<div id=\"list\">"
-    modules = []
-    Typus::Configuration.config.to_a.each { |model| modules << ((model[1].has_key? 'module') ? model[1]['module'].capitalize : 'Typus') }
 
     if Typus.applications.size == 0
-      return "<p>Run <code>rake typus:config</code> to create <code>config/typus.yml</code></p>"
+      return "<p>There are not defined applications in <code>config/typus.yml</code></p>"
     end
 
     Typus.applications.each do |module_name|
@@ -53,6 +51,7 @@ module TypusHelper
       end
       html << "</table>\n<br /><div style=\"clear\"></div>"
     end
+
     html << "</div>"
 
   rescue Exception => error
