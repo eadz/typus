@@ -5,7 +5,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title><%= Typus::Configuration.options[:app_name] %> <%= page_title || "untitled" %></title>
+  <title><%= Typus::Configuration.options[:app_name] %> <%= page_title || "untitled" %> <%= "(#{RAILS_ENV})" unless RAILS_ENV == "production" %></title>
   <meta http-equiv="imagetoolbar" content="no" />
   <%= stylesheet_link_tag "typus", :media => "screen" %>
   <%= javascript_include_tag :defaults %>
