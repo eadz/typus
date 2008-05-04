@@ -23,8 +23,8 @@ namespace :typus do
                                :status => true)
     if typus_user.save
       puts "=> [Typus] Typus User successfully created."
-      puts "=> [Typus]    Email: #{typus_user.email}"
-      puts "=> [Typus]    Password: #{password}"
+      puts "   Email: #{typus_user.email}"
+      puts "   Password: #{password}"
     else
       puts "=> [Typus] Could not create Typus User."
     end
