@@ -4,7 +4,7 @@
 
 <%= display_link_to_previous if params.size > 0 %>
 
-<h2><%= link_to @model, :action => "index", :model => params[:model], :id => nil %> &rsaquo; New</h2>
+<h2><%= link_to @model.to_s.titleize, :action => "index", :model => params[:model], :id => nil %> &rsaquo; New</h2>
 
 <%= typus_block("new_top") %>
 
