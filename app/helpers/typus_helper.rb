@@ -151,7 +151,7 @@ module TypusHelper
           html << "<ul>"
           values.each do |item|
             switch = (current_request.include? "#{f[0]}=#{item.last}") ? 'on' : 'off'
-            html << "<li>#{link_to item.last, { :params => params.merge(f[0] => item.first) }, :class => switch }</li>"
+            html << "<li>#{link_to item.first, { :params => params.merge(f[0] => item.last) }, :class => switch }</li>"
           end
           html << "</ul>"
         end
@@ -162,7 +162,7 @@ module TypusHelper
 
   # FIXME: ...
   def display_link_to_previous
-    message = "You're adding a new #{@model.to_s} on a #{params[:btm].capitalize}. "
+    message = "You're adding a new #{@model.to_s.titleize.downcase} to a #{params[:btm].singularize}. "
     message << "Do you want to cancel it? <a href=\"/admin/#{params[:btm]}/#{params[:bti]}\">Click Here</a>"
     "<div id=\"flash\" class=\"notice\"><p>#{message}</p></div>"
   rescue
@@ -343,7 +343,7 @@ module TypusHelper
         if @items.size > 0
           html << typus_table(field, 'relationship')
         else
-          html << "<div id=\"flash\" class=\"notice\"><p>There are no #{field}.</p></div>"
+          html << "<div id=\"flash\" class=\"notice\"><p>There are no #{field.titleize.downcase}.</p></div>"
         end
       end
     end
