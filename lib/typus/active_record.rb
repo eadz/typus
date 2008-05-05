@@ -37,23 +37,31 @@ module Typus
 
       fields_with_type = []
       fields.each do |f|
+
+        ##
+        # Get the field_type for each field
         available_fields.each do |af|
           @field_type = af.last if af.first == f
         end
+
+        ##
+        # Some custom field_type depending on the attribute name
         case f
           when 'parent_id':       @field_type = 'tree'
           when /password/:        @field_type = 'password'
           when 'uploaded_data':   @field_type = 'blob'
           when 'position':        @field_type = 'position'
           when 'preview':         @field_type = 'preview'
+          when 'tag_list':        @field_type = 'string'
           when /_id/:             @field_type = 'collection'
-          else
-              @field_type = 'string' if @field_type == ""
+          else @field_type = 'string' if @field_type == ""
         end
-        @field_type = (eval f.upcase) rescue @field_type
+
+        # @field_type = (eval f.upcase) rescue @field_type
         @field_type = 'selector' if @field_type.class == Array
         fields_with_type << [ f, @field_type ]
         @field_type = ""
+
       end
 
       return fields_with_type
