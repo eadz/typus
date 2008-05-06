@@ -47,6 +47,7 @@ module Typus
         ##
         # Some custom field_type depending on the attribute name
         case f
+          when /file_name/:       @field_type = 'file'
           when 'parent_id':       @field_type = 'tree'
           when /password/:        @field_type = 'password'
           when 'uploaded_data':   @field_type = 'blob'
