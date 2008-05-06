@@ -112,7 +112,7 @@ namespace :typus do
         typus.puts "#     has_many: "
         typus.puts "#   filters: status, created_at, category_id"
         typus.puts "#   search: title body"
-        typus.puts "#   module: Content"
+        typus.puts "#   application: Content"
         typus.puts "#   description: Some text to describe the model"
         typus.puts "#"
         typus.puts "# ------------------------------------------------"
@@ -126,7 +126,7 @@ namespace :typus do
         typus.puts "    form:"
         typus.puts "  filters: status"
         typus.puts "  search: first_name, last_name, email"
-        typus.puts "  module: Typus"
+        typus.puts "  application: Typus Admin"
         typus.puts "  description: System Users Administration"
         typus.puts ""
         typus.close
@@ -152,7 +152,7 @@ namespace :typus do
           typus.puts "    has_many: "
           typus.puts "  filters:"
           typus.puts "  search:"
-          typus.puts "  module: Untitled"
+          typus.puts "  application: Untitled"
           typus.puts "  description:"
           typus.close
           puts "=> [Typus] #{class_name} added to `typus.yml`."
