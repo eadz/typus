@@ -42,36 +42,45 @@ namespace :typus do
 
   desc "Install plugin dependencies"
   task :dependencies do
+
+    ##
     # Plugins
-    puts "Installing required Plugins ..."
-    plugins = [ "http://svn.techno-weenie.net/projects/plugins/attachment_fu/",
-                "http://dev.rubyonrails.org/svn/rails/plugins/acts_as_list/",
-                "http://dev.rubyonrails.org/svn/rails/plugins/acts_as_tree/"]
+    puts "=> [Typus] Installing Required Plugins"
+
+    plugins = [ "git://github.com/fesplugas/paperclip.git", 
+                "git://github.com/fesplugas/acts_as_list.git", 
+                "http://dev.rubyonrails.org/svn/rails/plugins/acts_as_tree/"
+              ]
+
     plugins.each do |plugin_url|
-      plugin = plugin_url.split("/")[-1]
-      puts "=> [Typus] Installing `#{plugin}` plugin."
-      system "rm -rf vendor/plugins/#{plugin}"
-      system "script/plugin install #{plugin_url} -q"
+      puts "   - #{plugin_url}"
+      system "script/plugin install #{plugin_url}"
     end
+
+    ##
     # Gems
-    puts "Installing required Gems ..."
+    puts "=> [Typus] Installing required Gems"
+
     gems = [ "paginator" ]
+
     gems.each do |gem|
-      puts "=> [Typus] Installing `#{gem}` gem."
+      puts "   - #{gem}"
       system "sudo gem install #{gem} --no-rdoc --no-ri"
     end
+
   end
 
   desc "Update Typus Plugin"
   task :update do
-    system "script/plugin install http://dev.intraducibles.net/svn/rails/plugins/typus --force"
     puts "=> [Typus] Updating Typus Plugin."
+    system "script/plugin install git://github.com/fesplugas/typus.git --force"
   end
 
   desc "Copy Typus images and stylesheets"
   task :assets do
+    puts "=> [Typus] Copying files"
     %w( images stylesheets ).each do |folder|
-      puts "=> [Typus] Added `#{folder}` assets."
+      puts "   - #{folder}"
       system "cp #{RAILS_ROOT}/vendor/plugins/typus/public/#{folder}/* #{RAILS_ROOT}/public/#{folder}/"
     end
   end
