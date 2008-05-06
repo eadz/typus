@@ -284,8 +284,8 @@ module TypusHelper
       case field[1]
       when "boolean"
         html << "#{check_box :item, field[0]} Checked if active"
-      when "blob"
-        html << "#{file_field :item, field[0], :style => "border: 0px;"}"
+      when "file"
+        html << "#{file_field :item, field[0].split("_").first, :style => "border: 0px;"}"
       when "datetime"
         html << "#{datetime_select :item, field[0], { :minute_step => 5 }}"
       when "password"
