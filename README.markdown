@@ -19,8 +19,12 @@ You can view the available tasks running
 
     rake typus:dependencies
 
-This task will install for you `will_paginate`, `attachment_fu`, `acts_as_list`
-and `acts_as_tree`.
+This task will install for you:
+
+- Gem `paginator`
+- `paperclip` File upload
+- `acts_as_list`
+- `acts_as_tree`
 
 ### Step 2: Copy stylesheets to your public/ folder.
 
@@ -67,9 +71,7 @@ If the configuration file is broken you'll see a +typus.yml+ text on the admin i
       form: name, body, created_at, status
       relationship: name, category_id
 
-If you want to be able to upload data to your application add `uploaded_data` to form.
-
-(Upload will only work with `attachment_fu`)
+NOTE: Upload files only works if you follow Paperclip naming conventions.
 
 ### External Forms
 
