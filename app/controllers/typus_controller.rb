@@ -75,8 +75,8 @@ class TypusController < ApplicationController
 
         ##
         # Model to relate
-        model_to_relate = btm.singularize.camelize.constantize
-        @item.send(btm) << model_to_relate.find(bti)
+        # model_to_relate = btm.singularize.camelize.constantize
+        # @item.send(btm) << model_to_relate.find(bti)
 
         ##
         # And finally redirect to the previous action
@@ -207,8 +207,8 @@ private
   # Set the current model.
   def set_model
     @model = params[:model].singularize.camelize.constantize
-  rescue
-    flash[:notice] = "Unexisting Model"
+  rescue Exception => error
+    flash[:notice] = "#{error.to_s.titleize}"
     redirect_to :action => 'dashboard'
   end
 
