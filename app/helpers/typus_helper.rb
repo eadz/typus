@@ -248,13 +248,13 @@ module TypusHelper
         @perform = link_to image_tag("typus_trash.gif"), { :model => model, 
                                                            :id => item.id, 
                                                            :params => params.merge(:action => 'destroy') }, 
-                                                         :confirm => "Remove this #{@model.to_s.titleize}?"
+                                                           :confirm => "Remove this #{@model.to_s.titleize}?"
       else
         @perform = link_to image_tag("typus_trash.gif"), { :action => "unrelate", 
                                                            :unrelated => model, 
                                                            :unrelated_id => item.id, 
                                                            :id => params[:id] }, 
-                                                         :confirm => "Remove #{model.singularize} \"#{item.name}\" from #{params[:model].titleize.singularize}?"
+                                                           :confirm => "Remove #{model.humanize.singularize.downcase} \"#{item.name}\" from #{params[:model].titleize.singularize}?"
       end
       html << "<td width=\"10px\">#{@perform}</td>\n</tr>"
 

@@ -80,7 +80,7 @@ class TypusController < ApplicationController
 
         ##
         # And finally redirect to the previous action
-        flash[:success] = "Assigned #{@item.class} to #{btm} successfully."
+        flash[:success] = "#{@item.class} assigned to #{btm.singularize} successfully."
         redirect_to :action => bta, :model => btm, :id => bti
       else
         flash[:success] = "#{@model.to_s.titleize} successfully created."
@@ -126,6 +126,9 @@ class TypusController < ApplicationController
     @item.destroy
     flash[:success] = "#{@model.to_s.titleize} successfully removed."
     redirect_to :params => params.merge(:action => 'index', :id => nil)
+  rescue Exception => error
+    flash[:error] = error.message.titleize
+    redirect_to :params => params.merge(:action => 'index', :id => nil)
   end
 
   # Toggle the status of an item.
@@ -149,8 +152,11 @@ class TypusController < ApplicationController
   def relate
     model_to_relate = params[:related].singularize.camelize.constantize
     @model.find(params[:id]).send(params[:related]) << model_to_relate.find(params[:model_id_to_relate][:related_id])
-    flash[:success] = "#{model_to_relate} added to #{@model.to_s.titleize}"
+    flash[:success] = "#{model_to_relate} added to #{@model.to_s.downcase}."
     redirect_to :action => 'edit', :id => params[:id]
+  rescue Exception => error
+    flash[:error] = error.message.titleize
+    redirect_to :action => 'dashboard'
   end
 
   # Remove relationship between models.
@@ -158,8 +164,12 @@ class TypusController < ApplicationController
     model_to_unrelate = params[:unrelated].singularize.camelize.constantize
     unrelate = model_to_unrelate.find(params[:unrelated_id])
     @model.find(params[:id]).send(params[:unrelated]).delete(unrelate)
-    flash[:success] = "#{model_to_unrelate} removed from #{@model.to_s.titleize}"
+    flash[:success] = "#{model_to_unrelate} removed from #{@model.to_s.downcase}."
     redirect_to :action => 'edit', :id => params[:id]
+  rescue Exception => error
+    flash[:error] = error.message.titleize
+    redirect_to :action => 'dashboard'
+    # params => params.merge(:action => 'index', :id => nil)
   end
 
   # Basic session creation.
