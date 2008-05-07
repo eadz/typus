@@ -38,7 +38,7 @@ This task will install for you:
 
     script/generate typus_migration
     rake db:migrate
-    rake typus:create_user email='youremail@yourdomain.com' RAILS_ENV=production
+    rake typus:seed email='youremail@yourdomain.com' RAILS_ENV=production
 
 ### Step 5: Start your application
 
