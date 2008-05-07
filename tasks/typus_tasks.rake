@@ -30,16 +30,6 @@ namespace :typus do
     end
   end
 
-  desc "Add controller to have new actions available"
-  task :extra_actions do
-    if !File.exists? ("#{RAILS_ROOT}/app/controllers/typus_extras_controller.rb")
-      system "script/generate controller typus_extras -q"
-      puts "=> [Typus] Added controller `typus_extras`."
-    else
-      puts "=> [Typus] Controller `typus_extras` already exists."
-    end
-  end
-
   desc "Install plugin dependencies"
   task :dependencies do
 

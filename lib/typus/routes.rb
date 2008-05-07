@@ -3,8 +3,11 @@ class ActionController::Routing::RouteSet
   alias draw_without_admin draw
 
   def draw_with_admin
+
     prefix = Typus::Configuration.options[:prefix]
+
     draw_without_admin do |map|
+
       map.with_options :controller => 'typus' do |i|
         i.typus_dashboard "#{prefix}", :action => 'dashboard'
         i.typus_login "#{prefix}/login", :action => 'login'
@@ -14,9 +17,14 @@ class ActionController::Routing::RouteSet
         i.connect "#{prefix}/:model/:action", :requirements => { :action => /index|new|create/ }, :action => 'index'
         i.connect "#{prefix}/:model/:id/:action", :requirements => { :action => /edit|update|destroy|position|toggle|relate|unrelate/, :id => /\d+/ }, :action => 'edit'
       end
-      map.connect "#{prefix}/:model/:action", :controller => 'typus_extras'
-      map.connect "#{prefix}/:model/:id/:action", :controller => 'typus_extras'
+
+      ##
+      # I'm really amazed that this works! I DO LOVE RUBY AND RAILS
+      map.connect "#{prefix}/:model/:action", :controller => "typus/#{:model}"
+      map.connect "#{prefix}/:model/:id/:action", :controller => "typus/#{:model}"
+
       yield map
+
     end
   end
 

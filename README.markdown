@@ -101,9 +101,24 @@ Adding minus (-) sign before the attribute will make the order DESC.
 
 These actions will only be available on the context +list+ and +form+ of Typus.
 
-Run the following task to create the `TypusExtras` controller.
+You'll have to create controllers that inherit from TypusController
 
-    rake typus:extra_actions
+    class Typus::NewslettersController < TypusController
+    
+      ##
+      # Action to deliver emails ...
+      def deliver
+        ...
+        redirect_to :back
+      end
+    
+    end
+
+For feedback you can use the flash method.
+
+- `flash[:notice]` just some feedback.
+- `flash[:error]` when there's something wront.
+- `flash[:success]` when the action successfully finished.
 
 ### Applications, modules and submodules
 
