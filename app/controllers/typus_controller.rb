@@ -49,8 +49,8 @@ class TypusController < ApplicationController
       render :template => "typus/index"
     end
 
-  rescue
-    flash[:error] = "There was an error on #{@model}."
+  rescue Exception => error
+    flash[:error] = error.message
     redirect_to :action => 'dashboard'
   end
 
@@ -208,7 +208,7 @@ private
   def set_model
     @model = params[:model].singularize.camelize.constantize
   rescue Exception => error
-    flash[:notice] = "#{error.to_s.titleize}"
+    flash[:error] = error.message.titleize
     redirect_to :action => 'dashboard'
   end
 
