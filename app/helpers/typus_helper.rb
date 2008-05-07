@@ -288,8 +288,6 @@ module TypusHelper
         html << "#{datetime_select :item, field[0], { :minute_step => 5 }}"
       when "password"
         html << "#{password_field :item, field[0], :class => 'title'}"
-      when "string", "integer", "float", "position"
-        html << "#{text_field :item, field[0], :class => 'title'}"
       when "text"
         html << "#{text_area :item, field[0], :class => 'text', :rows => '10'}"
       when "tree"
@@ -321,6 +319,8 @@ module TypusHelper
         else
           html << "#{select :item, "#{field[0]}", related.find(:all).collect { |p| ["#{related}##{p.id}", p.id] }.sort_by { |e| e.first }, :include_blank => true}"
         end
+      else # when "string", "integer", "float", "position"
+        html << "#{text_field :item, field[0], :class => 'title'}"
       end
       html << "</p>"
     end
