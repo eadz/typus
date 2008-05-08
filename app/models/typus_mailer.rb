@@ -6,7 +6,7 @@ class TypusMailer < ActionMailer::Base
     @subject    = "[#{Typus::Configuration.options[:app_name]}] Your new password"
     @body       = { :user => user, :password => password, :host => host }
     @recipients = user.email
-    typus_user = TypusUser.find(:first)
+    typus_user  = TypusUser.find(:first)
     @from       = "\"#{typus_user.full_name}\" <#{typus_user.email}>"
     @sent_on    = Time.now
     @headers    = {}
