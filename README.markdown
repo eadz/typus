@@ -7,7 +7,7 @@ As Django Admin, Typus is designed for a single activity:
 
 Once installed and configured you can login at http://application.tld/admin/
 
-Note: Typus doesn't try to be all the thing to all the people.
+Note: Typus doesn't try to be all the things to all the people.
 
 ## Installing
 
@@ -15,7 +15,7 @@ You can view the available tasks running
 
     rake typus
 
-### Step 1: Install extra plugins
+### Step 1: Install extra plugins.
 
     rake typus:dependencies
 
@@ -30,7 +30,7 @@ This task will install for you:
 
     rake typus:assets
 
-### Step 3: Create an initial configuration file at `config/typus.yml`
+### Step 3: Create an initial configuration file at `config/typus.yml`.
 
     rake typus:configure
 
@@ -40,7 +40,7 @@ This task will install for you:
     rake db:migrate
     rake typus:seed email='youremail@yourdomain.com' RAILS_ENV=production
 
-### Step 5: Start your application
+### Step 5: Start your application.
 
 Start your application and go to http://application.tld/admin/
 
