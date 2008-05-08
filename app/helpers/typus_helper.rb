@@ -98,9 +98,13 @@ module TypusHelper
     html = ""
     case params[:action]
     when 'index'
-      @model.typus_actions_for('list').each { |a| html << "<li>#{link_to a.titleize, :params => params.merge(:controller => "typus/#{params[:model]}", :model => params[:model], :action => a) }</li>" }
+      @model.typus_actions_for('list').each do |a|
+        html << "<li>#{link_to a.titleize, :params => params.merge(:controller => "typus/#{params[:model]}", :model => params[:model], :action => a) }</li>"
+      end
     when 'edit'
-      @model.typus_actions_for('form').each { |a| html << "<li>#{link_to a.titleize, :controller => "typus/#{params[:model]}", :model => params[:model], :action => a, :id => params[:id] }</li>" }
+      @model.typus_actions_for('form').each do |a|
+        html << "<li>#{link_to a.titleize, :controller => "typus/#{params[:model]}", :model => params[:model], :action => a, :id => params[:id] }</li>"
+      end
     end
     html = "<ul>#{html}</ul>" if html
   end
@@ -142,7 +146,7 @@ module TypusHelper
             html << "<ul>\n"
             model.find(:all).each do |item|
               switch = (current_request.include? "#{f[0]}=#{item.id}") ? 'on' : 'off'
-              html << "<li>#{link_to item.name, { :params => params.merge(f[0] => item.id) }, :class => switch}</li>"
+              html << "<li>#{link_to item.typus_name, { :params => params.merge(f[0] => item.id) }, :class => switch}</li>"
             end
             html << "</ul>\n"
           end
