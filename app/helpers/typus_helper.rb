@@ -254,7 +254,7 @@ module TypusHelper
                                                            :unrelated => model, 
                                                            :unrelated_id => item.id, 
                                                            :id => params[:id] }, 
-                                                           :confirm => "Remove #{model.humanize.singularize.downcase} \"#{item.name}\" from #{params[:model].titleize.singularize}?"
+                                                           :confirm => "Remove #{model.humanize.singularize.downcase} \"#{item.typus_name}\" from #{params[:model].titleize.singularize}?"
       end
       html << "<td width=\"10px\">#{@perform}</td>\n</tr>"
 
