@@ -315,7 +315,7 @@ module TypusHelper
       when "collection"
         related = field[0].split("_id").first.capitalize.constantize
         if (related.new.attributes.keys.include? 'name') || (related.new.methods.include? 'name')
-          html << "#{select :item, "#{field[0]}", related.find(:all).collect { |p| [p.name, p.id] }.sort_by { |e| e.first }, :include_blank => true}"
+          html << "#{select :item, "#{field[0]}", related.find(:all).collect { |p| [p.typus_name, p.id] }.sort_by { |e| e.first }, :include_blank => true}"
         else
           html << "#{select :item, "#{field[0]}", related.find(:all).collect { |p| ["#{related}##{p.id}", p.id] }.sort_by { |e| e.first }, :include_blank => true}"
         end
