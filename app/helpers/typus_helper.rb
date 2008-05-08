@@ -220,13 +220,9 @@ module TypusHelper
           html << "<td width=\"80px\">#{fmt_date(item.send(column[0]))}</td>"
         when "collection"
           this_model = column[0].split("_id").first.capitalize.constantize
-          if (this_model.new.methods.include? 'name') || (this_model.new.attributes.keys.include? 'name')
-            html << "<td>#{link_to item.send(column[0].split("_id").first).name, :controller => "typus", :action => "edit", :model => "#{column[0].split("_id").first.pluralize}", :id => item.send(column[0]) if item.send(column[0])}</td>"
-          else
-            html << "<td>#{"#{this_model}##{item.send(column[0])}" if item.send(column[0])}</td>"
-          end
+          html << "<td>#{link_to item.send(column[0].split("_id").first).typus_name, :controller => "typus", :action => "edit", :model => "#{column[0].split("_id").first.pluralize}", :id => item.send(column[0]) if item.send(column[0])}</td>"
         when 'tree'
-          html << "<td>#{item.parent.name if item.parent}</td>"
+          html << "<td>#{item.parent.typus_name if item.parent}</td>"
         when 'preview'
           if item.content_type
             html << "<td>#{lightview_image_tag "http://0.0.0.0:3000#{item.public_filename}", :title => item.filename}</td>"
