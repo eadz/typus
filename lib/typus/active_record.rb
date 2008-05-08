@@ -151,6 +151,10 @@ module Typus
       children.size > 0
     end
 
+    def typus_name
+      name rescue "#{self.class}##{id}"
+    end
+
   end
 
 end

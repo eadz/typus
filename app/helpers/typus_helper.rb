@@ -361,7 +361,7 @@ module TypusHelper
         if items_to_relate.size > 0
           html << <<-HTML
             #{form_tag :action => "relate", :related => field, :id => params[:id]}
-            <p>#{ select "model_id_to_relate", :related_id, items_to_relate.collect { |f| [f.name, f.id] }.sort_by { |e| e.first } }
+            <p>#{ select "model_id_to_relate", :related_id, items_to_relate.collect { |f| [f.typus_name, f.id] }.sort_by { |e| e.first } }
           &nbsp; #{submit_tag "Add", :class => 'button'}
             </form></p>
           HTML
