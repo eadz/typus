@@ -35,7 +35,7 @@ module TypusHelper
     html = "<div id=\"list\">"
 
     if Typus.applications.size == 0
-      return "<p>There are not defined applications in <code>config/typus.yml</code></p>"
+      return display_error("There are not defined applications in config/typus.yml")
     end
 
     Typus.applications.each do |module_name|
@@ -314,11 +314,7 @@ module TypusHelper
         end
       when "collection"
         related = field[0].split("_id").first.capitalize.constantize
-        if (related.new.attributes.keys.include? 'name') || (related.new.methods.include? 'name')
-          html << "#{select :item, "#{field[0]}", related.find(:all).collect { |p| [p.typus_name, p.id] }.sort_by { |e| e.first }, :include_blank => true}"
-        else
-          html << "#{select :item, "#{field[0]}", related.find(:all).collect { |p| ["#{related}##{p.id}", p.id] }.sort_by { |e| e.first }, :include_blank => true}"
-        end
+        html << "#{select :item, "#{field[0]}", related.find(:all).collect { |p| [p.typus_name, p.id] }.sort_by { |e| e.first }, :prompt => "Select a #{related}"}"
       else # when "string", "integer", "float", "position"
         html << "#{text_field :item, field[0], :class => 'title'}"
       end
@@ -413,8 +409,7 @@ module TypusHelper
   end
 
   def display_error(error)
-    "<h2 style=\"margin: 20px 0px 10px 0px;\">Error</h2>
-    <pre>#{error}</pre>"
+    "<div id=\"flash\" class=\"error\"><p>#{error}</p></div>"
   end
 
 end

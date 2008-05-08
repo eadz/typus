@@ -169,7 +169,6 @@ class TypusController < ApplicationController
   rescue Exception => error
     flash[:error] = error.message.titleize
     redirect_to :action => 'dashboard'
-    # params => params.merge(:action => 'index', :id => nil)
   end
 
   # Basic session creation.
