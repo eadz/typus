@@ -188,10 +188,11 @@ You can customize the interface by placing on `views/typus` the following files.
 
 ## Acknowledgments
 
-- Isaac Feliu - http://railslab.net
-- Jaime Iniesta - http://railes.net
+- Isaac Feliu - http://railslab.net/
+- Jaime Iniesta - http://railes.net/
 - supercoco9, sd and hydrus (sort_by)
 - Laia Gargallo - http://azotacalles.net/
+- Xavier Noria (fxn) - http://www.hashref.com/
 
 ## Author, contact & bugs
 
