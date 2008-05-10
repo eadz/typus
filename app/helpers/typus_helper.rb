@@ -269,7 +269,9 @@ module TypusHelper
             html << "<td></td>"
           end
         when "position"
-          html << "<td>#{link_to "Up", :model => model, :action => 'position', :id => item.id, :go => 'up'} / #{link_to "Down", :model => model, :action => 'position', :id => item.id, :go => 'down'} (#{item.send(column[0])})</td>"
+          html << "<td>#{link_to "Up", :params => params.merge(:action => 'position', :id => item.id, :go => 'up')} / 
+                   #{link_to "Down", :params => params.merge(:action => 'position', :id => item.id, :go => 'down')}
+                   (#{item.send(column[0])})</td>"
         else # 'string', 'integer', 'selector'
           html << "<td>#{link_to item.send(column[0]) || "", :model => model, :action => 'edit', :id => item.id}</td>"
         end

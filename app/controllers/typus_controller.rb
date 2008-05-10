@@ -150,7 +150,7 @@ class TypusController < ApplicationController
       when 'down': @item.move_lower
     end
     flash[:success] = "Position changed ..."
-    redirect_to :params => params.merge(:action => 'index', :id => nil)
+    redirect_to :params => params.merge(:action => 'index', :go => nil, :id => nil)
   end
 
   # Relate a model object to another.
