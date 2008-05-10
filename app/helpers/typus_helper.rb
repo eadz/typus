@@ -176,7 +176,7 @@ module TypusHelper
           end
           html << "</ul>\n"
         when 'integer'
-          model = f[0].split("_id").first.capitalize.constantize
+          model = f[0].split("_id").first.capitalize.camelize.constantize
           if model.count > 0
             html << "<ul>\n"
             model.find(:all).each do |item|
