@@ -69,23 +69,28 @@ class TypusController < ApplicationController
     @item = @model.new(params[:item])
     if @item.save
       if session[:typus_previous]
+
+        ##
+        # Recover the session
         previous = session[:typus_previous]
         btm, bta, bti = previous[:btm], previous[:bta], previous[:bti]
         session[:typus_previous] = nil
 
         ##
         # Model to relate
-        # model_to_relate = btm.singularize.camelize.constantize
-        # @item.send(btm) << model_to_relate.find(bti)
+        model_to_relate = btm.singularize.camelize.constantize
+        @item.send(btm) << model_to_relate.find(bti)
 
         ##
         # And finally redirect to the previous action
         flash[:success] = "#{@item.class} assigned to #{btm.singularize} successfully."
         redirect_to :action => bta, :model => btm, :id => bti
+
       else
         flash[:success] = "#{@model.to_s.titleize} successfully created."
         redirect_to :action => 'edit', :id => @item.id
       end
+
     else
       render :action => 'new'
     end
