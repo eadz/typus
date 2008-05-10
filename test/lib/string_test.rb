@@ -12,7 +12,7 @@ class StringTest < Test::Unit::TestCase
   def test_should_return_sql_conditions_on_search_and_filter_for_typus_user
     query = "search=francesc&status=true"
     processed = query.build_conditions(TypusUser)
-    expected = "AND (LOWER(first_name) LIKE '%francesc%' OR LOWER(last_name) LIKE '%francesc%' OR LOWER(email) LIKE '%francesc%') AND status = 't' "
+    expected = "AND (LOWER(first_name) LIKE '%francesc%' OR LOWER(last_name) LIKE '%francesc%' OR LOWER(email) LIKE '%francesc%') AND status = '1' "
     assert_equal processed, expected
   end
 
