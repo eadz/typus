@@ -152,7 +152,7 @@ class TypusController < ApplicationController
   def relate
     model_to_relate = params[:related].singularize.camelize.constantize
     @model.find(params[:id]).send(params[:related]) << model_to_relate.find(params[:model_id_to_relate][:related_id])
-    flash[:success] = "#{model_to_relate} added to #{@model.to_s.downcase}."
+    flash[:success] = "#{model_to_relate.to_s.titleize} added to #{@model.to_s.titleize}."
     redirect_to :action => 'edit', :id => params[:id]
   rescue Exception => error
     flash[:error] = error.message.titleize
@@ -164,7 +164,7 @@ class TypusController < ApplicationController
     model_to_unrelate = params[:unrelated].singularize.camelize.constantize
     unrelate = model_to_unrelate.find(params[:unrelated_id])
     @model.find(params[:id]).send(params[:unrelated]).delete(unrelate)
-    flash[:success] = "#{model_to_unrelate} removed from #{@model.to_s.downcase}."
+    flash[:success] = "#{model_to_unrelate.to_s.titleize} removed from #{@model.to_s.titleize}."
     redirect_to :action => 'edit', :id => params[:id]
   rescue Exception => error
     flash[:error] = error.message.titleize
