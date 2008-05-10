@@ -29,8 +29,9 @@ module TypusHelper
     return html
   end
 
-  # Dashboard list of modules
-  def modules
+  ##
+  # Dashboard list of applications for the dashboard
+  def applications
 
     html = "<div id=\"list\">"
 
@@ -66,6 +67,8 @@ module TypusHelper
       html << "<li>#{link_to "Add #{params[:model].titleize.singularize}", :action => 'new'}</li>"
       html << "</ul>"
       html << more_actions
+      html << modules
+      html << submodules
     when "new", "create"
       html << "<ul>"
       html << "<li>#{link_to "Back to list", :action => 'index'}</li>"
@@ -79,11 +82,15 @@ module TypusHelper
       html << "#{'<li>' + (link_to "Previous", :action => 'edit', :id => @previous.id) + '<li>' if @previous}"
       html << "</ul>"
       html << more_actions
+      html << modules
+      html << submodules
       html << "<ul>"
       html << "<li>#{link_to "Back to list", :action => 'index'}</li>"
       html << "</ul>"
     else
       html << more_actions
+      html << modules
+      html << submodules
       html << "<ul>"
       if params[:id]
         html << "<li>#{link_to "Back to list", :controller => 'typus', :action => 'edit', :id => params[:id]}</li>"
@@ -107,6 +114,34 @@ module TypusHelper
       end
     end
     html = "<ul>#{html}</ul>" if html
+  end
+
+  def modules
+    html = ""
+    Typus.parent_module(params[:model].singularize.titleize).each do |m|
+      model_cleaned = m.split(" ").join("").tableize
+      html << "<li>#{ link_to m, :controller => "typus", :model => model_cleaned }</li>"
+    end
+    unless html.empty?
+      html = "<h2>Modules</h2>\n<ul>#{html}</ul>"
+    else
+      ""
+    end
+  rescue
+    ""
+  end
+
+  def submodules
+    html = ""
+    Typus.submodules(params[:model].singularize.titleize).each do |m|
+      model_cleaned = m.split(" ").join("").tableize
+      html << "<li>#{ link_to m, :controller => "typus", :model => model_cleaned }</li>"
+    end
+    unless html.empty?
+      html = "<h2>Submodules</h2>\n<ul>#{html}</ul>"
+    else
+      ""
+    end
   end
 
   def search
@@ -166,8 +201,8 @@ module TypusHelper
 
   # FIXME: ...
   def display_link_to_previous
-    message = "You're adding a new #{@model.to_s.titleize.downcase} to a #{params[:btm].singularize}. "
-    message << "Do you want to cancel it? <a href=\"/admin/#{params[:btm]}/#{params[:bti]}\">Click Here</a>"
+    message = "You're adding a new #{@model.to_s.titleize} to a #{params[:btm].titleize.singularize}. "
+    message << "Do you want to cancel it? <a href=\"/admin/#{params[:btm]}/#{params[:bti]}/edit\">Click Here</a>"
     "<div id=\"flash\" class=\"notice\"><p>#{message}</p></div>"
   rescue
     nil
@@ -223,7 +258,7 @@ module TypusHelper
         when "datetime"
           html << "<td width=\"80px\">#{fmt_date(item.send(column[0]))}</td>"
         when "collection"
-          this_model = column[0].split("_id").first.capitalize.constantize
+          this_model = column[0].split("_id").first.capitalize.camelize.constantize
           html << "<td>#{link_to item.send(column[0].split("_id").first).typus_name, :controller => "typus", :action => "edit", :model => "#{column[0].split("_id").first.pluralize}", :id => item.send(column[0]) if item.send(column[0])}</td>"
         when 'tree'
           html << "<td>#{item.parent.typus_name if item.parent}</td>"
@@ -313,8 +348,8 @@ module TypusHelper
           html << "No Preview Available for <strong>#{@item.content_type}</strong>"
         end
       when "collection"
-        related = field[0].split("_id").first.capitalize.constantize
-        html << "#{select :item, "#{field[0]}", related.find(:all).collect { |p| [p.typus_name, p.id] }.sort_by { |e| e.first }, :prompt => "Select a #{related}"}"
+        related = field[0].split("_id").first.capitalize.camelize.constantize
+        html << "#{select :item, "#{field[0]}", related.find(:all).collect { |p| [p.typus_name, p.id] }.sort_by { |e| e.first }, :prompt => "Select a #{related.to_s.titleize}"}"
       else # when "string", "integer", "float", "position"
         html << "#{text_field :item, field[0], :class => 'title'}"
       end
