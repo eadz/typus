@@ -33,11 +33,11 @@ module Typus
     end
 
     def parent_module(submodule_name)
-      # TODO
+      Typus::Configuration.config[submodule_name]['module']
     end
 
-    def parent_app(module_name)
-      # TODO
+    def parent_application(module_name)
+      Typus::Configuration.config[module_name]['application']
     end
 
     def enable
