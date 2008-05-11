@@ -460,6 +460,7 @@ div#dialog {
 .pagination a:hover,
 .pagination a:active {
   color: #FFF;
+  background: #000;
 }
 .pagination span.current {
   background-color: #408BB6;
