@@ -1,4 +1,3 @@
-
 TODO
 ====
 
@@ -10,18 +9,15 @@ TODO
 [ ] Javascript for textareas. With Markdown and dropdown with a preview.
 [ ] Javascript for images to pop up.
 [ ] Link "View Site" opens the window with a javascript popup.
+[ ] If no attributes are not defined on a model, typus uses database.
 [ ] Release plugin as a gem.
 [ ] Update tests to make it work outside of Rails.
 [ ] Script to allow the plugin to work outside a Rails application.
 [ ] Tests for Datamapper.
-[ ] Update CSS for Internet Explorer.
-[ ] Display view as block ...
-
 
 DONE
 ====
 
-[X] If no attributes are not defined on a model, typus uses database. (20080428)
 [X] Salted password.
 [X] Update feedback error on empty fields. (20080322)
 [X] Update flash. (20080322)

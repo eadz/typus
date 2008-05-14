@@ -7,7 +7,7 @@ As Django Admin, Typus is designed for a single activity:
 
 Once installed and configured you can login at http://application.tld/admin/
 
-Note: Typus doesn't try to be all the things to all the people.
+Note: Typus doesn't try to be all the thing to all the people.
 
 ## Installing
 
@@ -15,22 +15,18 @@ You can view the available tasks running
 
     rake typus
 
-### Step 1: Install extra plugins.
+### Step 1: Install extra plugins
 
     rake typus:dependencies
 
-This task will install for you:
-
-- Gem `paginator`
-- `paperclip` File upload
-- `acts_as_list`
-- `acts_as_tree`
+This task will install for you, `attachment_fu`, `acts_as_list`, `acts_as_tree` 
+and `paginator` gem under under `vendor/gems` folder.
 
 ### Step 2: Copy stylesheets to your public/ folder.
 
     rake typus:assets
 
-### Step 3: Create an initial configuration file at `config/typus.yml`.
+### Step 3: Create an initial configuration file at `config/typus.yml`
 
     rake typus:configure
 
@@ -38,9 +34,9 @@ This task will install for you:
 
     script/generate typus_migration
     rake db:migrate
-    rake typus:seed email='youremail@yourdomain.com' RAILS_ENV=production
+    rake typus:create_user email='youremail@yourdomain.com' RAILS_ENV=production
 
-### Step 5: Start your application.
+### Step 5: Start your application
 
 Start your application and go to http://application.tld/admin/
 
@@ -71,7 +67,9 @@ If the configuration file is broken you'll see a +typus.yml+ text on the admin i
       form: name, body, created_at, status
       relationship: name, category_id
 
-NOTE: Upload files only works if you follow Paperclip naming conventions.
+If you want to be able to upload data to your application add `uploaded_data` to form.
+
+(Upload will only work with `attachment_fu`)
 
 ### External Forms
 
@@ -101,67 +99,15 @@ Adding minus (-) sign before the attribute will make the order DESC.
 
 These actions will only be available on the context +list+ and +form+ of Typus.
 
-You'll have to create controllers that inherit from TypusController
+Run the following task to create the `TypusExtras` controller.
 
-    class Typus::NewslettersController < TypusController
-    
-      ##
-      # Action to deliver emails ...
-      def deliver
-        ...
-        redirect_to :back
-      end
-    
-    end
+    rake typus:extra_actions
 
-For feedback you can use the flash method.
+### Module
 
-- `flash[:notice]` just some feedback.
-- `flash[:error]` when there's something wront.
-- `flash[:success]` when the action successfully finished.
+To group models on the main screen use `module`.
 
-### Applications, modules and submodules
-
-To group modules into an application use `application`.
-
-    application: CMS
-
-Each module has submodules grouped using `module`.
-
-    module: Article
-
-Example: (E-Commerce Application)
-
-    Product:
-      application: ECommerce
-    Client:
-      application: ECommerce
-    Category:
-      module: Product
-    Option Type:
-      module: Product
-
-Example: (Blog)
-
-    Post:
-      application: Blog
-    Category:
-      application: Blog
-    Tag:
-      module: Post
-
-## Custom Views
-
-You can add your custom views to match your application requirements. Views 
-you can customize.
-
-- `index.html.erb`
-- `edit.html.erb`
-
-Example:
-
-You need a custom view on the Articles listing. Under `app/view/typus/articles`
-add the file `index.html.erb` and Typus default listing will be overrided.
+    module: Site
 
 ## Customize Interface
 
@@ -188,16 +134,16 @@ You can customize the interface by placing on `views/typus` the following files.
 
 ## Acknowledgments
 
-- Isaac Feliu - http://railslab.net/
-- Jaime Iniesta - http://railes.net/
+- Isaac Feliu - http://railslab.net
+- Jaime Iniesta - http://railes.net
 - supercoco9, sd and hydrus (sort_by)
-- Laia Gargallo - http://azotacalles.net/
-- Xavier Noria (fxn) - http://www.hashref.com/
 
 ## Author, contact & bugs
 
 You can contact me at <fesplugas@intraducibles.net>
 
-BROWSE SOURCE on GitHub: http://github.com/fesplugas/typus
+REPORT BUGS on Trac: http://dev.intraducibles.net/trac/typus
+
+BROWSE SOURCE on SVN: http://dev.intraducibles.net/svn/rails/plugins/typus
 
 Copyright (c) 2007-2008 Francesc Esplugas Marti, released under the MIT license
