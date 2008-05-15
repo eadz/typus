@@ -94,6 +94,9 @@ class TypusController < ApplicationController
     else
       render :action => 'new'
     end
+  rescue Exception => error
+    flash[:error] = error.message.titleize
+    redirect_to :params => params.merge(:action => 'index', :id => nil)
   end
 
   def edit
