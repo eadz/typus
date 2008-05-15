@@ -45,7 +45,6 @@ module TypusHelper
       Typus.modules(module_name).each do |model|
         html << "<tr class=\"#{cycle('even', 'odd')}\"><td>"
         html << "#{link_to model.to_s.pluralize, :action => 'index', :model => model.delete(" ").tableize}<br />"
-        # html << "<small>#{model[1]['description']}</small></td>"
         html << "<td align=\"right\" valign=\"bottom\"><small>"
         html << "#{link_to 'Add', :action => 'new', :model => model.delete(" ").tableize}"
         html << "</small></td></tr>\n"
@@ -199,7 +198,6 @@ module TypusHelper
     return html
   end
 
-  # FIXME: ...
   def display_link_to_previous
     message = "You're adding a new #{@model.to_s.titleize} to a #{params[:btm].titleize.singularize}. "
     message << "Do you want to cancel it? <a href=\"/admin/#{params[:btm]}/#{params[:bti]}/edit\">Click Here</a>"
@@ -262,18 +260,17 @@ module TypusHelper
           html << "<td>#{link_to item.send(column[0].split("_id").first).typus_name, :controller => "typus", :action => "edit", :model => "#{column[0].split("_id").first.pluralize}", :id => item.send(column[0]) if item.send(column[0])}</td>"
         when 'tree'
           html << "<td>#{item.parent.typus_name if item.parent}</td>"
-        when 'preview'
-          if item.content_type
-            html << "<td>#{lightview_image_tag "http://0.0.0.0:3000#{item.public_filename}", :title => item.filename}</td>"
-          else
-            html << "<td></td>"
-          end
         when "position"
           html << "<td>#{link_to "Up", :params => params.merge(:action => 'position', :id => item.id, :go => 'up')} / 
                    #{link_to "Down", :params => params.merge(:action => 'position', :id => item.id, :go => 'down')}
                    (#{item.send(column[0])})</td>"
         else # 'string', 'integer', 'selector'
-          html << "<td>#{link_to item.send(column[0]) || "", :model => model, :action => 'edit', :id => item.id}</td>"
+          case column[0]
+            when /file_name/
+              html << "<td>#{link_to item.send(column[0]) || "", :model => model, :action => 'edit', :id => item.id} (#{link_to "Preview", item.asset.url, :popup => ['Sanoke', 'height=461,width=692']})</td>"
+            else
+              html << "<td>#{link_to item.send(column[0]) || "", :model => model, :action => 'edit', :id => item.id}</td>"
+            end
         end
       end
       
@@ -307,12 +304,18 @@ module TypusHelper
     html = error_messages_for :item, :header_tag => "h3"
     fields.each do |field|
 
-      # Field Name
+      html << "<p><label for=\"item_#{field[0]}\">#{field[0].titleize}</label>"
+
+      # When the field is an asset ...
       case field[0]
-      when 'uploaded_data'
-        html << "<p><label>Upload File</label>"
-      else
-        html << "<p><label for=\"item_#{field[0]}\">#{field[0].titleize}</label>"
+      when /file_name/
+        attribute = field[0].split("_file_name").first
+        case @item.send("#{attribute}_content_type")
+        when /image/
+          html << "<p>#{link_to image_tag(@item.send(attribute).url(:thumb)), @item.send(attribute).url, :popup => ['Sanoke', 'height=461,width=692'], :style => "border: 1px solid #D3D3D3;"}</p>"
+        else
+          html << "<p>No Preview Available</p>"
+        end
       end
 
       # Field Type
@@ -340,15 +343,6 @@ module TypusHelper
           html << "<option #{"selected" if @item.send(field[0]).to_s == value.last.to_s} value=\"#{value.last}\">#{value.first}</option>"
         end
         html << "</select>"
-      when "preview"
-        if @item.content_type == nil
-          html << "No Preview Available"
-        elsif @item.content_type.include? "image"
-          # html << "<td>#{lightview_image_tag item.public_filename, :title => item.filename}</td>"
-          html << "<a href=\"#{@item.public_filename}\" title=\"::\" rel=\"lightview\">#{image_tag(@item.public_filename(), {:style => "border: 1px solid #000;", :width => "250px" })}</a>"
-        else
-          html << "No Preview Available for <strong>#{@item.content_type}</strong>"
-        end
       when "collection"
         related = field[0].split("_id").first.capitalize.camelize.constantize
         html << "#{select :item, "#{field[0]}", related.find(:all).collect { |p| [p.typus_name, p.id] }.sort_by { |e| e.first }, :prompt => "Select a #{related.to_s.titleize}"}"
