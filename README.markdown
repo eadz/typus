@@ -193,6 +193,7 @@ You can customize the interface by placing on `views/typus` the following files.
 - supercoco9, sd and hydrus (sort_by)
 - Laia Gargallo - http://azotacalles.net/
 - Xavier Noria (fxn) - http://www.hashref.com/
+- Sergio Espeja - [http://github.com/spejman/]
 
 ## Author, contact & bugs
 
