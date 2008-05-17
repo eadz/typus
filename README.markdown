@@ -5,7 +5,7 @@ As Django Admin, Typus is designed for a single activity:
 
 > Trusted users editing structured content.
 
-Once installed and configured you can login at http://application.tld/admin/
+Once installed and configured you can login at <http://application.tld/admin/>
 
 Note: Typus doesn't try to be all the things to all the people.
 
@@ -188,16 +188,17 @@ You can customize the interface by placing on `views/typus` the following files.
 
 ## Acknowledgments
 
-- Isaac Feliu - http://railslab.net/
-- Jaime Iniesta - http://railes.net/
+- Isaac Feliu - <http://railslab.net/>
+- Jaime Iniesta - <http://railes.net/>
 - supercoco9, sd and hydrus (sort_by)
-- Laia Gargallo - http://azotacalles.net/
-- Xavier Noria (fxn) - http://www.hashref.com/
+- Laia Gargallo - <http://azotacalles.net/>
+- Xavier Noria (fxn) - <http://www.hashref.com/>
+- Sergio Espeja - <http://github.com/spejman/>
 
 ## Author, contact & bugs
 
 You can contact me at <fesplugas@intraducibles.net>
 
-BROWSE SOURCE on GitHub: http://github.com/fesplugas/typus
+BROWSE SOURCE on GitHub: <http://github.com/fesplugas/typus>
 
 Copyright (c) 2007-2008 Francesc Esplugas Marti, released under the MIT license
