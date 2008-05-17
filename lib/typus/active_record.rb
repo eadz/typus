@@ -47,10 +47,10 @@ module Typus
         ##
         # Some custom field_type depending on the attribute name
         case f
+          when 'parent_id':       @field_type = 'tree'
           when /_id/:             @field_type = 'collection'
           when /file_name/:       @field_type = 'file'
           when /password/:        @field_type = 'password'
-          when 'parent_id':       @field_type = 'tree'
           when 'position':        @field_type = 'position'
           else @field_type = 'string' if @field_type == ""
         end
