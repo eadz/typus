@@ -26,7 +26,9 @@ ActiveRecord::Schema.define do
 
   create_table :categories, :force => true, :force => true do |t|
     t.string :name
+    t.string :permalink
     t.text :description
+    t.integer :position
   end
 
   create_table :categories_posts, :force => true, :id => false do |t|

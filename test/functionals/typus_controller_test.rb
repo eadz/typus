@@ -155,4 +155,42 @@ class TypusControllerTest < ActionController::TestCase
     assert !Post.find(post.id).status
   end
 
+  def test_should_position_item_one_step_down
+
+    user = typus_users(:user)
+    @request.session[:typus] = user.id
+    @request.env["HTTP_REFERER"] = "/admin/categories"
+
+    first_category = categories(:first)
+    assert_equal first_category.position, 1
+    second_category = categories(:second)
+    assert_equal second_category.position, 2
+    get :position, { :model => 'categories', :id => first_category.id, :go => 'down' }
+    assert flash[:success]
+    first_category = Category.find(1)
+    assert_equal first_category.position, 2
+    second_category = Category.find(2)
+    assert_equal second_category.position, 1
+
+  end
+
+  def test_should_position_item_one_step_up
+
+    user = typus_users(:user)
+    @request.session[:typus] = user.id
+    @request.env["HTTP_REFERER"] = "/admin/categories"
+
+    first_category = categories(:first)
+    assert_equal first_category.position, 1
+    second_category = categories(:second)
+    assert_equal second_category.position, 2
+    get :position, { :model => 'categories', :id => second_category.id, :go => 'up' }
+    assert flash[:success]
+    first_category = Category.find(1)
+    assert_equal first_category.position, 2
+    second_category = Category.find(2)
+    assert_equal second_category.position, 1
+
+  end
+
 end

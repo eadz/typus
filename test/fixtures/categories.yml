@@ -1,0 +1,14 @@
+first:
+  id: 1
+  name: First Category
+  position: 1
+
+second:
+  id: 2
+  name: Second Category
+  position: 2
+
+third:
+  id: 3
+  name: Third Category
+  position: 3
