@@ -23,4 +23,10 @@ class StringTest < Test::Unit::TestCase
     assert_equal processed, expected
   end
 
+  def test_modelize
+    assert "people".modelize, Person
+    assert "categories".modelize, Category
+    assert "typus_users".modelize, TypusUser
+  end
+
 end

@@ -228,7 +228,7 @@ private
 
   # Set the current model.
   def set_model
-    @model = params[:model].singularize.camelize.constantize
+    @model = params[:model].modelize
   rescue Exception => error
     flash[:error] = error.message.titleize
     redirect_to :action => 'dashboard'

@@ -38,4 +38,8 @@ class String
     return conditions
   end
 
+  def modelize
+    self.singularize.camelize.constantize
+  end
+
 end
