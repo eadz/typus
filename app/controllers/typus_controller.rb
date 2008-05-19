@@ -149,8 +149,10 @@ class TypusController < ApplicationController
   # Change item position
   def position
     case params[:go]
-      when 'up':   @item.move_higher
-      when 'down': @item.move_lower
+      when 'top':         @item.move_to_top
+      when 'up':          @item.move_higher
+      when 'down':        @item.move_lower
+      when 'bottom':      @item.move_to_bottom
     end
     flash[:success] = "Position changed ..."
     redirect_to :back
