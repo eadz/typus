@@ -8,7 +8,9 @@
 
 <%= typus_block("new_top") %>
 
-<% form_for :item, :url  => { :action => "create" }, :html => { :multipart => true } do %>
+<% form_for :item, 
+            :url  => { :action => "create" }, 
+            :html => { :multipart => true } do %>
   <%= typus_form %>
   <p><%= submit_tag "Create #{@model.to_s.titleize.singularize}", :class => 'button' %></p>
 <% end %>

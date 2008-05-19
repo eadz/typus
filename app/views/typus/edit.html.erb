@@ -6,7 +6,9 @@
 
 <%= typus_block("edit_top") %>
 
-<% form_for :item, :url  => { :action => "update", :id => @item.id }, :html => { :multipart => true } do %>
+<% form_for :item, 
+            :url  => { :action => "update", :id => @item.id }, 
+            :html => { :multipart => true } do |f| %>
   <%= typus_form %>
   <p><%= submit_tag "Update #{params[:model].titleize.singularize}", :class => 'button' %></p>
 <% end %>

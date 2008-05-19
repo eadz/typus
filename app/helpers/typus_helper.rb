@@ -301,7 +301,9 @@ module TypusHelper
   end
 
   def typus_form(fields = @item_fields)
+
     html = error_messages_for :item, :header_tag => "h3"
+
     fields.each do |field|
 
       html << "<p><label for=\"item_#{field[0]}\">#{field[0].titleize}</label>"
