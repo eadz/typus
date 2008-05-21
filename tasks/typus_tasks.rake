@@ -10,24 +10,32 @@ namespace :typus do
     require "#{RAILS_ROOT}/config/environment"
     include Authentication
 
+    ##
     # Create the new user with the params.
     email = ENV['email']
     password = ENV['password'] || generate_password
 
-    typus_user = TypusUser.new(:email => email, 
-                               :password => password, 
-                               :password_confirmation => password, 
-                               :first_name => 'Typus',
-                               :last_name => 'Admin', 
-                               :admin => true,
-                               :status => true)
-    if typus_user.save
-      puts "=> [Typus] Typus User successfully created."
-      puts "   Email: #{typus_user.email}"
-      puts "   Password: #{password}"
-    else
-      puts "=> [Typus] Could not create Typus User."
+    begin
+      typus_user = TypusUser.new(:email => email, 
+                                 :password => password, 
+                                 :password_confirmation => password, 
+                                 :first_name => 'Typus', 
+                                 :last_name => 'Admin', 
+                                 :admin => true, 
+                                 :status => true)
+      if typus_user.save
+        puts "=> [Typus] Typus User successfully created."
+        puts "   Email: #{typus_user.email}"
+        puts "   Password: #{password}"
+      else
+        puts "=> [Typus] Could not create Typus User."
+        puts "   Provide an email. (rake typus:seed email=foo@bar.com)"
+      end
+    rescue
+      puts "=> [Typus] Yay! Table doesn't exists."
+      puts "   Please, run `script/generate typus_migration` to create required tables."
     end
+
   end
 
   desc "Install plugin dependencies"
@@ -82,6 +90,7 @@ namespace :typus do
       Dir.chdir(MODEL_DIR)
       models = Dir["*.rb"]
       if !File.exists? ("#{RAILS_ROOT}/config/typus.yml")
+        puts "=> [Typus] Creating config/typus.yml"
         require File.dirname(__FILE__) + '/../../../../config/environment'
         typus = File.open("#{RAILS_ROOT}/config/typus.yml", "w+")
         typus.puts "# ------------------------------------------------"
@@ -111,9 +120,6 @@ namespace :typus do
         typus.puts "  fields:"
         typus.puts "    list: first_name, last_name, email, status, admin"
         typus.puts "    form: first_name, last_name, email, password, password_confirmation"
-        typus.puts "  actions:"
-        typus.puts "    list:"
-        typus.puts "    form:"
         typus.puts "  filters: status"
         typus.puts "  search: first_name, last_name, email"
         typus.puts "  application: Typus Admin"
@@ -145,10 +151,10 @@ namespace :typus do
           typus.puts "  application: Untitled"
           typus.puts "  description:"
           typus.close
-          puts "=> [Typus] #{class_name} added to `typus.yml`."
+          puts "   - Model #{class_name} added."
         end
       else
-        puts "=> [Typus] File `typus.yml` already exists."
+        puts "=> [Typus] Configuration file already exists."
       end
     rescue Exception => e
       puts "#{e.message}"
