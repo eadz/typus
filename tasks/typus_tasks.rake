@@ -68,12 +68,6 @@ namespace :typus do
 
   end
 
-  desc "Update Typus Plugin"
-  task :update do
-    puts "=> [Typus] Updating Typus Plugin."
-    system "script/plugin install git://github.com/fesplugas/typus.git --force"
-  end
-
   desc "Copy Typus images and stylesheets"
   task :assets do
     puts "=> [Typus] Copying files"
@@ -83,7 +77,7 @@ namespace :typus do
     end
   end
 
-  desc "Generate `config/typus.yml`"
+  desc "Generates `config/typus.yml`"
   task :configure do
     begin
       MODEL_DIR = File.join(RAILS_ROOT, "app/models")
