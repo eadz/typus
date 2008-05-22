@@ -5,9 +5,8 @@ end
 namespace :typus do
 
   desc "Create Typus User `rake typus:seed email=foo@bar.com`"
-  task :seed do
+  task :seed => :environment do
 
-    require "#{RAILS_ROOT}/config/environment"
     include Authentication
 
     ##
