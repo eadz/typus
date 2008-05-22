@@ -1,5 +1,7 @@
 class TypusController < ApplicationController
 
+  filter_parameter_logging :password
+
   include Authentication
 
   before_filter :require_login, :except => [ :login, :logout, :email_password ]
