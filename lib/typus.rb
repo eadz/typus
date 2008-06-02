@@ -19,7 +19,7 @@ module Typus
           submodules << model[0]
         end
       end
-      return submodules
+      return submodules.sort
     end
 
     def submodules(module_name)
@@ -29,7 +29,7 @@ module Typus
           submodules << model[0]
         end
       end
-      return submodules
+      return submodules.sort
     end
 
     def parent_module(submodule_name)
