@@ -44,10 +44,10 @@ namespace :typus do
     # Plugins
     puts "=> [Typus] Installing Required Plugins"
 
-    plugins = [ "git://github.com/fesplugas/paperclip.git", 
-                "git://github.com/fesplugas/acts_as_list.git", 
-                "http://dev.rubyonrails.org/svn/rails/plugins/acts_as_tree/"
-              ]
+    # Updated repos
+    plugins = [ "git://github.com/thoughtbot/paperclip.git", 
+                "git://github.com/rails/acts_as_list.git", 
+                "git://github.com/rails/acts_as_tree.git" ]
 
     plugins.each do |plugin_url|
       puts "   - #{plugin_url}"
@@ -62,7 +62,10 @@ namespace :typus do
 
     gems.each do |gem|
       puts "   - #{gem}"
-      system "sudo gem install #{gem} --no-rdoc --no-ri"
+      # If command fails, please, notify user!
+      if !(system "sudo gem install #{gem} --no-rdoc --no-ri") then
+        print "Installing gem #{gem} failed: Error code returned was ", $?, "\n"
+      end
     end
 
   end
@@ -82,7 +85,9 @@ namespace :typus do
       MODEL_DIR = File.join(RAILS_ROOT, "app/models")
       Dir.chdir(MODEL_DIR)
       models = Dir["*.rb"]
-      if !File.exists? ("#{RAILS_ROOT}/config/typus.yml")
+      ##
+      # If typus config file does not file exists or force param is not blank, configure
+      if !File.exists? ("#{RAILS_ROOT}/config/typus.yml") or ENV['force']
         puts "=> [Typus] Creating config/typus.yml"
         require File.dirname(__FILE__) + '/../../../../config/environment'
         typus = File.open("#{RAILS_ROOT}/config/typus.yml", "w+")
@@ -121,30 +126,33 @@ namespace :typus do
         typus.close
         models.each do |model|
           class_name = eval model.sub(/\.rb$/,'').camelize
-          class_attributes = class_name.new.attributes.keys
-          typus = File.open("#{RAILS_ROOT}/config/typus.yml", "a+")
-          typus.puts ""
-          typus.puts "#{class_name}:"
-          list = class_attributes
-          list.delete("content")
-          list.delete("body")
-          typus.puts "  fields:"
-          typus.puts "    list: #{list.join(", ")}"
-          typus.puts "    form: #{list.join(", ")}"
-          typus.puts "    relationship: #{list.join(", ")}"
-          typus.puts "  actions:"
-          typus.puts "    list:"
-          typus.puts "    form:"
-          typus.puts "  order_by:"
-          typus.puts "  relationships:"
-          typus.puts "    has_and_belongs_to_many: "
-          typus.puts "    has_many: "
-          typus.puts "  filters:"
-          typus.puts "  search:"
-          typus.puts "  application: Untitled"
-          typus.puts "  description:"
-          typus.close
-          puts "   - Model #{class_name} added."
+          if class_name.new.kind_of?(ActiveRecord::Base)
+            puts( "Processing #{class_name}" )
+            class_attributes = class_name.new.attributes.keys
+            typus = File.open("#{RAILS_ROOT}/config/typus.yml", "a+")
+            typus.puts ""
+            typus.puts "#{class_name}:"
+            list = class_attributes
+            list.delete("content")
+            list.delete("body")
+            typus.puts "  fields:"
+            typus.puts "    list: #{list.join(", ")}"
+            typus.puts "    form: #{list.join(", ")}"
+            typus.puts "    relationship: #{list.join(", ")}"
+            typus.puts "  actions:"
+            typus.puts "    list:"
+            typus.puts "    form:"
+            typus.puts "  order_by:"
+            typus.puts "  relationships:"
+            typus.puts "    has_and_belongs_to_many: "
+            typus.puts "    has_many: "
+            typus.puts "  filters:"
+            typus.puts "  search:"
+            typus.puts "  application: Untitled"
+            typus.puts "  description:"
+            typus.close
+            puts "   - Model #{class_name} added."
+          end
         end
       else
         puts "=> [Typus] Configuration file already exists."
