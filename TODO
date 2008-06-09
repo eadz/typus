@@ -11,6 +11,7 @@ TODO
 [ ] Release plugin as a gem.
 [ ] Script to allow the plugin to work outside a Rails application.
 [ ] Tests for Datamapper.
+[ ] Don't use @model.to_s in views, use @model.name instead
 
 DONE
 ====

@@ -73,7 +73,7 @@ module Typus
 
     def self.typus_filters
       available_fields = self.model_fields
-      fields = Typus::Configuration.config["#{self.to_s.titleize}"]["filters"].split(", ")
+      fields = Typus::Configuration.config["#{self.name}"]["filters"].split(", ")
       fields_with_type = Array.new
       fields.each do |f|
         available_fields.each do |af|
@@ -94,7 +94,7 @@ module Typus
     #     typus_form_actions :action_two, :action_three
 
     def self.typus_actions_for(filter)
-      Typus::Configuration.config["#{self.to_s.titleize}"]["actions"][filter].split(", ") rescue []
+      Typus::Configuration.config["#{self.name}"]["actions"][filter].split(", ") rescue []
     end
 
     ##
@@ -108,14 +108,14 @@ module Typus
     # Default order is ASC, except for datetime items that is DESC.
 
     def self.typus_defaults_for(filter)
-      Typus::Configuration.config["#{self.to_s.titleize}"][filter].split(", ") rescue []
+      Typus::Configuration.config["#{self.name}"][filter].split(", ") rescue []
     end
 
     ##
     # Used for +relationships+
     def self.typus_relationships_for(filter)
       begin
-        Typus::Configuration.config["#{self.to_s.titleize}"]["relationships"][filter].split(", ")
+        Typus::Configuration.config["#{self.name}"]["relationships"][filter].split(", ")
       rescue
         associations = []
         self.reflections.each do |name, value|
@@ -126,7 +126,7 @@ module Typus
     end
 
     def self.typus_order_by
-      fields = Typus::Configuration.config["#{self.to_s.titleize}"]["order_by"].split(", ")
+      fields = Typus::Configuration.config["#{self.name}"]["order_by"].split(", ")
       order = []
       fields.each do |field|
         if field.include?("-")

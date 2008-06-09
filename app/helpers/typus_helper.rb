@@ -146,7 +146,7 @@ module TypusHelper
       <p><input id="search" name="search" type="text" value="#{params[:search]}"/></p>
       </form>
     HTML
-    return search if Typus::Configuration.config["#{@model.to_s.titleize}"]["search"]
+    return search if Typus::Configuration.config["#{@model.name}"]["search"]
   end
 
   def filters
