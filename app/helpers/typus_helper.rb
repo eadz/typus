@@ -52,8 +52,6 @@ module TypusHelper
 
     html << "</div>"
 
-  rescue Exception => error
-    display_error(error)
   end
 
   def actions
@@ -124,8 +122,8 @@ module TypusHelper
     else
       ""
     end
-  rescue
-    ""
+  rescue => e
+   ""
   end
 
   def submodules
@@ -200,8 +198,6 @@ module TypusHelper
     message = "You're adding a new #{@model.to_s.titleize} to a #{params[:btm].titleize.singularize}. "
     message << "Do you want to cancel it? <a href=\"/admin/#{params[:btm]}/#{params[:bti]}/edit\">Click Here</a>"
     "<div id=\"flash\" class=\"notice\"><p>#{message}</p></div>"
-  rescue
-    nil
   end
 
   def display_flash_message
@@ -226,7 +222,7 @@ module TypusHelper
   end
 
   def fmt_date(date)
-    date.strftime("%d.%m.%Y")
+    date ? date.strftime("%d.%m.%Y") : ''
   end
 
   def typus_table(model = params[:model], fields = 'list', items = @items)
@@ -294,8 +290,6 @@ module TypusHelper
 
     html << "</table>"
 
-  rescue Exception => error
-    display_error(error)
   end
 
   def typus_form(fields = @item_fields)
@@ -352,8 +346,6 @@ module TypusHelper
       html << "</p>"
     end
     return html
-  rescue Exception => error
-    display_error(error)
   end
 
   # FIXME: The admin shouldn't be hardcoded.
@@ -373,8 +365,6 @@ module TypusHelper
       end
     end
     return html
-  rescue Exception => error
-    display_error(error)
   end
 
   # FIXME: The admin shouldn't be hardcoded.
@@ -399,8 +389,6 @@ module TypusHelper
       end
     end
     return html
-  rescue Exception => error
-    display_error(error)
   end
 
   def typus_block(name)
