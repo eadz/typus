@@ -6,16 +6,14 @@ module TypusHelper
 
   def breadcrumbs
     html = "<p>"
+    html << "#{link_to "Home", typus_dashboard_url}"
     if params[:model]
-      html << "#{link_to "Home", typus_dashboard_url}"
       case params[:action]
       when "index"
         html << " &rsaquo; #{params[:model].titleize}\n"
       when "new", "edit", "create"
         html << " &rsaquo; #{link_to params[:model].titleize, :action => 'index'} &rsaquo; #{params[:action].titleize}"
       end
-    else
-      html << "Home"
     end
     html << "</p>"
   end
@@ -43,11 +41,11 @@ module TypusHelper
       html << "<table>\n"
       html << "<tr><th colspan=\"2\">#{module_name}</th></tr>\n"
       Typus.modules(module_name).each do |model|
-        html << "<tr class=\"#{cycle('even', 'odd')}\"><td>"
-        html << "#{link_to model.to_s.pluralize, :action => 'index', :model => model.delete(" ").tableize}<br />"
+        html << "<tr class=\"#{cycle('even', 'odd')}\">\n"
+        html << "<td>#{link_to model.to_s.pluralize, :action => 'index', :model => model.delete(" ").tableize}<br /></td>\n"
         html << "<td align=\"right\" valign=\"bottom\"><small>"
         html << "#{link_to 'Add', :action => 'new', :model => model.delete(" ").tableize}"
-        html << "</small></td></tr>\n"
+        html << "</small></td>\n</tr>\n"
       end
       html << "</table>\n<br /><div style=\"clear\"></div>"
     end
