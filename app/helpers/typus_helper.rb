@@ -198,6 +198,8 @@ module TypusHelper
     message = "You're adding a new #{@model.to_s.titleize} to a #{params[:btm].titleize.singularize}. "
     message << "Do you want to cancel it? <a href=\"/admin/#{params[:btm]}/#{params[:bti]}/edit\">Click Here</a>"
     "<div id=\"flash\" class=\"notice\"><p>#{message}</p></div>"
+  rescue
+    ''
   end
 
   def display_flash_message
