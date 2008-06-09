@@ -27,9 +27,8 @@ module Typus
     def self.typus_fields_for(filter)
 
       available_fields = self.model_fields
-
-      if Typus::Configuration.config["#{self.to_s.titleize}"]["fields"].has_key? filter
-        fields = Typus::Configuration.config["#{self.to_s.titleize}"]["fields"][filter]
+      if Typus::Configuration.config["#{self.name}"]["fields"].has_key? filter
+        fields = Typus::Configuration.config["#{self.name}"]["fields"][filter]
         fields = (fields.nil?) ? available_fields : fields.split(", ")
       else
         fields = available_fields
