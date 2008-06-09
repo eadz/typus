@@ -178,7 +178,7 @@ module TypusHelper
           model = f[0].split("_id").first.capitalize.camelize.constantize
           if model.count > 0
             html << "<ul>\n"
-            model.find(:all).each do |item|
+            model.find(:all, :order => model.typus_order_by).each do |item|
               switch = (current_request.include? "#{f[0]}=#{item.id}") ? 'on' : 'off'
               html << "<li>#{link_to item.typus_name, { :params => params.merge(f[0] => item.id) }, :class => switch}</li>"
             end
