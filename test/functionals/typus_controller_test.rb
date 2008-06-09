@@ -34,7 +34,7 @@ class TypusControllerTest < ActionController::TestCase
     @request.session[:typus] = 1
     get :index, { :model => 'unexisting' }
     assert_response :redirect
-    assert_redirected_to :action => 'dashboard'
+    assert_redirected_to typus_dashboard_url
   end
 
   def test_should_render_new

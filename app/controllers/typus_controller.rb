@@ -213,6 +213,9 @@ private
   # Set the current model.
   def set_model
     @model = params[:model].modelize
+  rescue NameError
+      flash[:notice] = "No such model"
+      redirect_to :action => 'dashboard'
   end
 
   # Set default order on the listings.
