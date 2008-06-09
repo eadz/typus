@@ -114,7 +114,7 @@ namespace :typus do
         typus.puts "#"
         typus.puts "# ------------------------------------------------"
         typus.puts ""
-        typus.puts "Typus User:"
+        typus.puts "TypusUser:"
         typus.puts "  fields:"
         typus.puts "    list: first_name, last_name, email, status, admin"
         typus.puts "    form: first_name, last_name, email, password, password_confirmation"
@@ -122,7 +122,6 @@ namespace :typus do
         typus.puts "  search: first_name, last_name, email"
         typus.puts "  application: Typus Admin"
         typus.puts "  description: System Users Administration"
-        typus.puts ""
         typus.close
         models.each do |model|
           class_name = eval model.sub(/\.rb$/,'').camelize
@@ -144,8 +143,8 @@ namespace :typus do
             typus.puts "    form:"
             typus.puts "  order_by:"
             typus.puts "  relationships:"
-            typus.puts "    has_and_belongs_to_many: "
-            typus.puts "    has_many: "
+            typus.puts "    has_and_belongs_to_many:"
+            typus.puts "    has_many:"
             typus.puts "  filters:"
             typus.puts "  search:"
             typus.puts "  application: Untitled"
@@ -159,6 +158,7 @@ namespace :typus do
       end
     rescue Exception => e
       puts "#{e.message}"
+      File.delete("#{RAILS_ROOT}/config/typus.yml")
     end
   end
 
