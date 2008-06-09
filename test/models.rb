@@ -1,8 +1,8 @@
 # Define some models ...
 
-class TypusUser < ActiveRecord::Base
+class TypusUser < ActiveRecord::Base; end
 
-end
+class Person < ActiveRecord::Base; end
 
 class Post < ActiveRecord::Base
 
