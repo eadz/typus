@@ -45,6 +45,8 @@ module Typus
 
         ##
         # Some custom field_type depending on the attribute name
+        # TODO: handle case where foriegn key doesn't end in _id
+        # TODO: e.g. you have a has_many :cars, :foreign_key => 'monkey'
         case f
           when 'parent_id':       @field_type = 'tree'
           when /_id/:             @field_type = 'collection'

@@ -12,6 +12,8 @@ TODO
 [ ] Script to allow the plugin to work outside a Rails application.
 [ ] Tests for Datamapper.
 [ ] Don't use @model.to_s in views, use @model.name instead
+[ ] handle case when foreign key doesn't end in _id, eg :foriegn_key => 'something'
+
 
 DONE
 ====
